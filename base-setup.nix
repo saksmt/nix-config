@@ -23,8 +23,10 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    wget vim htop oh-my-zsh zsh git
+    wget htop oh-my-zsh zsh git nfs-utils
   ];
+
+  programs.vim.defaultEditor = true;
 
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;
@@ -33,12 +35,6 @@
   hardware.pulseaudio.enable = true;
 
   powerManagement.cpuFreqGovernor = "ondemand";
-
-  users.extraUsers.smt = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
-    shell = pkgs.zsh;
-  };
 
   environment.shells = [ pkgs.zsh pkgs.bashInteractive ];
   

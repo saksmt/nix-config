@@ -9,6 +9,8 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./base-setup.nix
+      ./user.nix
+      ./dev/common.nix
       ./dev/c.nix
       ./dev/jvm.nix
       ./dev/haskell.nix
