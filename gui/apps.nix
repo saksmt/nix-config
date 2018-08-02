@@ -1,21 +1,21 @@
 { config, pkgs, ... }:
+with (import ../lib/env-functions.nix);
 
 {
   environment.systemPackages = with pkgs; [
     firefox
-    thunderbird
     tdesktop
     pcmanfm
     deadbeef
     skype
     qpdfview
+    parcellite
 
     mpv
     smplayer
   ];
 
   nixpkgs.config.firefox = {
-    enableAdobeFlash = true;
     ffmpegSupport = true;
     jre = true;
   };
@@ -25,4 +25,10 @@
     theoraSupport = true;
     x264Support = true;
   };
-}
+} // whenWorkLike {
+    environment.systemPackages = [ pkgs.slack ];
+} // (whenWork {
+    environment.systemPackages = [ pkgs.thunderbird ];
+}) // (whenHome {
+    environment.systemPackages = [ pkgs.transmission-remote-gtk ];
+})
