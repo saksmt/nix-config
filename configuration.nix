@@ -2,11 +2,26 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+cfg@{ config, pkgs, ... }:
+
+with (import ./env.nix);
 
 {
-  nix.nixPath = [
-    "root=/etc/nixos"
-  ];
-  imports = [ ./config.nix ];
+  imports =
+    [ # Include the results of the hardware scan.
+      additionalConfiguration
+
+      ./hardware-configuration.nix
+      ./base-setup.nix
+      ./dev/common.nix
+      ./dev/c.nix
+      ./dev/jvm.nix
+      ./dev/haskell.nix
+      ./apps/vpn.nix
+      ./apps/work.nix
+      ./gui/base.nix
+      ./gui/nvidia.nix
+      ./gui/apps.nix
+      ./gui/awesome.nix
+    ];
 }

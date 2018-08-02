@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 with (import ../lib/env-functions.nix);
 
-(whenWorkLike {
+{ imports = [(whenWorkLike {
     environment.systemPackages = [ pkgs.openconnect ];
-}) // (whenWork {
+}) (whenWork {
     environment.systemPackages = [ pkgs.davmail ];
-})
+}) ]; }

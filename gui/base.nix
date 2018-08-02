@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 with (import ../lib/env-functions.nix);
 
-{
+{ imports = [{
+
   environment.systemPackages = with pkgs; [
     roxterm xarchiver keepassxc mate.mate-icon-theme-faenza 
   ];
@@ -10,9 +11,9 @@ with (import ../lib/env-functions.nix);
 
   fonts.fonts = with pkgs; [ ubuntu_font_family hasklig terminus_font terminus_font_ttf ];
 
-} // (whenLaptop {
+} (whenLaptop {
     services.xserver.libinput.enable = true;
     services.xserver.libinput.disableWhileTyping = true;
     services.xserver.multitouch.enable = true;
     services.xserver.multitouch.ignorePalm = true;
-})
+})]; }

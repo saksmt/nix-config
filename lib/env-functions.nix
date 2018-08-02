@@ -1,4 +1,5 @@
 let
+    lib = (import <nixpkgs> {}).lib;
     uses = import ./uses.nix;
     env = import ../env.nix;
     flatMap = f: xs: builtins.foldl' (a: b: a ++ b) [] (builtins.map f xs);
@@ -13,8 +14,9 @@ let
     use = flag: builtins.elem flag allEnabledUses;
     genWhen = flag: data: if (use flag) then data else {};
     genWhenNot = flag: data: if (use flag) then {} else data;
+    all = sets: builtins.foldl' lib.recursiveUpdate {} sets;
     mkResult = prefix: gen: builtins.foldl' (
         acc: elem: acc // { "${prefix}${elem.name}" = (gen (elem.value or elem.name)); }
     ) {} uses;
 
-in ((mkResult "when" genWhen) // (mkResult "whenNot" genWhenNot)) // { inherit use; }
+in ((mkResult "when" genWhen) // (mkResult "whenNot" genWhenNot)) // { inherit use all; }
