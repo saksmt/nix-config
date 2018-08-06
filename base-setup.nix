@@ -68,7 +68,5 @@ with (import ./lib/env-functions.nix);
             device = "192.168.0.1:/srv/nfs";
             fsType = "nfs";
         };
-
-        fileSystems."/mnt/nfs/NEW"
     })
 ]; }
