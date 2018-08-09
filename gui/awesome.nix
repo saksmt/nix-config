@@ -6,6 +6,8 @@
   environment.systemPackages = with pkgs; [ 
     scrot 
     feh 
-    lua 
+    lua
+    lxappearance
+    pavucontrol
   ];
 }

@@ -11,5 +11,6 @@
             extraGroups = [ "wheel" "networkmanager" "docker" ];
             shell = pkgs.zsh;
         };
+        networking.hostName = "HOSTNAME";
     };
 }

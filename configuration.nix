@@ -9,7 +9,6 @@ with (import ./env.nix);
 {
   imports =
     [ # Include the results of the hardware scan.
-      additionalConfiguration
 
       ./hardware-configuration.nix
       ./base-setup.nix
@@ -23,5 +22,7 @@ with (import ./env.nix);
       ./gui/nvidia.nix
       ./gui/apps.nix
       ./gui/awesome.nix
+
+      additionalConfiguration
     ];
 }
