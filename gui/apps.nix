@@ -26,6 +26,10 @@ with (import ../lib/env-functions.nix);
         theoraSupport = true;
         x264Support = true;
       };
+
+      services.gnome3.gvfs.enable = true;
+      services.udisks2.enable = true;
+      environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.gvfs}/lib/gio/modules" ];
     }
 
     (whenWorkLike {

@@ -17,7 +17,7 @@ with (import ./lib/env-functions.nix);
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = with pkgs; [
-        wget htop oh-my-zsh zsh git nfs-utils unzip
+          wget htop oh-my-zsh zsh git nfs-utils unzip exfat
         ];
 
         programs.vim.defaultEditor = true;
@@ -68,5 +68,9 @@ with (import ./lib/env-functions.nix);
             device = "192.168.0.1:/srv/nfs";
             fsType = "nfs";
         };
+    })
+
+    (whenHome {
+        services.openssh.enable = true;
     })
 ]; }
