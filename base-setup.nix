@@ -17,7 +17,7 @@ with (import ./lib/env-functions.nix);
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
         environment.systemPackages = with pkgs; [
-          wget htop oh-my-zsh zsh git nfs-utils unzip exfat
+          wget htop oh-my-zsh zsh git nfs-utils unzip exfat telnet
         ];
 
         programs.vim.defaultEditor = true;

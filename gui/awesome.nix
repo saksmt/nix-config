@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
+with (import ../lib/env-functions.nix);
 
-{
+whenNotNoX {
   services.xserver.windowManager.awesome.enable = true;
   services.xserver.windowManager.awesome.package = pkgs.awesome;
   environment.systemPackages = with pkgs; [ 

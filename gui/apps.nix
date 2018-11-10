@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 with (import ../lib/env-functions.nix);
 
-{ imports = [{
+whenNotNoX { imports = [{
 
       environment.systemPackages = with pkgs; [
         firefox

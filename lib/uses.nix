@@ -7,4 +7,7 @@
  { name = "EFI"; value = "efi"; }
  { name = "DevOracle"; value = "dev/oracle"; }
  { name = "Dev"; value = "dev"; extends = [ "dev/oracle" ]; }
+ { name = "NoX"; value = "no-x"; }
+ { name = "MediaServer"; value = "media-server"; extends = ["no-x"]; }
+ { name = "Nvidia"; value = "nVidia"; }
 ]

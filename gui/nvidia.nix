@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
+with (import ../lib/env-functions.nix);
 
-{
+whenNvidia {
   boot.extraModulePackages = [ pkgs.linuxPackages.nvidia_x11 ];
   boot.extraModprobeConfig = ''
       options nvidia-drm modeset=1

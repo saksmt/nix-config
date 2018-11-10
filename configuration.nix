@@ -19,6 +19,7 @@ with (import ./env.nix);
       ./apps/vpn.nix
       ./apps/work.nix
       ./apps/media.nix
+      ./apps/media-server.nix
       ./gui/base.nix
       ./gui/nvidia.nix
       ./gui/apps.nix
