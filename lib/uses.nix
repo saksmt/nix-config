@@ -8,6 +8,7 @@
  { name = "DevOracle"; value = "dev/oracle"; }
  { name = "Dev"; value = "dev"; extends = [ "dev/oracle" ]; }
  { name = "NoX"; value = "no-x"; }
- { name = "MediaServer"; value = "media-server"; extends = ["no-x"]; }
+ { name = "Server"; value = "server"; }
+ { name = "MediaServer"; value = "media-server"; extends = ["no-x" "server"]; }
  { name = "Nvidia"; value = "nVidia"; }
 ]
