@@ -3,7 +3,7 @@ with (import ../lib/env-functions.nix);
 
 whenMediaServer {
   services.plex.enable = true;
-  services.nfs.enable = true;
+  services.nfs.server.enable = true;
   services.transmission.enabled = true;
   services.transmission.settings = {
     block-list-enabled = true;
