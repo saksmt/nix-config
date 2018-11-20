@@ -16,6 +16,7 @@ with (import ./env.nix);
       ./dev/c.nix
       ./dev/jvm.nix
       ./dev/haskell.nix
+      ./dev/oracle.nix
       ./apps/vpn.nix
       ./apps/work.nix
       ./apps/media.nix

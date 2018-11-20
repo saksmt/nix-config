@@ -21,4 +21,7 @@ whenMediaServer {
     rpc-white-list-enabled = true;
     utp-enabled = true;
   };
+
+  nixpkgs.config.allowUnfree = true;
+  programs.java.package = pkgs.oraclejre;
 }
