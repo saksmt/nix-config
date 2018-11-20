@@ -25,4 +25,6 @@ whenMediaServer {
   nixpkgs.config.allowUnfree = true;
   programs.java.package = pkgs.oraclejre;
   programs.java.enable = true;
+
+  networking.firewall.allowedTCPPorts = [ 22 80 8080 8688 8443 8006 32400 ];
 }
