@@ -6,8 +6,8 @@ whenMediaServer {
   services.nfs.server.enable = true;
   services.transmission.enable = true;
   services.transmission.settings = {
-    block-list-enabled = true;
-    block-list-url = "http://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz";
+    blocklist-enabled = true;
+    blocklist-url = "http://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz";
     dht-enabled = true;
     download-dir = "/data";
     lpd-enabled = true;
@@ -20,6 +20,12 @@ whenMediaServer {
     rpc-whitelist = "127.0.0.1,192.168.*.*";
     rpc-whitelist-enabled = true;
     utp-enabled = true;
+    peer-limit-global = 30000;
+    peer-limit-per-torrent = 1000;
+    download-queue-enabled = true;
+    download-queue-size = 30;
+    seed-queue-enabled = true;
+    seed-queue-size = 60;
   };
 
   nixpkgs.config.allowUnfree = true;
