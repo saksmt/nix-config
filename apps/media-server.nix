@@ -4,6 +4,9 @@ with (import ../lib/env-functions.nix);
 whenMediaServer {
   services.plex.enable = true;
   services.nfs.server.enable = true;
+  services.nfs.server.lockdPort = 4001;
+  services.nfs.server.mountdPort = 4002;
+  services.nfs.server.statdPort = 4000;
   services.transmission.enable = true;
   services.transmission.settings = {
     blocklist-enabled = true;
@@ -32,7 +35,8 @@ whenMediaServer {
   programs.java.package = pkgs.oraclejre;
   programs.java.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 22 80 8080 8688 8443 8006 8005 32400 9091 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 8080 8688 8443 8006 8005 32400 9091 4000 4001 4002 ];
+  networking.firewall.allowedUDPPorts = [ 4000 4001 4002 ];
 
   networking.firewall.allowedTCPPortRanges = [ { from = 10000; to = 65535; } ];
   networking.firewall.allowedUDPPortRanges = [ { from = 10000; to = 65535; } ];
