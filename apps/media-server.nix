@@ -26,5 +26,6 @@ whenMediaServer {
   programs.java.package = pkgs.oraclejre;
   programs.java.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 22 80 8080 8688 8443 8006 8005 32400 9091 ];
+  networking.firewall.allowedTCPPorts = [ 22 80 8080 8688 8443 8006 8005 32400 9091 51413 ];
+  networking.firewall.allowedUDPPorts = [ 51413 ];
 }
