@@ -17,8 +17,8 @@ whenMediaServer {
     rpc-enabled = true;
     rpc-url = "/transmission/";
     rpc-port = 9091;
-    rpc-white-list = "127.0.0.1,192.168.*.*";
-    rpc-white-list-enabled = true;
+    rpc-whitelist = "127.0.0.1,192.168.*.*";
+    rpc-whitelist-enabled = true;
     utp-enabled = true;
   };
 
