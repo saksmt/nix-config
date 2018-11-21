@@ -28,6 +28,6 @@ whenMediaServer {
 
   networking.firewall.allowedTCPPorts = [ 22 80 8080 8688 8443 8006 8005 32400 9091 ];
 
-  networking.firewall.allowedTCPPortsRanges = [ { from = 10000; to = 65535; } ];
-  networking.firewall.allowedUDPPortsRanges = [ { from = 10000; to = 65535; } ];
+  networking.firewall.allowedTCPPortRanges = [ { from = 10000; to = 65535; } ];
+  networking.firewall.allowedUDPPortRanges = [ { from = 10000; to = 65535; } ];
 }
