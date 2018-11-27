@@ -31,6 +31,12 @@ whenMediaServer {
     seed-queue-size = 60;
   };
 
+  services.vsftpd.enable = true;
+  services.vsftpd.writeEnable = true;
+  services.vsftpd.localUsers = true;
+  services.vsftpd.anonymousUser = false;
+  services.vsftpd.userlistEnable = true;
+
   nixpkgs.config.allowUnfree = true;
   programs.java.package = pkgs.oraclejre;
   programs.java.enable = true;
