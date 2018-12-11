@@ -37,7 +37,7 @@ whenNotNoX { imports = [{
     })
 
     (whenWork {
-        environment.systemPackages = [ pkgs.thunderbird ];
+        environment.systemPackages = [ pkgs.gnome3.evolution ];
     })
 
     (whenHome {

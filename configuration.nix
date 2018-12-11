@@ -24,6 +24,8 @@ with (import ./env.nix);
       ./apps/media-server.nix
       ./gui/base.nix
       ./gui/nvidia.nix
+      ./gui/intel-gpu.nix
+      ./gui/nvidia-laptop.nix
       ./gui/apps.nix
       ./gui/awesome.nix
 

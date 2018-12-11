@@ -11,4 +11,5 @@
  { name = "Server"; value = "server"; }
  { name = "MediaServer"; value = "media-server"; extends = ["no-x" "server"]; }
  { name = "Nvidia"; value = "nVidia"; }
+ { name = "IntelGpu"; value = "intel-gpu"; }
 ]

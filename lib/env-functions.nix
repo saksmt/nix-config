@@ -19,4 +19,8 @@ let
         acc: elem: acc // { "${prefix}${elem.name}" = (gen (elem.value or elem.name)); }
     ) {} uses;
 
-in ((mkResult "when" genWhen) // (mkResult "whenNot" genWhenNot)) // { inherit use all; }
+in ((mkResult "when" genWhen) // (mkResult "whenNot" genWhenNot)) // { 
+    inherit use all;
+    when = flags: data: if (lib.all use flags) then data else {};
+    whenNot = flags: data: if (lib.all (x: !use x) flags) then data else {};
+}

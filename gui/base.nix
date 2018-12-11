@@ -11,6 +11,8 @@ whenNotNoX { imports = [{
 
   fonts.fonts = with pkgs; [ ubuntu_font_family hasklig terminus_font terminus_font_ttf ];
 
+  services.gnome3.gnome-keyring.enable = true;
+
 } (whenLaptop {
     services.xserver.libinput.enable = true;
     services.xserver.libinput.disableWhileTyping = true;
