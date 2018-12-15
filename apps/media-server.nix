@@ -22,6 +22,7 @@ whenMediaServer {
     rpc-port = 9091;
     rpc-whitelist = "127.0.0.1,192.168.*.*";
     rpc-whitelist-enabled = true;
+    rpc-host-whitelist-enabled = false;
     utp-enabled = true;
     peer-limit-global = 30000;
     peer-limit-per-torrent = 1000;
