@@ -65,7 +65,7 @@ with (import ./lib/env-functions.nix);
 
     (whenHomeLike {
         fileSystems."/mnt/nfs" = {
-            device = "192.168.0.1:/srv/nfs";
+            device = "192.168.31.31:/data";
             fsType = "nfs";
         };
     })
