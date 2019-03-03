@@ -5,6 +5,7 @@ with (import ../lib/env-functions.nix);
 whenDev {
   nixpkgs.config.allowUnfree = true;
   programs.java.package = pkgs.oraclejdk;
+  nixpkgs.config.oraclejdk.accept_license = true;
   environment.systemPackages = with pkgs; [
     jetbrains.idea-ultimate
     scala
