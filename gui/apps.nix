@@ -11,6 +11,7 @@ whenNotNoX { imports = [{
         skype
         qpdfview
         parcellite
+        discord
 
         mpv
         smplayer
@@ -46,5 +47,9 @@ whenNotNoX { imports = [{
 
     (whenHome {
         environment.systemPackages = [ pkgs.transmission-remote-gtk ];
+    })
+
+    (whenGuitar {
+        environment.systemPackages = with pkgs; [ tuxguitar timidity ];
     })
 ]; }

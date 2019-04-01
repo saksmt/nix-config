@@ -2,6 +2,7 @@
 with (import ../lib/env-functions.nix);
 
 whenMediaServer {
+  nixpkgs.config.oraclejdk.accept_license = true;
   services.plex.enable = true;
   services.nfs.server.enable = true;
   services.nfs.server.lockdPort = 4001;
@@ -41,6 +42,11 @@ whenMediaServer {
   nixpkgs.config.allowUnfree = true;
   programs.java.package = pkgs.oraclejre;
   programs.java.enable = true;
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.enableOnBoot = true;
+
+  environment.systemPackages = [ pkgs.docker_compose ];
 
   networking.firewall.allowedTCPPorts = [ 22 21 20 80 8080 8688 8443 8006 8005 32400 9091 4000 4001 4002 111 2049 ];
   networking.firewall.allowedUDPPorts = [ 4000 4001 4002 111 2049 ];
