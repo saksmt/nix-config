@@ -4,7 +4,7 @@ with (import ../lib/env-functions.nix);
 whenNotNoX { imports = [{
 
   environment.systemPackages = with pkgs; [
-    roxterm xarchiver keepassxc mate.mate-icon-theme-faenza 
+    roxterm xarchiver keepassxc mate.mate-icon-theme-faenza xsel
   ];
 
   services.xserver.enable = true;

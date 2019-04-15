@@ -10,6 +10,8 @@ whenDev {
         docker_compose
         gitAndTools.tig
         jq
+        httpie
+        jo
       ];
 
       virtualisation.docker.enable = true;
