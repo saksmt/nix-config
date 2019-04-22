@@ -12,6 +12,7 @@ whenDev {
         jq
         httpie
         jo
+        graphviz
       ];
 
       virtualisation.docker.enable = true;
