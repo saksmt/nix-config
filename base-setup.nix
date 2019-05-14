@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 with (import ./lib/env-functions.nix);
 
-{ imports = [{
+{ imports = [
+    {
         nixpkgs.config.allowUnfree = true;
         boot.loader.grub.useOSProber = true;
 
@@ -47,6 +48,7 @@ with (import ./lib/env-functions.nix);
     (whenLaptop {
         networking.networkmanager.enable = true;
         powerManagement.cpuFreqGovernor = "ondemand";
+        environment.systemPackages = [ pkgs.upower ];
     })
 
     (whenNotLaptop {

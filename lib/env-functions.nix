@@ -1,8 +1,9 @@
+with (import ./fp.nix);
+
 let
     lib = (import <nixpkgs> {}).lib;
     uses = import ./uses.nix;
     env = import ../env.nix;
-    flatMap = f: xs: builtins.foldl' (a: b: a ++ b) [] (builtins.map f xs);
     deps = flag: builtins.foldl' (
         acc: current: acc ++ (
             if (current.value == flag)

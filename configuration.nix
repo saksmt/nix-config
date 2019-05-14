@@ -10,6 +10,7 @@ with (import ./env.nix);
   imports =
     [
 
+      ./packages/all.nix
       ./hardware-configuration.nix
       ./base-setup.nix
       ./dev/common.nix

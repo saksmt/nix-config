@@ -10,7 +10,9 @@ whenDev {
     jetbrains.idea-ultimate
     scala
     sbt
+    bloop
     oraclejdk
     gradle
+    freshBazel
   ];
 }
