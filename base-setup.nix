@@ -48,7 +48,7 @@ with (import ./lib/env-functions.nix);
     (whenLaptop {
         networking.networkmanager.enable = true;
         powerManagement.cpuFreqGovernor = "ondemand";
-        environment.systemPackages = [ pkgs.upower ];
+        services.upower.enable = true;
     })
 
     (whenNotLaptop {
