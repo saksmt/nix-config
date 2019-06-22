@@ -10,6 +10,6 @@
               url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
               inherit sha256;
             };
-        }; );
+        });
     })];
 }
