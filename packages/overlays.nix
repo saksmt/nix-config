@@ -1,4 +1,4 @@
-{ config, pkgs }: {
+{ config, pkgs, ... }: {
     nixpkgs.overlays = [( self: super: with super.lib; {
         plex = super.plex.overrideAttrs(old: rec {
             name = "plex-${version}";
