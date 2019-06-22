@@ -5,6 +5,7 @@ with (import ./lib/env-functions.nix);
     {
         nixpkgs.config.allowUnfree = true;
         boot.loader.grub.useOSProber = true;
+        config.glibc.installLocales = true;
 
         i18n = {
             consoleFont = "cyr-sun16";
