@@ -127,6 +127,7 @@ in
         PLEX_MEDIA_SERVER_TMPDIR="/tmp";
         PLEX_MEDIA_SERVER_USE_SYSLOG="true";
         LC_ALL="en_US.UTF-8";
+        LC_CTYPE="en_US.UTF-8";
         LANG="en_US.UTF-8";
       };
     };
