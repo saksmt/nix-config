@@ -4,7 +4,7 @@
             name = "plex-${version}";
             version = "1.16.0.1226";
             vsnHash = "7eb2c8f6f";
-            sha256 = "8ee806f35ccedcecd0cab028bbe1f7e2ac7de24292b715978d3165c4712f5c40";
+            sha256 = "1cav5lhpg5ma6s0hkpn8vrdgpy4b9q10qc1vb3j4w7ls9v160g3n";
 
             src = super.fetchurl {
               url = "https://downloads.plex.tv/plex-media-server-new/${version}-${vsnHash}/redhat/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
