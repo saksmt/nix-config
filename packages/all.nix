@@ -8,7 +8,9 @@ with (import ../lib/fp.nix);
         runJdk = pkgs.jdk11;
     }; }
 
-    { freshPlex = "servers/plex"; }
+    { freshPlex = "servers/plex"; args = {
+        plexRaw = import "./servers/plex/raw.nix";
+    }; }
 
 ];
 
