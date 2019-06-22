@@ -8,6 +8,8 @@ with (import ../lib/fp.nix);
         runJdk = pkgs.jdk11;
     }; }
 
+    { freshPlex = "servers/plex"; }
+
 ];
 
 in {

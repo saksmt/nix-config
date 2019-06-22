@@ -3,11 +3,15 @@ with (import ../lib/env-functions.nix);
 
 whenMediaServer {
   nixpkgs.config.oraclejdk.accept_license = true;
+
   services.plex.enable = true;
+  services.plex.package = pkgs.freshPlex;
+
   services.nfs.server.enable = true;
   services.nfs.server.lockdPort = 4001;
   services.nfs.server.mountdPort = 4002;
   services.nfs.server.statdPort = 4000;
+
   services.transmission.enable = true;
   services.transmission.settings = {
     blocklist-enabled = true;
@@ -40,6 +44,7 @@ whenMediaServer {
   services.vsftpd.userlistEnable = true;
 
   nixpkgs.config.allowUnfree = true;
+
   programs.java.package = pkgs.oraclejre;
   programs.java.enable = true;
 
