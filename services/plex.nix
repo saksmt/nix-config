@@ -121,6 +121,7 @@ in
         # Allow access to GPU acceleration; the Plex LD_LIBRARY_PATH is added
         # by the FHS userenv script.
         LD_LIBRARY_PATH="/run/opengl-driver/lib";
+        LOCALE_ARCHIVE="/run/current-system/sw/lib/locale/locale-archive";
 
         PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6";
         PLEX_MEDIA_SERVER_TMPDIR="/tmp";
