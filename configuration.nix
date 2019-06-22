@@ -11,6 +11,7 @@ with (import ./env.nix);
     [
 
       ./packages/all.nix
+      ./packages/overlays.nix
       ./hardware-configuration.nix
       ./base-setup.nix
       ./dev/common.nix
