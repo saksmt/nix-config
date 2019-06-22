@@ -9,7 +9,7 @@ with (import ../lib/fp.nix);
     }; }
 
     { freshPlex = "servers/plex"; args = {
-        plexRaw = import ./servers/plex/raw.nix;
+        plexRaw = pkgs.callPackage ./servers/plex/raw.nix;
     }; }
 
 ];
