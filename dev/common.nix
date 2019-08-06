@@ -5,6 +5,11 @@ whenDev {
   imports = [ 
 #    (whenNotNoX { environment.systemPackages = [ pkgs.postman ]; })
 
+    (whenNotNoX { environment.systemPackages = with pkgs; [
+        vscode
+        freemind
+    ]; })
+
     {
       environment.systemPackages = with pkgs; [
         docker_compose

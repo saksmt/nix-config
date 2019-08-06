@@ -8,7 +8,7 @@ whenNotNoX { imports = [{
         tdesktop
         pcmanfm
         deadbeef
-        skype
+#        skype
         qpdfview
         parcellite
         discord

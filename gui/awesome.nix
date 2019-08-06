@@ -10,6 +10,7 @@ whenNotNoX {
     lua
     lxappearance
     pavucontrol
+    paper-icon-theme
   ];
 
   services.xserver.displayManager.sddm.enable = true;

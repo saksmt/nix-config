@@ -44,7 +44,6 @@ whenMediaServer {
 
   nixpkgs.config.allowUnfree = true;
 
-  programs.java.package = pkgs.oraclejre;
   programs.java.enable = true;
 
   virtualisation.docker.enable = true;
