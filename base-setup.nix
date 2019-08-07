@@ -13,6 +13,12 @@ with (import ./lib/env-functions.nix);
             defaultLocale = "ru_RU.UTF-8";
         };
 
+        nix.gc = {
+            automatic = true;
+            dates = "weekly";
+            options = "--delete-older-than 60d";
+        };
+
         # Set your time zone.
         time.timeZone = "Europe/Moscow";
 
