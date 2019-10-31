@@ -54,7 +54,7 @@ with (import ./lib/env-functions.nix);
         programs.zsh.enable = true;
         programs.zsh.ohMyZsh.enable = true;
         programs.zsh.ohMyZsh.theme = "gentoo";
-        programs.zsh.ohMyZsh.plugins = [ "git" "nix" "docker" ];
+        programs.zsh.ohMyZsh.plugins = [ "git" "docker" ];
 
         # This value determines the NixOS release with which your system is to be
         # compatible, in order to avoid breaking some software such as database
