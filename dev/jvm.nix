@@ -7,7 +7,7 @@ whenDev {
   nixpkgs.config.allowUnfree = true;
   programs.java.package = pkgs.jdk11;
   environment.systemPackages = with pkgs; [
-    jetbrains.idea-ultimate
+    unstable.jetbrains.idea-ultimate
     scala
     sbt
     bloop

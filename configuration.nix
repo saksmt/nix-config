@@ -12,6 +12,7 @@ with (import ./env.nix);
 
       ./packages/all.nix
       ./packages/overlays.nix
+      ./unstable.nix
       ./services/plex.nix
       ./hardware-configuration.nix
       ./base-setup.nix

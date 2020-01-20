@@ -2,5 +2,5 @@
 with (import ../lib/env-functions.nix);
 
 { imports = [ (whenWork {
-    environment.systemPackages = [ pkgs.sqldeveloper ];
+#    environment.systemPackages = [ pkgs.sqldeveloper ];
 }) ]; }
