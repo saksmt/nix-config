@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenNotNoX, whenLaptop, ... } : { config, pkgs, ... }:
 
 whenNotNoX { imports = [{
 

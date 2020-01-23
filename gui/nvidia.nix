@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenNvidia, ... } : { config, pkgs, ... }:
 
 whenNvidia {
   services.xserver.videoDrivers = [ "nvidia" ];

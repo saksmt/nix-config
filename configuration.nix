@@ -1,39 +1,36 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+{ config, pkgs, ... }:
 
-cfg@{ config, pkgs, ... }:
+let configFiles = [
+
+  ./base-setup.nix
+  ./dev/common.nix
+  ./dev/c.nix
+  ./dev/jvm.nix
+  ./dev/haskell.nix
+  ./dev/oracle.nix
+  ./apps/vpn.nix
+  ./apps/work.nix
+  ./apps/media.nix
+  ./apps/server.nix
+  ./apps/media-server.nix
+  ./gui/base.nix
+  ./gui/nvidia.nix
+  ./gui/intel-gpu.nix
+  ./gui/nvidia-laptop.nix
+  ./gui/apps.nix
+  ./gui/awesome.nix
+  ./apps/guitar.nix
+
+]; in
 
 with (import ./env.nix);
 
-{
-  imports =
-    [
-
-      ./packages/all.nix
-      ./packages/overlays.nix
-      ./unstable.nix
-      ./services/plex.nix
-      ./hardware-configuration.nix
-      ./base-setup.nix
-      ./dev/common.nix
-      ./dev/c.nix
-      ./dev/jvm.nix
-      ./dev/haskell.nix
-      ./dev/oracle.nix
-      ./apps/vpn.nix
-      ./apps/work.nix
-      ./apps/media.nix
-      ./apps/server.nix
-      ./apps/media-server.nix
-      ./gui/base.nix
-      ./gui/nvidia.nix
-      ./gui/intel-gpu.nix
-      ./gui/nvidia-laptop.nix
-      ./gui/apps.nix
-      ./gui/awesome.nix
-      ./apps/guitar.nix
-
-      additionalConfiguration
-    ];
+let uses = import ./lib/uses/env-functions.nix;
+    include = file: (import file) uses;
+    includeAll = files: map include files;
+in {
+  imports = [
+    ((include ./lib/unstable-overlaying.nix) (import ./unstables.nix))
+    ./hardware-configuration.nix
+  ] ++ (includeAll configFiles) ++ [ additionalConfiguration ];
 }

@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenServer, ... } : { config, pkgs, ... }:
 
 whenServer {
   services.sshd.enable = true;

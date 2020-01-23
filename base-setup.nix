@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
-with (import ./lib/env-functions.nix);
+uses: { config, pkgs, ... }:
+with uses;
 
 { imports = [
     (whenHiDPI {

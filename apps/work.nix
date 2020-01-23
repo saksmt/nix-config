@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenWork, whenWorkLike, ... } : { config, pkgs, ... }:
 
 { imports = [(whenWorkLike {
     environment.systemPackages = [ pkgs.openconnect ];

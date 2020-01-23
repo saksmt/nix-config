@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenDev, ... }: { config, pkgs, ... }:
 
 # todo: idea to NotNoX, maybe split dev from runtime
 whenDev {
@@ -7,12 +6,12 @@ whenDev {
   nixpkgs.config.allowUnfree = true;
   programs.java.package = pkgs.jdk11;
   environment.systemPackages = with pkgs; [
-    unstable.jetbrains.idea-ultimate
+    jetbrains.idea-ultimate
     scala
     sbt
     bloop
     jdk
     gradle
-    freshBazel
+    bazel
   ];
 }

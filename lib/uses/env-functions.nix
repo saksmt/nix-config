@@ -1,9 +1,9 @@
-with (import ./fp.nix);
+with (import ../util/fp.nix);
 
 let
     lib = (import <nixpkgs> {}).lib;
     uses = import ./uses.nix;
-    env = import ../env.nix;
+    env = import ../../env.nix;
     deps = flag: builtins.foldl' (
         acc: current: acc ++ (
             if (current.value == flag)
@@ -20,8 +20,8 @@ let
         acc: elem: acc // { "${prefix}${elem.name}" = (gen (elem.value or elem.name)); }
     ) {} uses;
 
-in ((mkResult "when" genWhen) // (mkResult "whenNot" genWhenNot)) // { 
-    inherit use all;
+in ((mkResult "when" genWhen) // (mkResult "whenNot" genWhenNot)) // {
+    inherit use all env;
     when = flags: data: if (lib.all use flags) then data else {};
     whenNot = flags: data: if (lib.all (x: !use x) flags) then data else {};
 }

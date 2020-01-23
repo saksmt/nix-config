@@ -1,8 +1,7 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenDev, whenNotNoX, ... } : { config, pkgs, ... }:
 
 whenDev {
-  imports = [ 
+  imports = [
 #    (whenNotNoX { environment.systemPackages = [ pkgs.postman ]; })
 
     (whenNotNoX { environment.systemPackages = with pkgs; [

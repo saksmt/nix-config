@@ -1,5 +1,5 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+uses: { config, pkgs, ... }:
+with uses;
 
 whenNotNoX { imports = [{
 
@@ -8,14 +8,13 @@ whenNotNoX { imports = [{
         tdesktop
         pcmanfm
         deadbeef
-#        skype
         qpdfview
         parcellite
         discord
 
         mpv
         smplayer
-        
+
         gnome3.dconf
       ];
 

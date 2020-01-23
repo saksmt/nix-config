@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenDev, ... } : { config, pkgs, ... }:
 
 whenDev {
   environment.systemPackages = with pkgs; [ stack ];

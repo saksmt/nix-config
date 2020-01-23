@@ -1,12 +1,11 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenNotNoX, ... } : { config, pkgs, ... }:
 
 whenNotNoX {
   services.xserver.windowManager.awesome.enable = true;
   services.xserver.windowManager.awesome.package = pkgs.awesome;
-  environment.systemPackages = with pkgs; [ 
-    scrot 
-    feh 
+  environment.systemPackages = with pkgs; [
+    scrot
+    feh
     lua
     lxappearance
     pavucontrol

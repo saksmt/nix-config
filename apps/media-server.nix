@@ -1,10 +1,9 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenMediaServer, ... } : { config, pkgs, ... }:
 
 whenMediaServer {
   nixpkgs.config.oraclejdk.accept_license = true;
 
-  services.freshPlex.enable = true;
+  services.plex.enable = true;
 
   services.nfs.server.enable = true;
   services.nfs.server.lockdPort = 4001;

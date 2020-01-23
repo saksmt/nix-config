@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenNotNoX, ... } : { config, pkgs, ... }:
 
 whenNotNoX {
   environment.systemPackages = [ pkgs.ffmpeg ];

@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-with (import ../lib/env-functions.nix);
+{ whenHome, ... } : { config, pkgs, ... }:
 
 whenHome {
   services.openvpn.servers = {
