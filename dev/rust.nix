@@ -1,5 +1,10 @@
 { whenDev, ... } : { config, pkgs, ... }:
 
 whenDev {
-  environment.systemPackages = [ pkgs.rustc pkgs.cargo ];
+  nixpkgs.config.allowUnfree = true;
+  environment.systemPackages = with pkgs; [ 
+    rustc
+    cargo
+    jetbrains.clion
+  ];
 }
