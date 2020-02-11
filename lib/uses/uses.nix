@@ -14,4 +14,5 @@
  { name = "IntelGpu"; value = "intel-gpu"; }
  { name = "Guitar"; value = "guitar"; }
  { name = "HiDPI"; value = "hidpi"; }
+ { name = "AndroidDev"; value = "android-dev"; }
 ]

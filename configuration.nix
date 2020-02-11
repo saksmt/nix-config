@@ -8,6 +8,9 @@ let configFiles = [
   ./dev/jvm.nix
   ./dev/haskell.nix
   ./dev/oracle.nix
+  ./dev/vm.nix
+  ./dev/android.nix
+  ./dev/rust.nix
   ./apps/vpn.nix
   ./apps/work.nix
   ./apps/media.nix

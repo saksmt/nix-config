@@ -13,5 +13,6 @@ whenDev {
     jdk
     gradle
     bazel
+    mill
   ];
 }
