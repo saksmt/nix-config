@@ -20,7 +20,6 @@ whenNotNoX { imports = [{
 
       nixpkgs.config.firefox = {
         ffmpegSupport = true;
-        jre = true;
       };
 
       nixpkgs.config.mpv = {

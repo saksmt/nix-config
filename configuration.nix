@@ -5,6 +5,7 @@ let configFiles = [
   ./base-setup.nix
   ./dev/common.nix
   ./dev/c.nix
+  ./dev/kuber.nix
   ./dev/jvm.nix
   ./dev/haskell.nix
   ./dev/oracle.nix
@@ -23,6 +24,7 @@ let configFiles = [
   ./gui/apps.nix
   ./gui/awesome.nix
   ./apps/guitar.nix
+  ./apps/gaming.nix
 
 ]; in
 

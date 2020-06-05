@@ -1,8 +1,6 @@
 { whenMediaServer, ... } : { config, pkgs, ... }:
 
 whenMediaServer {
-  nixpkgs.config.oraclejdk.accept_license = true;
-
   services.plex.enable = true;
 
   services.nfs.server.enable = true;
@@ -44,6 +42,7 @@ whenMediaServer {
   nixpkgs.config.allowUnfree = true;
 
   programs.java.enable = true;
+  programs.java.package = pkgs.jdk11;
 
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true;

@@ -2,7 +2,12 @@
 
 # todo: idea to NotNoX, maybe split dev from runtime
 whenDev {
-  nixpkgs.config.oraclejdk.accept_license = true;
+  nixpkgs.config.packageOverrides = pkgs: rec {
+    sbt = pkgs.sbt.override {
+      jre = pkgs.jdk11;
+    };
+  };
+
   nixpkgs.config.allowUnfree = true;
   programs.java.package = pkgs.jdk11;
   environment.systemPackages = with pkgs; [
@@ -10,7 +15,7 @@ whenDev {
     scala
     sbt
     bloop
-    jdk
+    jdk11
     gradle
     bazel
     mill
