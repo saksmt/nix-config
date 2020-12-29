@@ -1,4 +1,4 @@
-{ whenNvidia, ... } : { config, pkgs, ... }:
+{ whenNvidia, ... } : _:
 
 whenNvidia {
   services.xserver.videoDrivers = [ "nvidia" ];

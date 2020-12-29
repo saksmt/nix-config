@@ -2,7 +2,7 @@
 
 whenDev(whenNotNoX {
   nixpkgs.config.allowUnfree = true;
-  environment.systemPackages = with pkgs; [
-    virtualboxWithExtpack
-  ];
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  users.extraGroups.vboxusers.members = [ "smt" ];
 })

@@ -1,3 +1,5 @@
 hardware-configuration.nix
 env.nix
 /result
+.nixpkgs.revision
+.unstable-nixpkgs.nix

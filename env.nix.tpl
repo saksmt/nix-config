@@ -1,9 +1,18 @@
 {
-    # "use flags"
+    # enabled overlays
+    overlays = [ "unstables" "plugins" ];
+
+    # "use flags", note that "efi" flag is currently broken beyond repair (hardcode for my pc using grub which don't 
+    #                                                                     fucking work normally with 4K even on fucking threadripper with 64Gb RAM)
     use = [ "pc" "home" "work-like" ];
 
-    # by default load unstable nixpkgs from github as tarball
-    unstablePath = fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixpkgs-unstable.tar.gz;
+    # packages that need plugins, in format: full-package-name = [ list-of-plugin-packages ]
+    plugins = pkgs: {
+        deadbeef-with-plugins = [ pkgs.deadbeef-mpris2-plugin ];
+    };
+
+    # assuming usage of https://github.com/saksmt/local-bin/blob/develop/bin/repin-unstable-nixpkgs which allows pinning of unstable nixpkgs
+    unstablePath = import ./.unstable-nixpkgs.nix;
     forkedPath = ../nixpkgs;
 
     # additional configuration specific to this deployment
