@@ -26,4 +26,8 @@ with uses;
           '';
         };
     })
+
+    (whenNotEFI {
+        boot.loader.grub.device = "/dev/sda";
+    })
 ]; }
