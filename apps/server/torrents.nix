@@ -2,6 +2,7 @@
 
 whenMediaServer {
     services.transmission.enable = true;
+    services.transmission.openFirewall = true;
     services.transmission.settings = {
         blocklist-enabled = true;
         blocklist-url = "http://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz";
@@ -14,6 +15,7 @@ whenMediaServer {
         rpc-enabled = true;
         rpc-url = "/transmission/";
         rpc-port = 9091;
+        rpc-bind-address = "0.0.0.0";
         rpc-whitelist = "127.0.0.1,192.168.*.*";
         rpc-whitelist-enabled = true;
         rpc-host-whitelist-enabled = false;
