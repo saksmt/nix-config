@@ -10,6 +10,5 @@ unstable: forked: {
   plex                    = unstable.plex;
   jetbrains.idea-ultimate = unstable.jetbrains.idea-ultimate;
   jetbrains.clion         = unstable.jetbrains.clion;
-  bottom                  = unstable.bottom;
 
 }

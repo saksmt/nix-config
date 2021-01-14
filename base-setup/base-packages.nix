@@ -24,7 +24,7 @@ with uses;
           lm_sensors
           iotop
           iftop
-          bottom
+          bpytop
           gnupg
         ];
     }
