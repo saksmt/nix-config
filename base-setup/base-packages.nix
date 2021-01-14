@@ -29,6 +29,12 @@ with uses;
         ];
     }
 
+    (whenNvidia {
+        environment.systemPackages = with pkgs; [
+            nvtop
+        ];
+    })
+
     (whenLaptop {
         networking.networkmanager.enable = true;
         services.upower.enable = true;
