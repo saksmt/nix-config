@@ -1,5 +1,5 @@
-{ whenNotNoX, ... } : { config, pkgs, ... }:
+_ : { config, pkgs, ... }:
 
-whenNotNoX {
-  environment.systemPackages = [ pkgs.ffmpeg ];
+{
+  environment.systemPackages = [ pkgs.ffmpeg-full ];
 }
