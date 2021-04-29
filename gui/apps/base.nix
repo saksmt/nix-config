@@ -8,6 +8,7 @@ whenNotNoX {
         xarchiver
         roxterm
 
+        rofi
         parcellite
 
         keepassxc
