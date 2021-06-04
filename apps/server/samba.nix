@@ -1,33 +1,41 @@
-{ whenServer, ... } : _ :
+{ whenServer, ... } : { pkgs, ... } :
 
 whenServer {
+    environment.systemPackages = [ pkgs.samba ];
+
     services.samba.enable = true;
     services.samba.shares = { 
         root = {
-            path = "/root";
-            "read only" = false;
+            path = "/";
             "valid users" = "@samba-root-access";
-            "guest ok" = false;
-            browsable = true;
-            writable = true;
+            "guest ok" = "no";
+            "force user" = "";
+            "force group" = "";
+            browsable = "yes";
+            writable = "yes";
+            comment = "Server filesystem root";
         };
 
         data = {
             path = "/data";
-            "read only" = false;
             "valid users" = "@samba-data-access";
-            "guest ok" = false;
-            browsable = true;
-            writable = true;
+            "guest ok" = "no";
+            browsable = "yes";
+            writable = "yes";
+            comment = "Медиа и данные";
         };
 
         files = {
-            path = "/data/files";
-            "read only" = false;
+            path = "/data/files/%u";
             "valid users" = "@samba-files-access";
-            "guest ok" = false;
-            browsable = true;
-            writable = true;
+            "guest ok" = "no";
+            browsable = "yes";
+            writable = "yes";
+            comment = "Персональные файлы";
         };
-     };
+    };
+    services.samba.extraConfig = ''
+      force user = nfs
+      force group = transmission
+    '';
 }
