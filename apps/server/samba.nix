@@ -27,7 +27,6 @@ whenServer {
 
         files = {
             path = "/data/files/%u";
-            "valid users" = "@samba-files-access";
             "guest ok" = "no";
             browsable = "yes";
             writable = "yes";
@@ -35,6 +34,9 @@ whenServer {
         };
     };
     services.samba.extraConfig = ''
+      workgroup = WORKGROUP
+      server string = smt-home-server
+      server role = standalone server
       force user = nfs
       force group = transmission
       log level = 2 full_audit:4
