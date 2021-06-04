@@ -4,27 +4,27 @@ whenServer {
     services.samba.enable = true;
     services.samba.shares = { 
         root = {
-            path = "/root"
+            path = "/root";
             "read only" = false;
-            "valid users" = "@samba-root-access"
+            "valid users" = "@samba-root-access";
             "guest ok" = false;
             browsable = true;
             writable = true;
         };
 
         data = {
-            path = "/data"
+            path = "/data";
             "read only" = false;
-            "valid users" = "@samba-data-access"
+            "valid users" = "@samba-data-access";
             "guest ok" = false;
             browsable = true;
             writable = true;
         };
 
         files = {
-            path = "/data/files"
+            path = "/data/files";
             "read only" = false;
-            "valid users" = "@samba-files-access"
+            "valid users" = "@samba-files-access";
             "guest ok" = false;
             browsable = true;
             writable = true;
