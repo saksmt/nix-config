@@ -37,5 +37,6 @@ whenServer {
     services.samba.extraConfig = ''
       force user = nfs
       force group = transmission
+      log level = 2 full_audit:4
     '';
 }
