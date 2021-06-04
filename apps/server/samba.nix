@@ -4,6 +4,7 @@ whenServer {
     environment.systemPackages = [ pkgs.samba ];
 
     services.samba.enable = true;
+    services.samba.invalidUsers = [];
     services.samba.shares = { 
         root = {
             path = "/";
@@ -29,6 +30,10 @@ whenServer {
             path = "/data/files/%u";
             "guest ok" = "no";
             browsable = "yes";
+            "force user" = "";
+            "create mask" = "664";
+            "directory mask" = "775";
+            "force group" = "nfs";
             writable = "yes";
             comment = "Персональные файлы";
         };
