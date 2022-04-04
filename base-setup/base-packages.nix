@@ -5,6 +5,9 @@ with uses;
     {
         nixpkgs.config.allowUnfree = true;
 
+        programs.gnupg.agent.enable = true;
+        programs.gnupg.agent.enableSSHSupport = true;
+
         environment.systemPackages = with pkgs; [
           wget 
           htop 
@@ -29,9 +32,13 @@ with uses;
         ];
     }
 
+    (whenNoX {
+        programs.gnupg.agent.pinentryFlavor = "curses";
+    })
+
     (whenNvidia {
         environment.systemPackages = with pkgs; [
-            nvtop
+            #nvtop
         ];
     })
 

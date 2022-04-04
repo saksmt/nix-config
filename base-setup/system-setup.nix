@@ -9,8 +9,10 @@ with uses;
         console.font = "ter-k16n";
     })
     {
+
+        system.stateVersion = "21.11";
+
         nixpkgs.config.glibc.installLocales = true;
-        services.dbus.socketActivated = true;
 
         console = {
             earlySetup = true;
@@ -29,8 +31,6 @@ with uses;
         };
 
         time.timeZone = "Europe/Moscow";
-
-        system.stateVersion = "20.09";
     }
 
     (whenLaptop {
@@ -39,5 +39,10 @@ with uses;
 
     (whenNotLaptop {
         powerManagement.cpuFreqGovernor = "performance";
+    })
+
+    (whenPC {
+        environment.systemPackages = [ pkgs.brightnessctl ];
+        boot.extraModulePackages = [ config.boot.kernelPackages.ddcci-driver ];
     })
 ]; }

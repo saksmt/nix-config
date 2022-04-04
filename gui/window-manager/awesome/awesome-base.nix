@@ -9,4 +9,6 @@ whenNotNoX {
     services.xserver.displayManager.sddm.enable = true;
     security.pam.services.sddm.enableGnomeKeyring = true;
     security.pam.services.sddm.startSession = true;
+
+    programs.gnupg.agent.pinentryFlavor = "curses";
 }

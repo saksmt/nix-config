@@ -2,7 +2,7 @@
 
 whenHome {
   services.openvpn.servers = {
-    vds = { config = '' config /root/ovpn.config '';
+    vds = { config = '' config /home/smt/.config/ovpn.conf '';
             updateResolvConf = true;
             autoStart = false;
           };

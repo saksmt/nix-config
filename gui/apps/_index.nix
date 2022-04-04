@@ -5,5 +5,6 @@
         ./im.nix
         ./office.nix
         ./guitar.nix
+        ./gaming.nix
     ];
 }

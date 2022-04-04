@@ -6,10 +6,6 @@
 
 unstable: forked: {
 
-  rofi                    = unstable.rofi;
-  bazel                   = unstable.bazel;
   plex                    = unstable.plex;
-  jetbrains.idea-ultimate = unstable.jetbrains.idea-ultimate;
-  jetbrains.clion         = unstable.jetbrains.clion;
 
 }

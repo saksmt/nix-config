@@ -14,14 +14,14 @@ let
       ) r
     else r
   ;
-    
+
   mergePackageSets = recMergeIf (_: r: !lib.isDerivation r);
 
   overlays = map (name: let
     path = ../. + "/overlays/${name}.nix";
   in import path) conf.overlays;
 
-  applyOverlay = prev@{ originalPkgs, currentPkgs, currentOverrides, overlay }: let 
+  applyOverlay = prev@{ originalPkgs, currentPkgs, currentOverrides, overlay }: let
     overlayOverrides = overlay (globalScope // {
       inherit originalPkgs currentPkgs currentOverrides;
     }) stdNix;
@@ -36,16 +36,15 @@ let
   ) lib.id overlays;
 
 in {
-  nixpkgs.overlays = [ (
+  nixConfig.nixpkgs.overlays = [ (
     self: super:
-      let 
-        result = mergePackageSets super (allOverrides {
+      let
+        result = (allOverrides {
           originalPkgs = super;
           currentPkgs = super;
           currentOverrides = {};
         }).currentOverrides;
       in result
   ) ];
-    
-}
 
+}
