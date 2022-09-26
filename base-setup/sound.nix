@@ -15,7 +15,6 @@ with uses;
         };
 
         hardware.pulseaudio = {
-          extraModules = [ pkgs.pulseaudio-modules-bt ];
           extraConfig = ''
             load-module module-bluetooth-policy
             load-module module-bluetooth-discover

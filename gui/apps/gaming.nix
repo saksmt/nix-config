@@ -6,5 +6,6 @@ whenGaming {
   environment.systemPackages = with pkgs; [ 
     discord
     minecraft
+    wineWowPackages.stable
   ];
 }

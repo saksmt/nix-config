@@ -17,7 +17,7 @@ with uses;
           nfs-utils
           unzip
           exfat
-          telnet
+          inetutils
           libsecret
           bat
           fzf

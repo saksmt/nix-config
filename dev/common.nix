@@ -2,7 +2,6 @@
 
 whenDev {
   imports = [
-#    (whenNotNoX { environment.systemPackages = [ pkgs.postman ]; })
 
     (whenNotNoX { environment.systemPackages = with pkgs; [
         vscode
@@ -11,7 +10,7 @@ whenDev {
 
     {
       environment.systemPackages = with pkgs; [
-        docker_compose
+        docker-compose
         gitAndTools.tig
         jq
         httpie

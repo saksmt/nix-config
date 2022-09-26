@@ -4,7 +4,7 @@ whenMediaServer {
     virtualisation.docker.enable = true;
     virtualisation.docker.enableOnBoot = true;
 
-    environment.systemPackages = [ pkgs.docker_compose ];
+    environment.systemPackages = [ pkgs.docker-compose ];
 
     services.avahi.reflector = true;
     services.avahi.nssmdns = true;

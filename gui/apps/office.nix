@@ -6,7 +6,6 @@ whenNotNoX {
     imports = [(whenWorkLike {
         environment.systemPackages = with pkgs; [ 
             libreoffice
-            xmind
         ];
     })];
 }

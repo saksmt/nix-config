@@ -1,14 +1,16 @@
 { whenNotNoX, whenWork, whenWorkLike, ... }: { pkgs, ... }: 
 
+with pkgs;
+
 whenNotNoX {
-    environment.systemPackages = with pkgs; [
+    environment.systemPackages = [
         tdesktop
         discord
     ];
 
     imports = [(whenWork {
-        environment.systemPackages = [ pkgs.gnome3.evolution ];
+        environment.systemPackages = [ gnome3.evolution ];
     }) (whenWorkLike {
-        environment.systemPackages = [ pkgs.slack pkgs.zoom-us ];
+        environment.systemPackages = [ slack zoom-us ];
     })];
 }
