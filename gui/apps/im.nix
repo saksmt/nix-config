@@ -9,8 +9,9 @@ whenNotNoX {
     ];
 
     imports = [(whenWork {
-        environment.systemPackages = [ gnome3.evolution ];
-    }) (whenWorkLike {
-        environment.systemPackages = [ slack zoom-us ];
+        programs.evolution = {
+          enable = true;
+          plugins = [ pkgs.evolution-ews ];
+        };
     })];
 }

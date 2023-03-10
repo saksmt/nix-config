@@ -13,7 +13,5 @@ whenNotNoX { imports = [{
 
 } (whenLaptop {
     services.xserver.libinput.enable = true;
-    services.xserver.libinput.disableWhileTyping = true;
-    services.xserver.multitouch.enable = true;
-    services.xserver.multitouch.ignorePalm = true;
+    services.xserver.libinput.touchpad.disableWhileTyping = true;
 })]; }

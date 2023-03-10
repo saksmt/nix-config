@@ -1,4 +1,4 @@
-{ whenNotNoX, whenHome, ... }: { pkgs, ... }:
+{ whenNotNoX, whenHomeLike, ... }: { pkgs, ... }:
 
 whenNotNoX {
     environment.systemPackages = with pkgs; [
@@ -18,7 +18,7 @@ whenNotNoX {
         ffmpegSupport = true;
     };
 
-    imports = [(whenHome {
+    imports = [(whenHomeLike {
         environment.systemPackages = [ pkgs.transmission-remote-gtk ];
     })];
 }

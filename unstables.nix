@@ -7,5 +7,7 @@
 unstable: forked: {
 
   plex                    = unstable.plex;
+  jetbrains.idea-ultimate = unstable.jetbrains.idea-ultimate;
+  appflowy                = unstable.appflowy;
 
 }

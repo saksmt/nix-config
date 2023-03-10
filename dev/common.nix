@@ -6,6 +6,7 @@ whenDev {
     (whenNotNoX { environment.systemPackages = with pkgs; [
         vscode
         freemind
+        appflowy
     ]; })
 
     {
