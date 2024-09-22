@@ -1,0 +1,28 @@
+{
+  features,
+  pkgs,
+  lib,
+  ...
+}:
+
+{
+  module-for = [ "hm" ];
+}
+// (
+  if features.GUI.isEnabled then
+    {
+      imports = [ ../barebones/x.nix ];
+
+      install.packages = [
+        pkgs.lua
+        pkgs.rofi
+      ];
+
+      services.parcellite.enable = lib.mkDefault true;
+
+      xsession.windowManager.awesome.enable = true;
+      xsession.windowManager.awesome.package = pkgs.awesome;
+    }
+  else
+    { }
+)

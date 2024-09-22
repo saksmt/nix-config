@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$(readlink -f "${0}")")" || exit
+
+# I fucking hate that restriction on flakes...
+nix eval --impure --expr 'import ./inputs.nix' | nix run nixpkgs#nixfmt-rfc-style

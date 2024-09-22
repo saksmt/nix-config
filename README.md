@@ -1,18 +1,33 @@
-# saksmt nixos configuration files
+# nixos & home-manager config
 
-Opinionated nixos configuration with support for somewhat useflags on "world" level, custom ovelaying (see [unstables](./overlays/unstables.nix) as an example)
- and coexistance of stable (stable channel), unstable (nixpkgs-unstable) and even forked packages with deadly simple syntax (see [unstables.nix](./unstables.nix))
+Opinionated nixos & home-manager configuration with gentoo/emerge concepts of use-flags and package-sets.
 
 Use at your own risk, no guarantees provided whatsoever.
 
-Start by copying `env.nix.tpl` to `env.nix` and modifying it for your own use-cases.
+To install run `./install <NAME_OF_CONFIG>`
 
-## todo
+After install to update use either `os switch` or `home switch` depending on whether you're on nixos or using home
+manager.
 
- - split media-server use flag into smaller pieces
- - drop grub and replace with systemd
- - work out some installation without symlinking
+General configuration concepts:
 
-## related
+- installation recipe - world + use-flags, high-level description of what result should be;
+- package-set - package-set, set of packages and options to provide some functionality/role;
+- feature - use-flag, minor or cross package-set behaviour switch;
+- installation-module & installation recipe processor - mostly internal concept for separation of concerns, idea is to
+  provide multitude of installation modules all providing their view on what should be done to make recipe a reality.
 
- - [local-bin](https://github.com/saksmt/local-bin)
+Dir structure:
+
+- `shared-lib` - reusable sub-flakes intended as shareable and at least more useful for community at large than other
+  stuff in this repo
+- `custom-packages` - custom packages
+- `overlays` - custom overlays
+- `installation-modules` - modules providing their view on what result of recipe should be (refer
+  to [types](./installation-modules/typedefs.d.ts))
+- `installation-modules/common` - modules intended for either hm or nixos
+- `installation-modules/nixos` - modules intended exclusively for nixos
+- `installation-modules/hm` - modules intended exclusively for home-manager
+- `hosts` - host installation recipes
+- `hosts/no-host` - non-nixos home-manager installation recipes
+- `package-sets` - NixOS modules

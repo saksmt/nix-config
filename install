@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+thisDir="$(readlink -f "$(dirname "${0}")")"
+
+attributeRef="${1}"
+
+if type nixos-rebuild &>/dev/null; then
+  if [[ n"${attributeRef}" == n ]]; then
+    attributeRef="$(hostname)"
+  fi
+
+  echo "path:${thisDir}" | sudo tee /etc/nixos/flake-ref >/dev/null
+  echo "${attributeRef}" | sudo tee /etc/nixos/host-ref >/dev/null
+
+  nix run --impure "$(< /etc/nixos/flake-ref)#os-rebuild" -- boot
+fi
+# todo: else hm

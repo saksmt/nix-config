@@ -1,4 +1,0 @@
-{ whenHome, ... } : { config, pkgs, ... }:
-
-whenHome {
-}
