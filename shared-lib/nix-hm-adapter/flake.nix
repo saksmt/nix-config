@@ -6,6 +6,8 @@
       packages = import ./src/packages.module.nix;
       shells = import ./src/shells.module.nix;
       fonts = import ./src/fonts.module.nix;
+      nix = import ./src/nix.module.nix;
+
       validatorF = import ./src/module-type-validator.nix;
       validator = {
         nixosModule = validatorF "nixos";
@@ -18,6 +20,7 @@
             (packages.${tpe})
             (shells.${tpe})
             (fonts.${tpe})
+            (nix.${tpe})
 
             (validator.${tpe})
           ];

@@ -54,5 +54,11 @@
     xxHash
 
     sshfs
+
+    # alias to configured default editor
+    (writeShellApplication {
+       name = "ee";
+       text = "exec \${EDITOR} \"\${@}\"";
+     })
   ];
 }

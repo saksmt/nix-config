@@ -21,15 +21,17 @@ lib.mkMerge [
       enable = true;
       font = {
         name = "IosevkaForTerm Nerd Font";
-        size = 19;
+        size = if HiDPI.isEnabled then 19 else 14;
       };
       theme = "Tango Dark";
       shellIntegration.enableZshIntegration = true;
+      shellIntegration.mode = "no-rc no-cursor";
 
       settings = {
         background = "#2B2B2B";
         selection_foreground = "none";
         selection_background = "none";
+        cursor_shape = "block";
       };
     };
 

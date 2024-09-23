@@ -29,6 +29,14 @@
         };
         url = "path:./shared-lib/nix-unstables";
       };
+      nixgl = {
+        inputs = {
+          nixpkgs = {
+            follows = "nixpkgs";
+          };
+        };
+        url = "github:nix-community/nixGL";
+      };
       nixos-hardware = {
         url = "github:NixOS/nixos-hardware/master";
       };
@@ -49,6 +57,7 @@
     {
       self,
       nixpkgs,
+      home-manager,
       nixpkgs-unstable,
       utils,
       nix-features,
@@ -70,6 +79,20 @@
           modules = applied.modules;
           specialArgs = applied.module-args;
         };
+      hmFromInstallationModules =
+        installationPath:
+        let
+          inherit (installation-module-lib) includeAllRelative apply;
+          installation = import (self.outPath + installationPath);
+          installationModules = includeAllRelative self [ "/installation-modules/hm/standalone.nix" ];
+          applied = apply inputs installationModules installation;
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        in
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          modules = applied.modules;
+          extraSpecialArgs = applied.module-args;
+        };
       outputs = {
 
         repl = {
@@ -80,18 +103,10 @@
 
         nixosConfigurations = {
           smt-laptop = nixosFromInstallationModules "/hosts/laptop.nix";
+        };
 
-          test = nixpkgs.lib.nixosSystem {
-            modules =
-              (nixpkgs.lib.optional (builtins.pathExists /etc/nixos/local-hacks.nix) /etc/nixos/local-hacks.nix)
-              ++ [
-                (_: { nixpkgs.hostPlatform = "x86_64-linux"; })
-                (import ./sys.nix)
-                (import ./tst.nix)
-                nix-features.nixosModules.default
-                nix-hm-adapter.nixosModules.default
-              ];
-          };
+        homeConfigurations = {
+          work-laptop = hmFromInstallationModules "/hosts/no-host/work-laptop.hm.nix";
         };
 
         packages =

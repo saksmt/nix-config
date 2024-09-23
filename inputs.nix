@@ -11,6 +11,8 @@ in
   nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+  nixgl = nixpkgs-dependent-input "github:nix-community/nixGL";
+
   home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-24.05";
 
   utils.url = "github:numtide/flake-utils";

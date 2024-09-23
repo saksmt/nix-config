@@ -54,4 +54,20 @@
       "user-preferences"
     ];
   };
+
+  imports = [
+    (builtins.fetchurl {
+      url = "https://raw.githubusercontent.com/nix-community/home-manager/830c928697049ef9ce1eea2f3b6ce2972a80b6f6/modules/misc/nixgl.nix";
+      sha256 = "01dkfr9wq3ib5hlyq9zq662mp0jl42fw3f6gd2qgdf8l8ia78j7i";
+    })
+    (
+      { pkgs, config, ... }:
+      {
+        home.packages = [ pkgs.nixgl.nixGLIntel ];
+        nixGL.prefix = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel";
+
+        programs.kitty.package = config.lib.nixGL.wrap pkgs.kitty;
+      }
+    )
+  ];
 }

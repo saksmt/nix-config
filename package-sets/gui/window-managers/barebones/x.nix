@@ -19,6 +19,7 @@ lib.mkMerge [
 
       pcmanfm
       xarchiver
+      xsel
     ];
     services.gpg-agent.pinentryPackage = pkgs.pinentry-curses;
     xsession.enable = true;

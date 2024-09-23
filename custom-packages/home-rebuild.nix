@@ -24,14 +24,14 @@ writeShellApplication {
     ASK_FLAG="''${NO_ASK:---ask}"
     read -r -a nixOpts <<< "''${NH_NIX_OPTS:-}"
 
-    if ![[ -f "''${HOME}/.config/hm/flake-ref" ]]; then
+    if ! [[ -f "''${HOME}/.config/hm/flake-ref" ]]; then
       echo "Can not find flake reference to build upon. Did you properly install config?" >&2
       exit 1
     fi
     thisFlake="$(< "''${HOME}/.config/hm/flake-ref")"
 
     thisConfig="$(whoami)"
-    if [[ -f "''${HOME}/.config/hm/user-config-ref" ]];
+    if [[ -f "''${HOME}/.config/hm/user-config-ref" ]]; then
       thisConfig="$(< "''${HOME}/.config/hm/user-config-ref")"
     fi
 

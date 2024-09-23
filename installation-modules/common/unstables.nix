@@ -15,9 +15,9 @@ let
     { source }:
     {
       unstable = source (
-        { config, ... }:
+        { pkgs, ... }:
         import nixpkgs-unstable {
-          system = config.nixpkgs.hostPlatform.system;
+          system = pkgs.system;
           config.allowUnfree = true;
         }
       );

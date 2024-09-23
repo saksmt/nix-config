@@ -1,5 +1,64 @@
 #!/usr/bin/env bash
 
+
+# TODO: make this a package after packaging local-bin
+
+esc=$(echo -en "\033")
+
+clr="${esc}[0m"
+bright="${esc}[1m"
+dim="${esc}[2m"
+
+red="${esc}[31m"
+green="${esc}[32m"
+cyan="${esc}[36m"
+white="${esc}[37m"
+
+info=" ${cyan}*${clr} "
+error=" ${red}*${clr} "
+
+function prompt {
+    local inversed
+
+    if [[ "$2" == "inverse" ]]; then
+        inversed=true
+    else
+        inversed=false
+    fi
+
+    local questionAnswerVariants
+    questionAnswerVariants=$($inversed && echo "[${red}y${clr}|${green}N${clr}]" || echo "[${green}Y${clr}|${red}n${clr}]")
+    local ans=""
+    while true; do
+        echo -n "${white}${bright}>>> ${clr}${1}${clr} ${questionAnswerVariants} "
+        read -n1 ans
+        if [[ ! ( $ans =~ [yYnN] || $ans == "" ) ]]; then
+            echo ""
+            echo "Sorry didn't understand, try again."
+        else
+            if [[ $ans != "" ]]; then
+                echo ""
+            fi
+            if [[ $ans =~ [yY] || ( $ans == "" && ! "$inversed" == "true" ) ]]; then
+                answer=true
+            else
+                answer=false
+            fi
+            break
+        fi
+    done
+
+    local returnCode
+    if [[ "$answer" == "true" ]]; then
+        returnCode=0
+    else
+        returnCode=1
+    fi
+    return $returnCode
+}
+
+
+
 thisDir="$(readlink -f "$(dirname "${0}")")"
 
 attributeRef="${1}"
@@ -9,9 +68,50 @@ if type nixos-rebuild &>/dev/null; then
     attributeRef="$(hostname)"
   fi
 
+  echo "${info}Installing system-wide configuration (nixos)"
+  echo "${info}Flake path: ${dim}path:${thisDir}${clr}"
+  echo "${info}Flake attribute: ${dim}${attributeRef}${clr}"
+
+  prompt "Proceed?" inverse
+
   echo "path:${thisDir}" | sudo tee /etc/nixos/flake-ref >/dev/null
   echo "${attributeRef}" | sudo tee /etc/nixos/host-ref >/dev/null
 
   nix run --impure "$(< /etc/nixos/flake-ref)#os-rebuild" -- boot
+elif type nix &> /dev/null; then
+  if [[ n"${attributeRef}" == n ]]; then
+    attributeRef="$(whoami)"
+  fi
+
+  echo "${info}Installing user configuration (home-manager)"
+  echo "${info}Flake path: ${dim}path:${thisDir}${clr}"
+  echo "${info}Flake attribute: ${dim}${attributeRef}${clr}"
+
+  prompt "Proceed?" inverse || exit 0
+
+  mkdir -p ~/.config/hm &>/dev/null
+  echo "path:${thisDir}" > ~/.config/hm/flake-ref
+  echo "${attributeRef}" > ~/.config/hm/user-config-ref
+
+  nix --extra-experimental-features 'nix-command flakes' run --impure "$(< ~/.config/hm/flake-ref)#home-rebuild" -- switch -b .hm-backup~ || exit 1
+  prompt "Add system-wide xsession pointing to home?" || exit 0
+  cat <<EOF | sudo tee /usr/bin/start-user-xsession > /dev/null
+  #!/usr/bin/env bash
+  exec \${HOME}/.xsession
+EOF
+  sudo chmod +x /usr/bin/start-user-xsession
+  cat <<EOF | sudo tee /usr/share/xsessions/home-managed_x.desktop > /dev/null
+  [Desktop Entry]
+  Version=1.0
+  Name=home-managed_x
+  Comment=Passthrough to xsession script of in user home
+  TryExec=start-user-xsession
+  Exec=start-user-xsession
+  Type=XSession
+  DesktopNames=home-managed_x
+EOF
+else
+  echo "${error}ERROR: No nix or nixos-rebuild found!" >&2;
+  exit 1
 fi
-# todo: else hm
+
