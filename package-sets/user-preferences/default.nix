@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 {
   module-for = [ "hm" ];
 
@@ -56,12 +53,8 @@
             "mem:1:default"
             "net:0:default"
           ]
-          [
-            "proc:0:default"
-          ]
-          [
-            "gpu0:0:default"
-          ]
+          [ "proc:0:default" ]
+          [ "gpu0:0:default" ]
         ]
       );
     };
@@ -84,6 +77,17 @@
 
       "*.swp"
       "*~"
+    ];
+  };
+
+  xdg.enable = true;
+  xdg.mimeApps.enable = true;
+  xdg.mimeApps.defaultApplications = {
+    "x-scheme-handler/http" = [ "firefox.desktop" ];
+    "x-scheme-handler/https" = [ "firefox.desktop" ];
+    "text/html" = [ "firefox.desktop" ];
+    "application/pdf" = [
+      "firefox.desktop"
     ];
   };
 }
