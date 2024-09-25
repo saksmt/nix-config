@@ -10,6 +10,10 @@
           { pkgs, ... }:
           {
             environment.systemPackages = [ pkgs.os-rebuild ];
+            nix.registry = {
+              os.to = builtins.parseFlakeRef (nixpkgs.lib.strings.fileContents "/etc/nixos/flake-ref");
+              tpl.to = builtins.parseFlakeRef (nixpkgs.lib.strings.fileContents "/etc/nixos/flake-ref");
+            };
           }
         )
       ]

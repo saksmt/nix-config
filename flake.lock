@@ -57,7 +57,7 @@
     "nix-hm-adapter": {
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-UrQbK2DS427PfwRrzZ9R7l0EZqc3Q7x7JzuneezSiuo=",
+        "narHash": "sha256-zWMQnvGLfGYFT+Ko8hbHPg3d1ENl2ytqb56BOP7NmFE=",
         "path": "./shared-lib/nix-hm-adapter",
         "type": "path"
       },

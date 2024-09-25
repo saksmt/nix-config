@@ -53,12 +53,12 @@ in
 
       config.programs.zsh.enable = lib.mkDefault config.shells.zsh.enable;
       # loosely matches "top" of rc file
-      config.programs.zsh.interactiveShellInit = lib.mkDefault config.shells.zsh.rc-extra.top;
+      config.programs.zsh.interactiveShellInit = config.shells.zsh.rc-extra.top;
       # loosely matches "bottom" of rc file
-      config.programs.zsh.promptInit = lib.mkDefault config.shells.zsh.rc-extra.bottom;
+      config.programs.zsh.promptInit = config.shells.zsh.rc-extra.bottom;
       config.programs.zsh.ohMyZsh.enable = lib.mkDefault config.shells.zsh.oh-my-zsh.enable;
       config.programs.zsh.ohMyZsh.theme = lib.mkDefault config.shells.zsh.oh-my-zsh.theme;
-      config.programs.zsh.ohMyZsh.plugins = lib.mkDefault config.shells.zsh.oh-my-zsh.plugins;
+      config.programs.zsh.ohMyZsh.plugins = config.shells.zsh.oh-my-zsh.plugins;
     };
   homeManagerModule =
     { config, lib, ... }:
@@ -68,10 +68,10 @@ in
       config.programs.bash.enable = lib.mkDefault config.shells.bash.enable;
 
       config.programs.zsh.enable = lib.mkDefault config.shells.zsh.enable;
-      config.programs.zsh.initExtraFirst = lib.mkDefault config.shells.zsh.rc-extra.top;
-      config.programs.zsh.initExtra = lib.mkDefault config.shells.zsh.rc-extra.bottom;
+      config.programs.zsh.initExtraFirst = config.shells.zsh.rc-extra.top;
+      config.programs.zsh.initExtra = config.shells.zsh.rc-extra.bottom;
       config.programs.zsh.oh-my-zsh.enable = lib.mkDefault config.shells.zsh.oh-my-zsh.enable;
       config.programs.zsh.oh-my-zsh.theme = lib.mkDefault config.shells.zsh.oh-my-zsh.theme;
-      config.programs.zsh.oh-my-zsh.plugins = lib.mkDefault config.shells.zsh.oh-my-zsh.plugins;
+      config.programs.zsh.oh-my-zsh.plugins = config.shells.zsh.oh-my-zsh.plugins;
     };
 }

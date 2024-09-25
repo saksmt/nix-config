@@ -95,6 +95,13 @@
         };
       outputs = {
 
+        templates = {
+          rust-base = {
+            path = ./templates/rust-base;
+            description = "Base rust template (flake, toolchain, empty rustfmt)";
+          };
+        };
+
         repl = {
           inherit inputs;
           inherit outputs;

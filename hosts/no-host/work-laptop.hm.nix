@@ -67,6 +67,7 @@
         nixGL.prefix = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel";
 
         programs.kitty.package = config.lib.nixGL.wrap pkgs.kitty;
+        services.xscreensaver.package = config.lib.nixGL.wrap pkgs.xscreensaver;
       }
     )
   ];
