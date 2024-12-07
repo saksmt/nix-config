@@ -61,6 +61,9 @@
   };
 
   programs.git = {
+    extraConfig = {
+      init.defaultBranch = "master";
+    };
     ignores = [
       "test.*"
       "non-git_local-overrides.*"
@@ -94,5 +97,7 @@
     "application/pdf" = [
       "firefox.desktop"
     ];
+
+    "x-scheme-handler/tg" = [ "org.telegram.desktop.desktop" ];
   };
 }

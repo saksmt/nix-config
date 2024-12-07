@@ -26,10 +26,31 @@
           nixpkgs.config.allowUnfree = true;
           nixpkgs.config.allowUnfreePredicate = _: true;
 
-          nix.settings.experimental-features = [
-            "nix-command"
-            "flakes"
-          ];
+          nix.settings = {
+            experimental-features = [ "nix-command" "flakes" ];
+
+            # quality-of-life, also overrides defaults with same values to
+            # make it more external change proof
+            log-lines = lib.mkDefault 100;
+            max-build-log-size = lib.mkDefault 0;
+            keep-build-log = lib.mkDefault true;
+            allow-dirty = lib.mkDefault true;
+            keep-derivations = lib.mkDefault true;
+            # debatable, but useful for debugging
+            keep-failed = lib.mkDefault true;
+            # motivation: it's better to build single package with
+            # parallelism than to build multiple packages in parallel
+            # with single thread per package. small packages are not
+            # parallelizing in any way and most likely are I/O bound,
+            # big packages on the other hand support parallelized build
+            # themselves so that they can be built quicker
+            max-jobs = lib.mkDefault 1;
+            # security is the priority =_=
+            require-sigs = lib.mkForce true;
+            sandbox = lib.mkForce true;
+            # need to test this properly, false for now; requires "cgroups" feature
+            use-cgroups = lib.mkForce false;
+          };
 
           nix.gc = {
             automatic = lib.mkDefault true;

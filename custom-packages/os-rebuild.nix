@@ -56,7 +56,7 @@ writeShellApplication {
       boot ) shift; nh os boot ${buildOpts}; ;;
       update )
         cd ${lib.strings.escapeShellArg thisFlakePath} || { echo ${lib.strings.escapeShellArg thisFlakePath}' does not exist!'; exit 1; }
-        git pull origin master
+        git pull
         nix flake update
         ;;
       repl )

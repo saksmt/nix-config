@@ -15,7 +15,7 @@ lib.mkMerge [
       [
         keepassxc
       ]
-      ++ (lib.lists.optional work-ban.isEnabled transmission-remote-gtk);
+      ++ (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk);
 
     programs.kitty = {
       enable = true;

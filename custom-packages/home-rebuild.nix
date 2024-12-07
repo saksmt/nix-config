@@ -49,7 +49,7 @@ writeShellApplication {
         preThisFlakePath="''${thisFlake#'git+file:'}"
         thisFlakePath="''${preThisFlakePath#'path:'}"
         cd "''${thisFlakePath}" || { echo "''${thisFlakePath}"' does not exist!'; exit 1; }
-        git pull origin master
+        git pull
         nix flake update
         ;;
       repl )
