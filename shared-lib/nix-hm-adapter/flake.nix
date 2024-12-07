@@ -3,6 +3,7 @@
   outputs =
     { self }:
     let
+      emacs = import ./src/emacs.module.nix;
       packages = import ./src/packages.module.nix;
       shells = import ./src/shells.module.nix;
       fonts = import ./src/fonts.module.nix;
@@ -17,6 +18,7 @@
       def = tpe: {
         default = _: {
           imports = [
+            (emacs.${tpe})
             (packages.${tpe})
             (shells.${tpe})
             (fonts.${tpe})
@@ -26,6 +28,7 @@
           ];
         };
 
+        emacs-adapter = emacs.${tpe};
         packages-adapter = packages.${tpe};
         shells-adapter = shells.${tpe};
         fonts-adapter = fonts.${tpe};

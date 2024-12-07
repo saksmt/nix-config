@@ -24,7 +24,7 @@ lib.mkMerge [
     services.gpg-agent.pinentryPackage = pkgs.pinentry-curses;
     xsession.enable = true;
 
-    services.xscreensaver.enable = true;
+    services.xscreensaver.enable = false; # param-PAM-pain... need extensive research into how to make it work and what and how xscreensaver uses
     systemd.user.services.xscreensaver = {
       # disable auto start
       Install.WantedBy = lib.mkForce [];

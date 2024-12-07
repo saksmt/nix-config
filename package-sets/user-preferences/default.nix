@@ -75,8 +75,13 @@
       ".bloop/"
       ".attach_pid*"
 
+      # vim
       "*.swp"
       "*~"
+
+      # emacs
+      "\#*\#"
+      ".\#*"
     ];
   };
 
