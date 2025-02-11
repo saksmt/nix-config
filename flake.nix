@@ -8,7 +8,7 @@
             follows = "nixpkgs";
           };
         };
-        url = "github:nix-community/home-manager/release-24.05";
+        url = "github:nix-community/home-manager/release-24.11";
       };
       nix-features = {
         inputs = {
@@ -41,7 +41,7 @@
         url = "github:NixOS/nixos-hardware/master";
       };
       nixpkgs = {
-        url = "github:nixos/nixpkgs/nixos-24.05";
+        url = "github:nixos/nixpkgs/nixos-24.11";
       };
       nixpkgs-unstable = {
         url = "github:nixos/nixpkgs/nixos-unstable";
@@ -50,6 +50,7 @@
         url = "github:numtide/flake-utils";
       };
     }
+
   # endregion
   ;
 

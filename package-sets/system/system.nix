@@ -46,11 +46,15 @@ with features;
   security.pam.u2f = {
     enable = true;
     control = "sufficient";
-    cue = true;
+    settings.cue = true;
 #    authFile = .u2f/authorized_keys; # this is broken. it requires path which disallows placement inside user HOME anywhere but default
   };
 
-  # no need for audio on server
-  sound.enable = lib.mkDefault GUI.isEnabled;
-  hardware.pulseaudio.enable = lib.mkDefault GUI.isEnabled;
+  services.pipewire = {
+    enable = lib.mkDefault GUI.isEnabled;
+    alsa.enable = lib.mkDefault GUI.isEnabled;
+    alsa.support32Bit = true;
+    pulse.enable = lib.mkDefault GUI.isEnabled;
+    jack.enable = lib.mkDefault guitar.isEnabled;
+  };
 }

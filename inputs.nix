@@ -7,13 +7,13 @@ let
   in-this-repo = if (use-relative-paths) then "path:./" else "github:saksmt/nix-confg?dir=";
 in
 {
-  nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+  nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
   nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
   nixgl = nixpkgs-dependent-input "github:nix-community/nixGL";
 
-  home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-24.05";
+  home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-24.11";
 
   utils.url = "github:numtide/flake-utils";
 

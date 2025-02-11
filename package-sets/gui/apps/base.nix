@@ -23,7 +23,7 @@ lib.mkMerge [
         name = "IosevkaForTerm Nerd Font";
         size = if HiDPI.isEnabled then 19 else 14;
       };
-      theme = "Tango Dark";
+      themeFile = "Tango_Dark";
       shellIntegration.enableZshIntegration = true;
       shellIntegration.mode = "no-rc no-cursor";
 

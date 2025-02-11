@@ -13,6 +13,6 @@ lib.mkMerge [
 
   ((GUI.and gaming).whenEnabled {
     programs.steam.enable = true;
-    install.packages = [ pkgs.wineWowPackages.stable ];
+    install.packages = [ pkgs.wineWowPackages.stable pkgs.prismlauncher ];
   })
 ]

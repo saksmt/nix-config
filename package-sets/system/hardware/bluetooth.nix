@@ -31,14 +31,6 @@ lib.mkMerge [
       };
     };
 
-    hardware.pulseaudio = {
-      extraConfig = ''
-        load-module module-bluetooth-policy
-        load-module module-bluetooth-discover
-      '';
-    };
-
-    hardware.pulseaudio.package = lib.mkDefault pkgs.pulseaudioFull;
   })
 
 ]
