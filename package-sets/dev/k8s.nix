@@ -15,7 +15,7 @@ with features;
     with pkgs;
     lib.lists.optionals dev.k8s.isEnabled [
       kubectl
-      helm
+      kubernetes-helm
       kind
     ];
 }

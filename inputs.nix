@@ -5,15 +5,16 @@ let
   };
   use-relative-paths = true;
   in-this-repo = if (use-relative-paths) then "path:./" else "github:saksmt/nix-confg?dir=";
+  nixpkgs-version = "24.11";
 in
 {
-  nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+  nixpkgs.url = "github:nixos/nixpkgs/nixos-${nixpkgs-version}";
   nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
   nixgl = nixpkgs-dependent-input "github:nix-community/nixGL";
 
-  home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-24.11";
+  home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-${nixpkgs-version}";
 
   utils.url = "github:numtide/flake-utils";
 

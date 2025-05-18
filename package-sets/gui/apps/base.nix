@@ -34,6 +34,13 @@ lib.mkMerge [
         cursor_shape = "block";
       };
     };
+    shells.zsh.rc-extra.bottom = ''
+      function clip() {
+        if [ -t 1 ]; then kitten clipboard -g; else kitten clipboard; fi;
+      }
+    '';
+    programs.zsh.shellAliases.icat = "kitten icat";
+    programs.zsh.shellAliases.ssh = "kitten ssh";
 
     programs.firefox = {
       enable = true;

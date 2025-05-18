@@ -5,7 +5,7 @@
 
   programs.git = {
     userName = "Kirill Saksin";
-    userEmail = "kirillsaksin@ringcentral.com";
+    userEmail = "kirill.saksin@ringcentral.com";
   };
 
   installation = {
@@ -18,6 +18,7 @@
       }:
       {
         jetbrains.idea-ultimate = from unstable;
+        iosevka = from unstable;
 
         unstable = copy-of unstable;
       };
@@ -53,22 +54,22 @@
 
       "user-preferences"
     ];
+
+    nix-gl = {
+      enabled = true;
+      wrapper-script-prefix = pkgs: "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel";
+    };
   };
 
   imports = [
-    (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/nix-community/home-manager/830c928697049ef9ce1eea2f3b6ce2972a80b6f6/modules/misc/nixgl.nix";
-      sha256 = "01dkfr9wq3ib5hlyq9zq662mp0jl42fw3f6gd2qgdf8l8ia78j7i";
-    })
     (
-      { pkgs, config, ... }:
+      { pkgs, ... }:
       {
         home.packages = [ pkgs.nixgl.nixGLIntel ];
-        nixGL.prefix = "${pkgs.nixgl.nixGLIntel}/bin/nixGLIntel";
 
-        programs.kitty.package = config.lib.nixGL.wrap pkgs.kitty;
-        services.xscreensaver.package = config.lib.nixGL.wrap pkgs.xscreensaver;
-        programs.firefox.package = config.lib.nixGL.wrap pkgs.firefox;
+        programs.kitty.package = pkgs.nix-gl-wrap pkgs.kitty;
+        services.xscreensaver.package = pkgs.nix-gl-wrap pkgs.xscreensaver;
+        programs.firefox.package = pkgs.nix-gl-wrap pkgs.firefox;
       }
     )
   ];
