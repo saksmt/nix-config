@@ -18,7 +18,6 @@ in
 
   utils.url = "github:numtide/flake-utils";
 
-  nix-features = nixpkgs-dependent-input "${in-this-repo}shared-lib/nix-features";
-  nix-unstables = nixpkgs-dependent-input "${in-this-repo}shared-lib/nix-unstables";
-  nix-hm-adapter.url = "${in-this-repo}shared-lib/nix-hm-adapter";
+  nix-features = nixpkgs-dependent-input "github:saksmt/nix-features";
+  nix-unstables = nixpkgs-dependent-input "github:saksmt/nix-unstables";
 }

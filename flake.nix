@@ -16,10 +16,7 @@
             follows = "nixpkgs";
           };
         };
-        url = "path:./shared-lib/nix-features";
-      };
-      nix-hm-adapter = {
-        url = "path:./shared-lib/nix-hm-adapter";
+        url = "github:saksmt/nix-features";
       };
       nix-unstables = {
         inputs = {
@@ -27,7 +24,7 @@
             follows = "nixpkgs";
           };
         };
-        url = "path:./shared-lib/nix-unstables";
+        url = "github:saksmt/nix-unstables";
       };
       nixgl = {
         inputs = {
@@ -63,18 +60,20 @@
       utils,
       nix-features,
       nix-unstables,
-      nix-hm-adapter,
       ...
     }@inputs:
     let
       installation-module-lib = import (self.outPath + "/installation-modules/lib.nix");
+      installationModulesArgs = inputs // {
+        nix-hm-adapter = import ./lib/nix-hm-adapter;
+      };
       nixosFromInstallationModules =
         installationPath:
         let
           inherit (installation-module-lib) includeAllRelative apply;
           installation = import (self.outPath + installationPath);
           installationModules = includeAllRelative self [ "/installation-modules/nixos" ];
-          applied = apply inputs installationModules installation;
+          applied = apply installationModulesArgs installationModules installation;
         in
         nixpkgs.lib.nixosSystem {
           modules = applied.modules;
@@ -86,7 +85,7 @@
           inherit (installation-module-lib) includeAllRelative apply;
           installation = import (self.outPath + installationPath);
           installationModules = includeAllRelative self [ "/installation-modules/hm/standalone.nix" ];
-          applied = apply inputs installationModules installation;
+          applied = apply installationModulesArgs installationModules installation;
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
         in
         home-manager.lib.homeManagerConfiguration {
@@ -103,11 +102,14 @@
           };
         };
 
-        repl = {
-          inherit inputs;
-          inherit outputs;
-          inherit self;
-        } // builtins // nixpkgs.lib;
+        repl =
+          {
+            inherit inputs;
+            inherit outputs;
+            inherit self;
+          }
+          // builtins
+          // nixpkgs.lib;
 
         nixosConfigurations = {
           smt-laptop = nixosFromInstallationModules "/hosts/laptop.nix";
