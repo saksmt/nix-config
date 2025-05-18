@@ -5,7 +5,7 @@ let
   };
   use-relative-paths = true;
   in-this-repo = if (use-relative-paths) then "path:./" else "github:saksmt/nix-confg?dir=";
-  nixpkgs-version = "24.11";
+  nixpkgs-version = "25.05";
 in
 {
   nixpkgs.url = "github:nixos/nixpkgs/nixos-${nixpkgs-version}";
