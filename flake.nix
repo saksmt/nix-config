@@ -2,6 +2,14 @@
   inputs =
     # region USE ./gen-inputs AND PASTE OUTPUT HERE!
     {
+      catppuccin = {
+        inputs = {
+          nixpkgs = {
+            follows = "nixpkgs";
+          };
+        };
+        url = "github:catppuccin/nix";
+      };
       home-manager = {
         inputs = {
           nixpkgs = {

@@ -14,6 +14,7 @@
           with (import (self.outPath + "/installation-modules/lib.nix"));
           let
             hmModules = includeAllRelative self [
+              "/installation-modules/hm/catppuccin.nix"
               "/installation-modules/common/features.nix"
               "/installation-modules/common/overlays.nix"
               "/installation-modules/common/package-sets.nix"

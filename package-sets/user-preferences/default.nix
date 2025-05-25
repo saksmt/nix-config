@@ -2,9 +2,10 @@
 {
   module-for = [ "hm" ];
 
+  # one of "latte", "frappe", "macchiato", "mocha" (light -> dark)
+  catppuccin.flavor = "macchiato";
   programs.btop = {
     settings = {
-      color_theme = "${pkgs.btop}/share/btop/themes/gruvbox_material_dark.theme";
       theme_background = false;
       truecolor = true;
       rounded_corners = true;

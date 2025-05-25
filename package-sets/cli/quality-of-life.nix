@@ -137,6 +137,24 @@
 
   programs.command-not-found.enable = true;
   programs.git.enable = true;
+  programs.git.delta.enable = true;
+  catppuccin.delta.enable = true;
+
+  programs.lazygit.enable = true;
+  catppuccin.lazygit.enable = true;
+  programs.lazygit.settings = {
+    gui = {
+      nerdFontsVersion = "3";
+      showDivergenceFromBaseBranch = "onlyArrow";
+      filterMode = "fuzzy";
+      sidePanelWidth = 0.2;
+    };
+    git.paging.pager = "delta --side-by-side --line-numbers --paging=never";
+  };
+
+  catppuccin.btop.enable = true;
+  catppuccin.bat.enable = true;
+  catppuccin.fzf.enable = true;
 
   install.packages = with pkgs; [
     (writeShellScriptBin "zsh-interactive" ''
@@ -157,7 +175,6 @@
     jo
     yq
     difftastic
-    delta
     unixtools.netstat
 
     iotop

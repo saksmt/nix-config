@@ -10,6 +10,7 @@ lib.mkMerge [
     module-for = [ "hm" ];
   }
   (features.GUI.whenEnabled {
+    catppuccin.gtk.icon.enable = true;
     install.packages = with pkgs; [
       vanilla-dmz
       numix-gtk-theme

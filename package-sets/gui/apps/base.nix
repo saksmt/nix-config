@@ -17,22 +17,23 @@ lib.mkMerge [
       ]
       ++ (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk);
 
+    catppuccin.kitty.enable = true;
     programs.kitty = {
       enable = true;
       font = {
         name = "IosevkaForTerm Nerd Font";
         size = if HiDPI.isEnabled then 19 else 14;
       };
-      themeFile = "Tango_Dark";
       shellIntegration.enableZshIntegration = true;
       shellIntegration.mode = "no-rc no-cursor";
 
+      /*themeFile = "Tango_Dark";
       settings = {
         background = "#2B2B2B";
         selection_foreground = "none";
         selection_background = "none";
         cursor_shape = "block";
-      };
+      };*/
     };
     shells.zsh.rc-extra.bottom = ''
       function clip() {

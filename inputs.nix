@@ -16,6 +16,8 @@ in
 
   home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-${nixpkgs-version}";
 
+  catppuccin = nixpkgs-dependent-input "github:catppuccin/nix";
+
   utils.url = "github:numtide/flake-utils";
 
   nix-features = nixpkgs-dependent-input "github:saksmt/nix-features";

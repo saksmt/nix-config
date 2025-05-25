@@ -6,6 +6,7 @@ includeAllRelative self [
   "/installation-modules/nixos/hm-adapter.nix"
   "/installation-modules/nixos/system.nix"
 
+  "/installation-modules/nixos/catppuccin.nix"
   "/installation-modules/common"
   "/installation-modules/nixos/home-manager.nix"
 ] inputs
