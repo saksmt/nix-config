@@ -1,4 +1,4 @@
-{
+rec {
   inputs =
     # region USE ./gen-inputs AND PASTE OUTPUT HERE!
     {
@@ -69,10 +69,11 @@
       nix-features,
       nix-unstables,
       ...
-    }@inputs:
+    }@resolvedInputs:
     let
+      sourceInputs = inputs;
       installation-module-lib = import (self.outPath + "/installation-modules/lib.nix");
-      installationModulesArgs = inputs // {
+      installationModulesArgs = resolvedInputs // {
         nix-hm-adapter = import ./lib/nix-hm-adapter;
       };
       nixosFromInstallationModules =
@@ -101,6 +102,7 @@
           modules = applied.modules;
           extraSpecialArgs = applied.module-args;
         };
+      versionedInputs = builtins.mapAttrs (k: v: v // { source = sourceInputs.${k}; }) resolvedInputs;
       outputs = {
 
         templates = {
@@ -112,9 +114,10 @@
 
         repl =
           {
-            inherit inputs;
+            inputs = versionedInputs;
             inherit outputs;
             inherit self;
+            inherit sourceInputs;
           }
           // builtins
           // nixpkgs.lib;
