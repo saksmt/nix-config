@@ -131,6 +131,8 @@
     glm = "git pull origin master --rebase";
     grhho = "git reset --hard origin/$(git_current_branch)";
 
+    kdiff = "kitten diff"
+
     watch = "watch -c -x zsh-interactive";
 
   };

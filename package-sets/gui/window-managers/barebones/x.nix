@@ -21,7 +21,7 @@ lib.mkMerge [
       xarchiver
       xsel
     ];
-    services.gpg-agent.pinentryPackage = pkgs.pinentry-curses;
+    services.gpg-agent.pinentry.package = pkgs.pinentry-curses;
     xsession.enable = true;
 
     services.xscreensaver.enable = false; # param-PAM-pain... need extensive research into how to make it work and what and how xscreensaver uses

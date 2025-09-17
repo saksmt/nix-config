@@ -18,7 +18,7 @@ lib.mkMerge [
         obs-tuna
         obs-text-pthread
         obs-gradient-source
-        obs-rgb-levels-filter
+        obs-rgb-levels
       ];
     };
   })

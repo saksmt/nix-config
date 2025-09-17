@@ -37,4 +37,5 @@
   # to disable stuff banned at work
   work-ban = feature { default-enabled = false; };
   gaming = feature { };
+  android = feature {};
 }

@@ -5,4 +5,4 @@
       catppuccin.nixosModules.catppuccin
     ];
   };
-}q
+}

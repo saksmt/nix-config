@@ -54,6 +54,8 @@ rec {
       "wheel"
       "networkmanager"
       "docker"
+      "kvm"
+      "adbusers"
     ];
   };
   home-manager.users.smt = { pkgs, ... }: { };
@@ -92,6 +94,7 @@ rec {
 
       work
       dev.all
+      android
     ];
 
     package-sets = [
