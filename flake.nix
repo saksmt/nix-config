@@ -102,7 +102,9 @@ rec {
           modules = applied.modules;
           extraSpecialArgs = applied.module-args;
         };
-      versionedInputs = builtins.mapAttrs (k: v: v // { source = sourceInputs.${k}; }) resolvedInputs;
+      versionedInputs = builtins.mapAttrs (
+        k: v: v // (if k == "self" then { } else { source = sourceInputs.${k}; })
+      ) resolvedInputs;
       outputs = {
 
         templates = {
@@ -118,6 +120,30 @@ rec {
             inherit outputs;
             inherit self;
             inherit sourceInputs;
+            inputVersions = builtins.mapAttrs (
+              k: v:
+              let
+                source = if builtins.isString v.source.url then builtins.parseFlakeRef v.source.url else v.source;
+              in
+              {
+                name = k;
+                branch =
+                  if source ? "ref" then
+                    source.ref
+                  else if
+                    builtins.elem source.type [
+                      "git"
+                      "github"
+                      "gitlab"
+                    ]
+                  then
+                    "<default-branch>"
+                  else
+                    null;
+                commit = v.shortRev;
+                updatedAt = v.lastModified;
+              }
+            ) (builtins.removeAttrs versionedInputs [ "self" ]);
           }
           // builtins
           // nixpkgs.lib;

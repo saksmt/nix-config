@@ -56,7 +56,7 @@ writeShellApplication {
         shift;
         flake="''${thisFlake}"
         if [[ "''${1:-}" == "--built" ]]; then
-          flake=hm-built
+          flake=built-hm
           shift
         fi
         nix repl --extra-experimental-features 'flakes repl-flake' "''${flake}#repl" "''${@}"

@@ -131,7 +131,9 @@
     glm = "git pull origin master --rebase";
     grhho = "git reset --hard origin/$(git_current_branch)";
 
-    kdiff = "kitten diff"
+    kdiff = "kitten diff";
+
+    lg = "lazygit";
 
     watch = "watch -c -x zsh-interactive";
 
@@ -157,6 +159,10 @@
   catppuccin.btop.enable = true;
   catppuccin.bat.enable = true;
   catppuccin.fzf.enable = true;
+
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
+  programs.direnv.enableZshIntegration = true;
 
   install.packages = with pkgs; [
     (writeShellScriptBin "zsh-interactive" ''
