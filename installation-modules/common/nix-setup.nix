@@ -28,6 +28,7 @@
 
           nix.settings = {
             experimental-features = [ "nix-command" "flakes" ];
+            trusted-users = [ "root" "smt" "@wheel" ];
 
             # quality-of-life, also overrides defaults with same values to
             # make it more external change proof
