@@ -99,6 +99,20 @@
         whichlink() {
           readlink -f $(which "''${1}")
         }
+
+        source-e() {
+           set -a;
+           while (( $# > 0 )); do
+             file="''${1}"
+             shift
+             set -a;
+             source "''${file}";
+             set +a;
+           done
+        }
+        load-env() {
+          source-e "''${@}"
+        }
       '';
     };
   };
