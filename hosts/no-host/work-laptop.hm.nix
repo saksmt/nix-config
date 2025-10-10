@@ -13,12 +13,12 @@
       {
         from,
         unstable,
+        master,
         copy-of,
         ...
       }:
       {
-        jetbrains.idea-ultimate = from unstable;
-        iosevka = from unstable;
+        jetbrains.idea-ultimate = from master;
 
         unstable = copy-of unstable;
       };

@@ -33,19 +33,22 @@ lib.mkMerge [
         };
         nerd-patcher = writeShellApplication {
           name = "nerd-patch";
-          runtimeInputs = [ nerd-font-patcher fontforge ];
+          runtimeInputs = [
+            nerd-font-patcher
+            fontforge
+          ];
           text = ''
-          read -r -a patchArgs <<< "''${FONT_PATCH_ARGS:--c}"
-          sourceFont="''${1}"
-          sourceFontDir="$(dirname "''${sourceFont}")"
-          sourceFontFile="$(basename "''${sourceFont}")"
-          targetName="''${sourceFontFile%.*}-nf.''${sourceFontFile##*.}"
+            read -r -a patchArgs <<< "''${FONT_PATCH_ARGS:--c}"
+            sourceFont="''${1}"
+            sourceFontDir="$(dirname "''${sourceFont}")"
+            sourceFontFile="$(basename "''${sourceFont}")"
+            targetName="''${sourceFontFile%.*}-nf.''${sourceFontFile##*.}"
 
-          cd "''${sourceFontDir}"
+            cd "''${sourceFontDir}"
 
-          echo "Patching ''${sourceFontFile}, will write it as ''${targetName}" >&2
-          nerd-font-patcher "''${patchArgs[@]}" "''${sourceFontFile}" || { echo "Failed patching. Args: ''${patchArgs[*]} ''${sourceFontFile}">&2; exit 1; }
-          mv "''${sourceFontFile}" "''${targetName}"
+            echo "Patching ''${sourceFontFile}, will write it as ''${targetName}" >&2
+            nerd-font-patcher "''${patchArgs[@]}" "''${sourceFontFile}" || { echo "Failed patching. Args: ''${patchArgs[*]} ''${sourceFontFile}">&2; exit 1; }
+            mv "''${sourceFontFile}" "''${targetName}"
           '';
         };
         nerdify =

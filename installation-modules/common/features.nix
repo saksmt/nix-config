@@ -17,9 +17,14 @@ in
     inherit feature-definitions;
   };
 
-  process-recipe = { installation ? {}, ... }: {
-    module-args = {
-      features = lib.assign-features feature-definitions (installation.features or [ ]);
+  process-recipe =
+    {
+      installation ? { },
+      ...
+    }:
+    {
+      module-args = {
+        features = lib.assign-features feature-definitions (installation.features or [ ]);
+      };
     };
-  };
 }

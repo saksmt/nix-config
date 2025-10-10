@@ -70,11 +70,12 @@ rec {
       {
         from,
         unstable,
+        master,
         copy-of,
         ...
       }:
       {
-        jetbrains.idea-ultimate = from unstable;
+        jetbrains.idea-ultimate = from master;
         asusctl = from unstable;
         supergfxctl = from unstable;
         wrapOBS = from unstable;

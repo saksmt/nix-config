@@ -27,7 +27,7 @@ lib.mkMerge [
     services.xscreensaver.enable = false; # param-PAM-pain... need extensive research into how to make it work and what and how xscreensaver uses
     systemd.user.services.xscreensaver = {
       # disable auto start
-      Install.WantedBy = lib.mkForce [];
+      Install.WantedBy = lib.mkForce [ ];
     };
   })
 ]

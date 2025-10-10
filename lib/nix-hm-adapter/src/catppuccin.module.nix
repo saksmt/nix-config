@@ -14,7 +14,8 @@
         };
     in
     {
-      options.catppuccin = todoFlag "btop" // todoFlag "bat" // todoFlag "fzf" // todoFlag "delta" // todoFlag "lazygit";
+      options.catppuccin =
+        todoFlag "btop" // todoFlag "bat" // todoFlag "fzf" // todoFlag "delta" // todoFlag "lazygit";
     };
   homeManagerModule =
     { config, lib, ... }:

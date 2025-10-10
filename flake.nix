@@ -8,7 +8,7 @@ rec {
             follows = "nixpkgs";
           };
         };
-        url = "github:catppuccin/nix";
+        url = "github:catppuccin/nix/release-25.05";
       };
       home-manager = {
         inputs = {
@@ -48,6 +48,9 @@ rec {
       nixpkgs = {
         url = "github:nixos/nixpkgs/nixos-25.05";
       };
+      nixpkgs-master = {
+        url = "github:nixos/nixpkgs/master";
+      };
       nixpkgs-unstable = {
         url = "github:nixos/nixpkgs/nixos-unstable";
       };
@@ -65,6 +68,7 @@ rec {
       nixpkgs,
       home-manager,
       nixpkgs-unstable,
+      nixpkgs-master,
       utils,
       nix-features,
       nix-unstables,
@@ -114,39 +118,38 @@ rec {
           };
         };
 
-        repl =
-          {
-            inputs = versionedInputs;
-            inherit outputs;
-            inherit self;
-            inherit sourceInputs;
-            inputVersions = builtins.mapAttrs (
-              k: v:
-              let
-                source = if builtins.isString v.source.url then builtins.parseFlakeRef v.source.url else v.source;
-              in
-              {
-                name = k;
-                branch =
-                  if source ? "ref" then
-                    source.ref
-                  else if
-                    builtins.elem source.type [
-                      "git"
-                      "github"
-                      "gitlab"
-                    ]
-                  then
-                    "<default-branch>"
-                  else
-                    null;
-                commit = v.shortRev;
-                updatedAt = v.lastModified;
-              }
-            ) (builtins.removeAttrs versionedInputs [ "self" ]);
-          }
-          // builtins
-          // nixpkgs.lib;
+        repl = {
+          inputs = versionedInputs;
+          inherit outputs;
+          inherit self;
+          inherit sourceInputs;
+          inputVersions = builtins.mapAttrs (
+            k: v:
+            let
+              source = if builtins.isString v.source.url then builtins.parseFlakeRef v.source.url else v.source;
+            in
+            {
+              name = k;
+              branch =
+                if source ? "ref" then
+                  source.ref
+                else if
+                  builtins.elem source.type [
+                    "git"
+                    "github"
+                    "gitlab"
+                  ]
+                then
+                  "<default-branch>"
+                else
+                  null;
+              commit = v.shortRev;
+              updatedAt = v.lastModified;
+            }
+          ) (builtins.removeAttrs versionedInputs [ "self" ]);
+        }
+        // builtins
+        // nixpkgs.lib;
 
         nixosConfigurations = {
           smt-laptop = nixosFromInstallationModules "/hosts/laptop.nix";

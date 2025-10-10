@@ -13,15 +13,17 @@ with features;
 
   install.packages =
     with pkgs;
-    lib.lists.optionals dev.common.isEnabled (
-      [
-        graphviz
-        httpie
-      ]
-    );
+    lib.lists.optionals dev.common.isEnabled ([
+      graphviz
+      httpie
+    ]);
   services.emacs.enable = lib.mkDefault dev.common.isEnabled;
   services.emacs.defaultEditor = lib.mkDefault dev.common.isEnabled;
-  services.emacs.package = if GUI.isEnabled then pkgs.emacs else (pkgs.emacs.override {
-    noGui = true;
-  });
+  services.emacs.package =
+    if GUI.isEnabled then
+      pkgs.emacs
+    else
+      (pkgs.emacs.override {
+        noGui = true;
+      });
 }

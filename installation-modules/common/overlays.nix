@@ -1,4 +1,5 @@
-{self, ...}@inputs: {
+{ self, ... }@inputs:
+{
   process-recipe = _: {
     modules = [
       (

@@ -39,10 +39,12 @@ lib.mkMerge [
       enable = true;
 
       nativeMessagingHosts = [ pkgs.keepassxc ];
-      /*languagePacks = [
-        "en-US"
-        "ru-RU"
-      ];*/
+      /*
+        languagePacks = [
+          "en-US"
+          "ru-RU"
+        ];
+      */
 
       # https://mozilla.github.io/policy-templates/
       policies = {

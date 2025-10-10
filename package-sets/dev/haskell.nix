@@ -1,4 +1,9 @@
-{ pkgs, features, lib, ... }:
+{
+  pkgs,
+  features,
+  lib,
+  ...
+}:
 with features;
 {
   module-for = [

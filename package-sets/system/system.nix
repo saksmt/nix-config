@@ -47,7 +47,7 @@ with features;
     enable = true;
     control = "sufficient";
     settings.cue = true;
-#    authFile = .u2f/authorized_keys; # this is broken. it requires path which disallows placement inside user HOME anywhere but default
+    #    authFile = .u2f/authorized_keys; # this is broken. it requires path which disallows placement inside user HOME anywhere but default
   };
 
   services.pipewire = {

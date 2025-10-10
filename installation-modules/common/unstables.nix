@@ -1,6 +1,7 @@
 {
   nix-unstables,
   nixpkgs-unstable,
+  nixpkgs-master,
   ...
 }:
 let
@@ -17,6 +18,13 @@ let
       unstable = source (
         { pkgs, ... }:
         import nixpkgs-unstable {
+          system = pkgs.system;
+          config.allowUnfree = true;
+        }
+      );
+      master = source (
+        { pkgs, ... }:
+        import nixpkgs-master {
           system = pkgs.system;
           config.allowUnfree = true;
         }

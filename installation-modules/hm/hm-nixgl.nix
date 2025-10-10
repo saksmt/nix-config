@@ -9,7 +9,8 @@
       nix-gl = {
         enabled = false;
         wrapper-script-prefix = null;
-      } // (installation.nix-gl or { });
+      }
+      // (installation.nix-gl or { });
     in
     {
       modules =

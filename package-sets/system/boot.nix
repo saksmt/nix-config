@@ -1,4 +1,9 @@
-{ config, lib, features, ... }:
+{
+  config,
+  lib,
+  features,
+  ...
+}:
 with features;
 
 lib.mkMerge [

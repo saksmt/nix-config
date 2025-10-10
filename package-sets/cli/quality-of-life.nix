@@ -180,7 +180,7 @@
 
   install.packages = with pkgs; [
     (writeShellScriptBin "zsh-interactive" ''
-    exec zsh -ic "''${@}"
+      exec zsh -ic "''${@}"
     '')
 
     btop
@@ -217,8 +217,8 @@
 
     # alias to configured default editor
     (writeShellApplication {
-       name = "ee";
-       text = "exec \${EDITOR} \"\${@}\"";
-     })
+      name = "ee";
+      text = "exec \${EDITOR} \"\${@}\"";
+    })
   ];
 }

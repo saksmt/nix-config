@@ -11,6 +11,9 @@ lib.mkMerge [
   }
 
   ((features.GUI.and features.dev.common).whenEnabled {
-    install.packages = [ pkgs.jetbrains.idea-ultimate pkgs.freemind ];
+    install.packages = [
+      pkgs.jetbrains.idea-ultimate
+      pkgs.freemind
+    ];
   })
 ]
