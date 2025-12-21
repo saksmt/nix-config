@@ -5,7 +5,7 @@ let
   };
   use-relative-paths = true;
   in-this-repo = if (use-relative-paths) then "path:./" else "github:saksmt/nix-confg?dir=";
-  nixpkgs-version = "25.05";
+  nixpkgs-version = "25.11";
 in
 {
   nixpkgs.url = "github:nixos/nixpkgs/nixos-${nixpkgs-version}";
@@ -17,7 +17,13 @@ in
 
   home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-${nixpkgs-version}";
 
-  catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/release-${nixpkgs-version}";
+  # waiting for catppuccin to make a branch for nixpkgs
+  #catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/release-${nixpkgs-version}";
+  # temprary solution - master
+  catppuccin = {
+    url = "github:catppuccin/nix/main";
+    inputs.nixpkgs.follows = "nixpkgs-unstable";
+  };
 
   utils.url = "github:numtide/flake-utils";
 

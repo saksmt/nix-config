@@ -137,7 +137,7 @@ lib.mkMerge [
             that disabe window buttons by default), but who cares
             */
             #nav-bar .titlebar-buttonbox-container {
-              visibility: colllapse !important;
+              display: none !important;
             }
 
             /* Fuck border radius */

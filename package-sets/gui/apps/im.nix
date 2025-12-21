@@ -12,6 +12,6 @@ lib.mkMerge [
   }
 
   (GUI.whenEnabled {
-    install.packages = with pkgs; [ tdesktop ] ++ (lib.lists.optional gaming.isEnabled discord);
+    install.packages = with pkgs; [ telegram-desktop ] ++ (lib.lists.optional gaming.isEnabled discord);
   })
 ]

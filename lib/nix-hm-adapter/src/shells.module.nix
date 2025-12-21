@@ -11,12 +11,12 @@ let
             enable = mkEnableOption "oh-my-zsh";
             plugins = mkOption {
               default = [ ];
-              type = types.listOf types.string;
+              type = types.listOf types.str;
               description = "List of plugins to enable in oh-my-zsh";
             };
             theme = mkOption {
               default = "gentoo";
-              type = types.string;
+              type = types.str;
               description = "Theme for oh-my-zsh";
             };
           };

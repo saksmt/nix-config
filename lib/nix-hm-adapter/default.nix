@@ -3,7 +3,6 @@ let
   packages = import ./src/packages.module.nix;
   shells = import ./src/shells.module.nix;
   fonts = import ./src/fonts.module.nix;
-  nix = import ./src/nix.module.nix;
   catppuccin = import ./src/catppuccin.module.nix;
   git-delta = import ./src/git-delta.module.nix;
 
@@ -20,7 +19,6 @@ let
         (packages.${tpe})
         (shells.${tpe})
         (fonts.${tpe})
-        (nix.${tpe})
         (catppuccin.${tpe})
         (git-delta.${tpe})
 

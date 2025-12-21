@@ -66,7 +66,7 @@ lib.mkMerge [
           };
       in
       [
-        ubuntu_font_family
+        ubuntu-classic
         hasklig
         terminus_font
         terminus_font_ttf

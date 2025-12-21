@@ -5,10 +5,10 @@ rec {
       catppuccin = {
         inputs = {
           nixpkgs = {
-            follows = "nixpkgs";
+            follows = "nixpkgs-unstable";
           };
         };
-        url = "github:catppuccin/nix/release-25.05";
+        url = "github:catppuccin/nix/main";
       };
       home-manager = {
         inputs = {
@@ -16,7 +16,7 @@ rec {
             follows = "nixpkgs";
           };
         };
-        url = "github:nix-community/home-manager/release-25.05";
+        url = "github:nix-community/home-manager/release-25.11";
       };
       nix-features = {
         inputs = {
@@ -46,7 +46,7 @@ rec {
         url = "github:NixOS/nixos-hardware/master";
       };
       nixpkgs = {
-        url = "github:nixos/nixpkgs/nixos-25.05";
+        url = "github:nixos/nixpkgs/nixos-25.11";
       };
       nixpkgs-master = {
         url = "github:nixos/nixpkgs/master";

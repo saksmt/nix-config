@@ -10,6 +10,21 @@ rec {
         users.users.smt.shell = pkgs.zsh;
         users.users.root.shell = pkgs.zsh;
 
+        programs.steam.package = pkgs.steam.override {
+          # nvidia-offload hacks. would've been better to somehow get those
+          # from config, but it is impossible as of now.
+          #
+          # imperfect: better way is to append those to launch options
+          # of specific games to use battery better, also seems like hw encoding
+          # may be better on mesa. But this solution is plain simpler usability-wise
+          extraEnv = {
+            __NV_PRIME_RENDER_OFFLOAD = "1";
+            __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
+            __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+            __VK_LAYER_NV_optimus = "NVIDIA_only";
+          };
+        };
+
         environment.systemPackages = with pkgs; [
           asusctl
           supergfxctl
