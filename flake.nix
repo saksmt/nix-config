@@ -157,6 +157,7 @@ rec {
 
         homeConfigurations = {
           work-laptop = hmFromInstallationModules "/hosts/no-host/work-laptop.hm.nix";
+          deck = hmFromInstallationModules "/hosts/no-host/deck.hm.nix";
         };
 
         packages =
