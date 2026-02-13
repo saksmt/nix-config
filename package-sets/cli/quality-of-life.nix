@@ -5,6 +5,53 @@
     "nixos"
   ];
 
+  install.packages = with pkgs; [
+    # because there can be no quality of life without kitties.
+    kittysay
+
+    (writeShellScriptBin "zsh-interactive" ''
+      exec zsh -ic "''${@}"
+    '')
+
+    btop
+    bat
+    bat-extras.batdiff
+    bat-extras.batman
+    bat-extras.batpipe
+    bat-extras.batwatch
+    fzf
+    ripgrep
+    wget
+    fd
+    jq
+    jo
+    yq
+    difftastic
+    unixtools.netstat
+
+    iotop
+    iftop
+    powertop
+
+    openssh
+    unzip
+    libsecret
+    moreutils
+    gnupg
+    xxHash
+
+    inetutils
+    iproute2
+
+    sshfs
+
+    # alias to configured default editor
+    (writeShellApplication {
+      name = "ee";
+      text = "exec \${EDITOR} \"\${@}\"";
+    })
+  ];
+
   shells.zsh.enable = true;
   shells.zsh = {
     oh-my-zsh = {
@@ -177,48 +224,4 @@
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.enableZshIntegration = true;
-
-  install.packages = with pkgs; [
-    (writeShellScriptBin "zsh-interactive" ''
-      exec zsh -ic "''${@}"
-    '')
-
-    btop
-    bat
-    bat-extras.batdiff
-    bat-extras.batman
-    bat-extras.batpipe
-    bat-extras.batwatch
-    fzf
-    ripgrep
-    wget
-    fd
-    jq
-    jo
-    yq
-    difftastic
-    unixtools.netstat
-
-    iotop
-    iftop
-    powertop
-
-    openssh
-    unzip
-    libsecret
-    moreutils
-    gnupg
-    xxHash
-
-    inetutils
-    iproute2
-
-    sshfs
-
-    # alias to configured default editor
-    (writeShellApplication {
-      name = "ee";
-      text = "exec \${EDITOR} \"\${@}\"";
-    })
-  ];
 }

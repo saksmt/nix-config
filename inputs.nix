@@ -14,16 +14,11 @@ in
   nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
   nixgl = nixpkgs-dependent-input "github:nix-community/nixGL";
+  awesome-iwm = nixpkgs-dependent-input "github:saksmt/awesomewm-iwm";
 
   home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-${nixpkgs-version}";
 
-  # waiting for catppuccin to make a branch for nixpkgs
-  #catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/release-${nixpkgs-version}";
-  # temprary solution - master
-  catppuccin = {
-    url = "github:catppuccin/nix/main";
-    inputs.nixpkgs.follows = "nixpkgs-unstable";
-  };
+  catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/release-${nixpkgs-version}";
 
   utils.url = "github:numtide/flake-utils";
 

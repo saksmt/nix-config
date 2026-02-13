@@ -18,15 +18,45 @@ lib.mkMerge [
       ++ (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk);
 
     catppuccin.kitty.enable = true;
-    programs.kitty = {
-      enable = true;
-      font = {
-        name = "IosevkaForTerm Nerd Font";
-        size = if HiDPI.isEnabled then 19 else 14;
+    programs.kitty =
+      let
+        # todo: make this a module
+        kittyConfigKeyPrefix = "KITTY_CONF_";
+        configKeyMapping = {
+          # support boot-time dpi settings of livecd
+          FONT_SIZE = "font_size";
+        };
+        envloader = pkgs.writeTextFile {
+          name = "kitty-config-envloader";
+          destination = "/loadenv.py";
+          text = ''
+            import os
+
+            key_mapping = ${lib.generators.toJSON {} configKeyMapping}
+            key_prefix = ${lib.generators.toJSON {} kittyConfigKeyPrefix}
+
+            for key, value in os.environ.items():
+                if key in key_mapping:
+                    print(key_mapping[key] + " " + value)
+                elif key.startswith(key_prefix):
+                    print(key.removeprefix(key_prefix) + " " + value)
+          '';
+        };
+      in
+      {
+        enable = true;
+        font = {
+          name = "IosevkaForTerm Nerd Font";
+          size = if HiDPI.isEnabled then 24 else 16;
+        };
+        settings.notify_on_cmd_finish = "unfocused 60 notify";
+        extraConfig = ''
+          geninclude ${envloader}/loadenv.py
+        '';
+
+        shellIntegration.enableZshIntegration = true;
+        shellIntegration.mode = "no-rc no-cursor";
       };
-      shellIntegration.enableZshIntegration = true;
-      shellIntegration.mode = "no-rc no-cursor";
-    };
     shells.zsh.rc-extra.bottom = ''
       function clip() {
         if [ -t 1 ]; then kitten clipboard -g; else kitten clipboard; fi;

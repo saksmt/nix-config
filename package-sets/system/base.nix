@@ -16,29 +16,25 @@ with features;
     lm_sensors
   ];
 
-  networking.networkmanager.enable = lib.mkDefault laptop.isEnabled;
-  services.upower.enable = lib.mkDefault laptop.isEnabled;
-
-  system.stateVersion = lib.mkDefault "24.05";
-
   nixpkgs.config.glibc.installLocales = true;
 
-  console = {
-    earlySetup = true;
-    packages = lib.mkDefault [ pkgs.terminus_font ];
-    keyMap = "ruwin_alt_sh-UTF-8";
-    font = if HiDPI.isEnabled then "ter-k32n" else "ter-k16n";
-  };
+  console =
+    let
+      getFont = font: "${pkgs.terminus_font}/share/consolefonts/${font}.psf.gz";
+    in
+    {
+      earlySetup = true;
+      packages = lib.mkDefault [ pkgs.terminus_font ];
+      keyMap = "ruwin_alt_sh-UTF-8";
+      font = getFont (if HiDPI.isEnabled then "ter-k32n" else "ter-k16n");
+    };
+  catppuccin.tty.enable = true;
 
   i18n = {
     defaultLocale = "ru_RU.UTF-8";
   };
 
   time.timeZone = lib.mkDefault "Asia/Tbilisi";
-
-  powerManagement.cpuFreqGovernor = lib.mkOverride 900 (
-    if laptop.isEnabled then "ondemand" else "performance"
-  );
 
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;

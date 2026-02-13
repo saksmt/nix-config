@@ -54,4 +54,57 @@ rec {
       );
     in
     configuration-instance;
+
+  loader =
+    { self, module-args }:
+    rec {
+      load-recipe = installationPath: import (self.outPath + installationPath);
+      process =
+        { modules, recipe }:
+        let
+          installationModules = includeAllRelative self modules;
+          applied = apply module-args installationModules recipe;
+          result = applied // rec {
+            _nixpkgs = module-args.nixpkgs;
+            override-base-nixpkgs = override: result // {
+              _nixpkgs = override;
+            };
+            as-nixos = _nixpkgs.lib.nixosSystem {
+              modules = applied.modules;
+              specialArgs = applied.module-args;
+            };
+            as-hm =
+              system:
+              module-args.home-manager.lib.homeManagerConfiguration {
+                pkgs = _nixpkgs.legacyPackages.${system};
+                modules = applied.modules;
+                extraSpecialArgs = applied.module-args;
+              };
+            as-iso =
+              system:
+              let cfg = (_nixpkgs.lib.nixosSystem {
+                modules = applied.modules ++ [
+                  (_: {
+                    nixpkgs.hostPlatform = system;
+                  })
+                ];
+                specialArgs = applied.module-args;
+              }); in cfg // {
+                image = {
+                  iso = cfg.config.build.iso-image;
+                  squashfs = cfg.config.build.squashfs-image;
+                };
+              };
+          };
+        in
+        result;
+
+      load-and-process =
+        { modules, recipe-path }:
+        let
+          recipe = load-recipe recipe-path;
+          applied = process { inherit modules recipe; };
+        in
+        applied;
+    };
 }

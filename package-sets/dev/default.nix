@@ -1,5 +1,6 @@
 _: {
   imports = [
+    (import ./ai.nix)
     (import ./common.nix)
     (import ./haskell.nix)
     (import ./k8s.nix)

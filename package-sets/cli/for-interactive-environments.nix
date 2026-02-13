@@ -14,9 +14,9 @@
   install.packages =
     with pkgs;
     lib.lists.optionals features.GUI.isEnabled [
-      (hunspellWithDicts [
-        hunspellDicts.ru_RU
-        hunspellDicts.en_US-large
-      ])
+      (hunspell.withDicts (dicts: [
+        dicts.ru_RU
+        dicts.en_US-large
+      ]))
     ];
 }

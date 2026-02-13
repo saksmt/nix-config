@@ -7,7 +7,7 @@ includeAllRelative self [
   "/installation-modules/hm/hm-setup.nix"
   "/installation-modules/hm/hm-system.nix"
   "/installation-modules/hm/hm-nixgl.nix"
-  "/installation-modules/hm/catppuccin.nix"
+  "/installation-modules/hm/external-modules.nix"
 
   "/installation-modules/common"
 ] inputs

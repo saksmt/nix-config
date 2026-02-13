@@ -18,7 +18,7 @@
         ...
       }:
       {
-        jetbrains.idea-ultimate = from master;
+        jetbrains.idea = from master;
 
         unstable = copy-of unstable;
       };
@@ -65,6 +65,7 @@
     (
       { pkgs, ... }:
       {
+        home.stateVersion = "24.05";
         home.packages = [ pkgs.nixgl.nixGLIntel ];
 
         programs.kitty.package = pkgs.nix-gl-wrap pkgs.kitty;

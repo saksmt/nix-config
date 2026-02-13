@@ -7,6 +7,8 @@ rec {
     (
       { pkgs, ... }:
       {
+        system.stateVersion = "24.05";
+
         users.users.smt.shell = pkgs.zsh;
         users.users.root.shell = pkgs.zsh;
 
@@ -73,7 +75,11 @@ rec {
       "adbusers"
     ];
   };
-  home-manager.users.smt = { pkgs, ... }: { };
+  home-manager.users.smt =
+    { pkgs, ... }:
+    {
+      home.stateVersion = "24.05";
+    };
 
   networking.hostName = "smt-laptop";
   networking.hosts = {
@@ -90,7 +96,7 @@ rec {
         ...
       }:
       {
-        jetbrains.idea-ultimate = from master;
+        jetbrains.idea = from master;
         asusctl = from unstable;
         supergfxctl = from unstable;
         wrapOBS = from unstable;
@@ -131,15 +137,15 @@ rec {
     home-manager = {
       enabled = true;
 
+      # force management of zshrc and stuff through home-manager
+      programs.zsh.enable = true;
+
+      programs.git = {
+        userName = "Kirill Saksin";
+        userEmail = "smt@saksmt.dev";
+      };
+
       installation = {
-        # force management of zshrc and stuff through home-manager
-        programs.zsh.enable = true;
-
-        programs.git = {
-          userName = "Kirill Saksin";
-          userEmail = "smt@saksmt.dev";
-        };
-
         package-sets = [
           "gui/apps/base"
           "gui/apps/dev"

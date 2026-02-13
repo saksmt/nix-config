@@ -17,9 +17,15 @@ lib.mkMerge [
     ];
     services.displayManager = {
       sddm.enable = true;
-      sddm.enableHidpi = lib.mkDefault HiDPI.isEnabled;
+      # this setting enables **automatic** HiDPI scaling, so lets hope it
+      # does not mess up *too* badly
+      sddm.enableHidpi = lib.mkDefault true;
 
       defaultSession = "home-managed_x";
     };
+    catppuccin.sddm.enable = true;
+    catppuccin.sddm.userIcon = true;
+    catppuccin.sddm.loginBackground = true;
+#    catppuccin.sddm.fontSize = if HiDPI.isEnabled then "24" else "14";
   })
 ]

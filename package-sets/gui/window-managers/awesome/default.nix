@@ -21,7 +21,6 @@
       services.clipcat.enable = lib.mkDefault true;
 
       xsession.windowManager.awesome.enable = true;
-      xsession.windowManager.awesome.package = pkgs.awesome;
     }
   else
     { }

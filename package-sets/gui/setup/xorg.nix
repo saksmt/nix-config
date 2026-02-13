@@ -18,6 +18,6 @@ lib.mkMerge [
   }
 
   (HiDPI.whenEnabled {
-    services.xserver.dpi = 140;
+    services.xserver.dpi = 144;
   })
 ]

@@ -72,7 +72,10 @@ if type nixos-rebuild &>/dev/null; then
   echo "${info}Flake path: ${dim}path:${thisDir}${clr}"
   echo "${info}Flake attribute: ${dim}${attributeRef}${clr}"
 
-  prompt "Proceed?" inverse
+  prompt "Proceed?" inverse || {
+    echo "${info}Aborting";
+    exit 1;
+  }
 
   echo "path:${thisDir}" | sudo tee /etc/nixos/flake-ref >/dev/null
   echo "${attributeRef}" | sudo tee /etc/nixos/host-ref >/dev/null

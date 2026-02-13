@@ -16,6 +16,7 @@ lib.mkMerge [
     install.packages = [
       pkgs.wineWowPackages.stable
       pkgs.prismlauncher
+      pkgs.umu-launcher
     ];
   })
 ]

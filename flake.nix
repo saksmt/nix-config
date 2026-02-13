@@ -2,13 +2,21 @@ rec {
   inputs =
     # region USE ./gen-inputs AND PASTE OUTPUT HERE!
     {
+      awesome-iwm = {
+        inputs = {
+          nixpkgs = {
+            follows = "nixpkgs";
+          };
+        };
+        url = "github:saksmt/awesomewm-iwm";
+      };
       catppuccin = {
         inputs = {
           nixpkgs = {
-            follows = "nixpkgs-unstable";
+            follows = "nixpkgs";
           };
         };
-        url = "github:catppuccin/nix/main";
+        url = "github:catppuccin/nix/release-25.11";
       };
       home-manager = {
         inputs = {
@@ -80,36 +88,35 @@ rec {
       installationModulesArgs = resolvedInputs // {
         nix-hm-adapter = import ./lib/nix-hm-adapter;
       };
+      recipe-loader = installation-module-lib.loader {
+        self = self;
+        module-args = installationModulesArgs;
+      };
       nixosFromInstallationModules =
-        installationPath:
-        let
-          inherit (installation-module-lib) includeAllRelative apply;
-          installation = import (self.outPath + installationPath);
-          installationModules = includeAllRelative self [ "/installation-modules/nixos" ];
-          applied = apply installationModulesArgs installationModules installation;
-        in
-        nixpkgs.lib.nixosSystem {
-          modules = applied.modules;
-          specialArgs = applied.module-args;
-        };
+        path:
+        (recipe-loader.load-and-process {
+          modules = [ "/installation-modules/nixos" ];
+          recipe-path = path;
+        }).as-nixos;
+      isoFromInstallationModulesFor =
+        system: path:
+        (recipe-loader.load-and-process {
+          modules = [ "/installation-modules/iso" ];
+          recipe-path = path;
+        }).as-iso
+          system;
       hmFromInstallationModules =
-        installationPath:
-        let
-          inherit (installation-module-lib) includeAllRelative apply;
-          installation = import (self.outPath + installationPath);
-          installationModules = includeAllRelative self [ "/installation-modules/hm/standalone.nix" ];
-          applied = apply installationModulesArgs installationModules installation;
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        in
-        home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = applied.modules;
-          extraSpecialArgs = applied.module-args;
-        };
+        path:
+        (recipe-loader.load-and-process {
+          modules = [ "/installation-modules/hm/standalone.nix" ];
+          recipe-path = path;
+        }).as-hm
+          "x86_64-linux";
+
       versionedInputs = builtins.mapAttrs (
         k: v: v // (if k == "self" then { } else { source = sourceInputs.${k}; })
       ) resolvedInputs;
-      outputs = {
+      outputs = rec {
 
         templates = {
           rust-base = {
@@ -160,6 +167,22 @@ rec {
           deck = hmFromInstallationModules "/hosts/no-host/deck.hm.nix";
         };
 
+        isoConfigurations =
+          (utils.lib.eachDefaultSystem (
+            system:
+            let
+              mkIso = isoFromInstallationModulesFor system;
+            in
+            {
+              isos = {
+
+                full-fat = mkIso "/hosts/iso/full-fat.nix";
+                minimal-nox = mkIso "/hosts/iso/minimal-nox.nix";
+
+              };
+            }
+          )).isos;
+
         packages =
           (utils.lib.eachDefaultSystem (
             system:
@@ -167,7 +190,9 @@ rec {
               pkgs = nixpkgs.legacyPackages.${system};
             in
             {
-              packages = import ./custom-packages pkgs;
+              packages = import ./custom-packages pkgs // {
+                images = builtins.mapAttrs (_: v: v.image.iso) isoConfigurations.${system};
+              };
             }
           )).packages;
       };

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   module-for = [ "hm" ];
 
@@ -62,7 +62,7 @@
   };
 
   programs.git = {
-    extraConfig = {
+    settings = {
       init.defaultBranch = "master";
     };
     ignores = [
@@ -101,4 +101,10 @@
 
     "x-scheme-handler/tg" = [ "org.telegram.desktop.desktop" ];
   };
+
+  # mark zsh initialized, useful when it is configured in nixos and hm has no config for it whatsoever
+  shells.zsh.enable = lib.mkDefault true;
+  shells.zsh.rc-extra.bottom = lib.mkDefault ''
+    # part of your config may reside somewhere globally!
+  '';
 }

@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+
+# TODO: make this a package after packaging local-bin
+
+# region lib code
+
+esc=$(echo -en "\033")
+
+clr="${esc}[0m"
+bright="${esc}[1m"
+dim="${esc}[2m"
+
+red="${esc}[31m"
+green="${esc}[32m"
+cyan="${esc}[36m"
+white="${esc}[37m"
+brown="${esc}[33m"
+yellow="${bright}${brown}"
+
+info=" ${cyan}*${clr} "
+warn=" ${yellow}*${clr} "
+error=" ${red}*${clr} "
+
+function prompt {
+    local inversed
+
+    if [[ "$2" == "inverse" ]]; then
+        inversed=true
+    else
+        inversed=false
+    fi
+
+    local questionAnswerVariants
+    questionAnswerVariants=$($inversed && echo "[${red}y${clr}|${green}N${clr}]" || echo "[${green}Y${clr}|${red}n${clr}]")
+    local ans=""
+    while true; do
+        echo -n "${white}${bright}>>> ${clr}${1}${clr} ${questionAnswerVariants} "
+        read -n1 ans
+        if [[ ! ( $ans =~ [yYnN] || $ans == "" ) ]]; then
+            echo ""
+            echo "Sorry didn't understand, try again."
+        else
+            if [[ $ans != "" ]]; then
+                echo ""
+            fi
+            if [[ $ans =~ [yY] || ( $ans == "" && ! "$inversed" == "true" ) ]]; then
+                answer=true
+            else
+                answer=false
+            fi
+            break
+        fi
+    done
+
+    local returnCode
+    if [[ "$answer" == "true" ]]; then
+        returnCode=0
+    else
+        returnCode=1
+    fi
+    return $returnCode
+}
+
+# region checking if root
+
+if [[ root != "${USER}" ]]; then
+    echo "${error}Not enough privileges to execute this command!"
+    echo "${info}You need to execute this command as ${bright}${white}root${clr}"
+    echo "${info}You may want to execute this command as root using ${bright}${white}sudo${clr}"
+    echo "${info}To quickly do so:"
+    echo "  > ${bright}${white}sudo !!${clr}"
+    exit 1
+fi
+
+# endregion
+
+# endregion
+
+print-usage() {
+  echo "usage: ${bright}${white}burn-stick${clr} <${dim}${white}path/to.iso${clr}> <${dim}${white}path/to/stick/device${clr}>"
+  echo "example: ${bright}${white}burn-stick${clr} ${dim}${white}./result/iso/fat.iso${clr} ${dim}${white}/dev/sda${clr}"
+  exit
+}
+
+case "${1}${2}" in
+  '' | '-h' | '--help' | 'help' )
+    print-usage
+  ;;
+esac
+
+if [[ n"${1}" == n ]] || [[ n"${2}" == n ]]; then
+  print-usage
+fi
+
+disk=
+iso=
+if [ -b "${1}" ]; then
+  disk="${1}"
+  iso="${2}"
+elif [ -b "${2}" ]; then
+  disk="${2}"
+  iso="${1}"
+else
+  echo "${error}error: neither ${bright}${white}${1}${clr} nor ${bright}${white}${2}${clr} are a valid usb-stick device" >&2
+  exit 1
+fi
+
+if ! lsblk -no TYPE "${disk}" | grep -q "disk"; then
+  echo "${error}error: ${bright}${white}${disk}${clr} is not a whole usb-stick device" >&2
+  echo "${info}did you specify a partition instead of a whole disk?"
+  exit 1
+fi
+
+if ! [ -f "${iso}" ]; then
+  echo "${error}error: ${bright}${white}${iso}${clr} does not exist!" >&2
+  exit 1
+fi
+
+echo "${info}burning ${bright}${iso}${clr} to ${bright}${white}${disk}${clr}"
+echo "${warn}all data on ${bright}${white}${disk}${clr} will be wiped!"
+prompt "proceed?" inverse || {
+  echo "${info}aborting";
+  exit 0
+}
+
+echo "${info}copying..."
+dd bs=4M conv=fsync oflag=direct status=progress if="${iso}" of="${disk}" || {
+  echo "${error}failed to burn stick";
+  exit 1;
+}
+echo "${info}syncing"
+sync
+echo "${info}done"

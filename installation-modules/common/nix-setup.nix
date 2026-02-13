@@ -58,6 +58,9 @@
             sandbox = lib.mkForce true;
             # need to test this properly, false for now; requires "cgroups" feature
             use-cgroups = lib.mkForce false;
+            # useless and makes any call to any nix command retrieve json from github
+            # also related - https://github.com/NixOS/nix/issues/8953#issuecomment-1728592073
+            flake-registry = "";
           };
 
           nix.gc = {
