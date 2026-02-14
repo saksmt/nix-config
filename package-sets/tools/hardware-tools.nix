@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }:
 
@@ -12,7 +11,9 @@
   install.packages = with pkgs; [
     lshw
     pciutils
+    usbutils
     hwinfo
+    sdparm
     hdparm
     smartmontools
     nvme-cli

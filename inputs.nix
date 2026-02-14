@@ -13,6 +13,8 @@ in
   nixpkgs-master.url = "github:nixos/nixpkgs/master";
   nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+  nix-index-database = nixpkgs-dependent-input "github:nix-community/nix-index-database";
+
   nixgl = nixpkgs-dependent-input "github:nix-community/nixGL";
   awesome-iwm = nixpkgs-dependent-input "github:saksmt/awesomewm-iwm";
 

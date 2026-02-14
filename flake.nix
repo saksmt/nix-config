@@ -34,6 +34,14 @@ rec {
         };
         url = "github:saksmt/nix-features";
       };
+      nix-index-database = {
+        inputs = {
+          nixpkgs = {
+            follows = "nixpkgs";
+          };
+        };
+        url = "github:nix-community/nix-index-database";
+      };
       nix-unstables = {
         inputs = {
           nixpkgs = {
@@ -177,7 +185,8 @@ rec {
               isos = {
 
                 full-fat = mkIso "/hosts/iso/full-fat.nix";
-                minimal-nox = mkIso "/hosts/iso/minimal-nox.nix";
+                nox = mkIso "/hosts/iso/nox.nix";
+                grub-test = mkIso "/hosts/iso/grub-test.nix";
 
               };
             }

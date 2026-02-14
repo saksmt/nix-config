@@ -13,10 +13,17 @@
 
   install.packages =
     with pkgs;
-    lib.lists.optionals features.GUI.isEnabled [
+    (lib.lists.optionals features.GUI.isEnabled [
       (hunspell.withDicts (dicts: [
         dicts.ru_RU
         dicts.en_US-large
       ]))
+    ])
+    ++ [
+      # these archive types are not strictly needed and almost always
+      # imply something user-downloaded in interactive environment
+      p7zip
+      rar
+      unrar
     ];
 }

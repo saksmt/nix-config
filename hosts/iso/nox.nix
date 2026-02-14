@@ -18,14 +18,13 @@ rec {
       }:
       {
         images.iso = {
-          base-name = "minimal-nox-${lib.trivial.release}";
+          base-name = "nox-${lib.trivial.release}";
           volumeID = "PORTABLE_NIXOS_NOX";
           applicationID = "PORTABLE_NIXOS_NOX";
 
-          efiBootEntryName = "Minimal NOX NixOS LiveCD";
-          efiBootEntryVersion = lib.trivial.release;
+          efiBootEntryName = "NOX NixOS LiveCD";
 
-          boot.entryname = "Boot to Minimal NOX NixOS";
+          boot.entryname = "Boot to NOX NixOS";
         };
 
       }
@@ -49,6 +48,8 @@ rec {
       GUI.disable
 
       android
+      dev.common
+      dev.nix
     ];
 
     package-sets = [
@@ -59,6 +60,7 @@ rec {
       "system/iso"
 
       "tools/hardware-tools"
+      "tools/rescue-tools"
 
       "cli"
       "dev"

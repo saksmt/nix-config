@@ -11,7 +11,7 @@
     };
 
     images.iso.efiBootEntryVersion = lib.mkOption {
-      default = lib.trivial.version;
+      default = config.images.iso.version;
       type = lib.types.str;
 
       description = ''

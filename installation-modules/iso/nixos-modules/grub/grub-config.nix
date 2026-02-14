@@ -68,7 +68,7 @@ let
       ${lib.concatStringsSep "\n" rest}
     '';
 
-  grubRoot = "(\$root)${config.images.iso.boot.grub.root-dir}";
+  grubRoot = "${config.images.iso.boot.grub.root-dir}";
 
   grubMenuCfg =
     let
@@ -107,10 +107,11 @@ let
       # Search using fs label
       search --no-floppy --set=root -l ${config.images.iso.volumeID}
 
-      insmod gfxterm
-      insmod png
       set gfxpayload=keep
       set gfxmode=${config.images.iso.boot.grub.gfx-modes}
+      insmod gfxterm
+      insmod all_video
+      insmod png
 
       if [ "\$textmode" == "false" ]; then
         terminal_output gfxterm
@@ -168,6 +169,7 @@ let
         echo "Press 't' to use the text boot menu on this console..."
         echo ""
 
+
         ${grubMenuCfg}
 
         ${config.images.iso.boot.grub.extra-initial-config}
@@ -201,9 +203,6 @@ let
           # GRUB apparently cannot do "chainloader" operations on "CD".
           if [ "\$root" != "cd0" ]; then
             menuentry 'rEFInd' --class refind {
-              # Force root to be the FAT partition
-              # Otherwise it breaks rEFInd's boot
-              search --set=root --no-floppy --fs-uuid 1234-5678
               chainloader ${grubRoot}/${refindBinary}
             }
           fi

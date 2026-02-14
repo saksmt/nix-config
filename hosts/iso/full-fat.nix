@@ -18,7 +18,6 @@ rec {
           base-name = "full-fat-${lib.trivial.release}";
 
           efiBootEntryName = "Full Fat NixOS LiveCD";
-          efiBootEntryVersion = lib.trivial.release;
 
           volumeID = "PORTABLE_FAT_NIXOS";
           applicationID = "PORTABLE_FAT_NIXOS";

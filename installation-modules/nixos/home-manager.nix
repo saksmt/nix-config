@@ -9,6 +9,9 @@
       hm-conf = installation.home-manager or { };
     in
     {
+      module-args = {
+        home-manager-enabled = hm-conf.enabled or hm-conf.enable or false;
+      };
       modules =
         if hm-conf.enabled or hm-conf.enable or false then
           with (import (self.outPath + "/installation-modules/lib.nix"));

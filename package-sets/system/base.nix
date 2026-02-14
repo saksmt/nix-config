@@ -14,6 +14,10 @@ with features;
     exfat
     inetutils
     lm_sensors
+    ccrypt
+    cryptsetup
+    fuse
+    fuse3
   ];
 
   nixpkgs.config.glibc.installLocales = true;
@@ -26,7 +30,7 @@ with features;
       earlySetup = true;
       packages = lib.mkDefault [ pkgs.terminus_font ];
       keyMap = "ruwin_alt_sh-UTF-8";
-      font = getFont (if HiDPI.isEnabled then "ter-k32n" else "ter-k16n");
+      font = getFont (if HiDPI.isEnabled then "ter-v32n" else "ter-v16n");
     };
   catppuccin.tty.enable = true;
 
