@@ -69,7 +69,7 @@ in
 
       config.programs.zsh.enable = lib.mkDefault config.shells.zsh.enable;
       config.programs.zsh.initExtraFirst = config.shells.zsh.rc-extra.top;
-      config.programs.zsh.initExtra = config.shells.zsh.rc-extra.bottom;
+      config.programs.zsh.initContent = config.shells.zsh.rc-extra.bottom;
       config.programs.zsh.oh-my-zsh.enable = lib.mkDefault config.shells.zsh.oh-my-zsh.enable;
       config.programs.zsh.oh-my-zsh.theme = lib.mkDefault config.shells.zsh.oh-my-zsh.theme;
       config.programs.zsh.oh-my-zsh.plugins = config.shells.zsh.oh-my-zsh.plugins;
