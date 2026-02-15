@@ -2,6 +2,7 @@
 with (import (self.outPath + "/installation-modules/lib.nix"));
 
 includeAllRelative self [
+  "/installation-modules/nixos/save-flake-args.nix"
 
   "/installation-modules/nixos/hm-adapter.nix"
   "/installation-modules/nixos/system.nix"

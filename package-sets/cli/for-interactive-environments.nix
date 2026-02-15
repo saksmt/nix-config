@@ -24,6 +24,5 @@
       # imply something user-downloaded in interactive environment
       p7zip
       rar
-      unrar
     ];
 }

@@ -1,17 +1,21 @@
 {
   nixosModule =
     { config, lib, ... }:
-    let
-      unimplementedEnableFlag = with lib; {
+    {
+      options.programs.git.delta = with lib; {
         enable = mkOption {
           type = types.bool;
           apply = v: warnIf v "programs.git.delta is not supported as a nixos module yet!" v;
           default = false;
         };
       };
-    in
-    {
-      options.programs.git.delta = unimplementedEnableFlag;
+      options.programs.delta = with lib; {
+        enableGitIntegration = mkOption {
+          type = types.bool;
+          apply = v: warnIf v "programs.delta is not supported as a nixos module yet!" v;
+          default = false;
+        };
+      };
     };
   homeManagerModule =
     { config, lib, ... }:

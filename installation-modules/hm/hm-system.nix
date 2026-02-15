@@ -8,19 +8,19 @@ _: {
           config,
           ...
         }:
-        {
+        let onCI = builtins.getEnv "CI" != ""; in {
           home.packages = [ pkgs.home-rebuild ];
           nix.enable = true;
           nix.package = pkgs.nix;
 
-          nix.registry = {
+          nix.registry = if (!onCI) then {
             home.to = builtins.parseFlakeRef (
               lib.strings.fileContents "${config.home.homeDirectory}/.config/hm/flake-ref"
             );
             tpl.to = builtins.parseFlakeRef (
               lib.strings.fileContents "${config.home.homeDirectory}/.config/hm/flake-ref"
             );
-          };
+          } else {};
 
           # for some reason hm is missing those...
           home.sessionVariables = {

@@ -33,6 +33,7 @@ with features;
 
   programs.git.enable = true;
   programs.git.delta.enable = true;
+  programs.delta.enableGitIntegration = true;
   catppuccin.delta.enable = true;
 
   programs.lazygit.enable = true;

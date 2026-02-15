@@ -6,9 +6,12 @@
   lib,
 }:
 let
+  onCI = builtins.getEnv "CI" != "";
   thisFlake =
     if (builtins.pathExists "/etc/nixos/flake-ref") then
       lib.strings.fileContents "/etc/nixos/flake-ref"
+    else if (onCI) then
+      "NOT_AVAILABLE"
     else
       builtins.throw "No reference to this flake specified in /etc/nixos/flake-ref";
   thisHost =
@@ -18,7 +21,7 @@ let
       "$(hostname)";
 
   thisFlakePath = lib.strings.removePrefix "path:" (lib.strings.removePrefix "git+file:" thisFlake);
-  var = name: ''''${${name}}'';
+  var = name: "\${${name}}";
   quotedVar = name: ''"${var name}"'';
   buildOpts = builtins.concatStringsSep " " [
     (quotedVar "ASK_FLAG")
@@ -30,24 +33,7 @@ let
     (quotedVar "nixOpts[@]")
     "--impure"
   ];
-in
-writeShellApplication {
-  name = "os";
-
-  derivationArgs = {
-    pname = "os-rebuild-script";
-    meta = {
-      name = "os-rebuild-script";
-    };
-  };
-
-  runtimeInputs = [
-    nh
-    nix-output-monitor
-    git
-  ];
-
-  text = ''
+  script = ''
     ASK_FLAG="''${NO_ASK:---ask}"
     read -r -a nixOpts <<< "''${NH_NIX_OPTS:-}"
     case "''${1:-}" in
@@ -82,4 +68,29 @@ writeShellApplication {
         ;;
     esac
   '';
+in
+writeShellApplication {
+  name = "os";
+
+  derivationArgs = {
+    pname = "os-rebuild-script";
+    meta = {
+      name = "os-rebuild-script";
+    };
+  };
+
+  runtimeInputs = [
+    nh
+    nix-output-monitor
+    git
+  ];
+
+  text =
+    if onCI then
+      ''
+        echo "THIS IS WAS A CI BUILD. os COMMAND IS NOT AVAILABLE" >&2;
+        exit 1;
+      ''
+    else
+      script;
 }
