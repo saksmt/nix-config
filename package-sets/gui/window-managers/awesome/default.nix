@@ -2,6 +2,7 @@
   features,
   pkgs,
   lib,
+  config,
   ...
 }:
 
@@ -20,6 +21,10 @@
 
       services.clipcat.enable = lib.mkDefault true;
 
+      windowManager.awesome-iwm.enable = true;
+      # This allows for seamless modification of default kitty package,
+      # for example in case of nixGL
+      windowManager.awesome-iwm.terminal = "${config.programs.kitty.package}/bin/kitty";
       xsession.windowManager.awesome.enable = true;
     }
   else

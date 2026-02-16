@@ -8,11 +8,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1770984286,
-        "narHash": "sha256-Rovv+jcsOD+hFODKl55th7sN8NgXXfUXih/cHKaZmlg=",
+        "lastModified": 1771276957,
+        "narHash": "sha256-Vroc7NEuMWywzWXjTIsgxasZNA21dvJB9NSSxNqDq9w=",
         "owner": "saksmt",
         "repo": "awesomewm-iwm",
-        "rev": "d754367f0ca0c425fe5b8fa1007bdbcd542fe819",
+        "rev": "17657f5d3bc9162cfa7dbca3a602e868796a085e",
         "type": "github"
       },
       "original": {

@@ -87,8 +87,6 @@ rec {
         userEmail = "smt@saksmt.dev";
       };
 
-      windowManager.awesome-iwm.enable = true;
-
       installation = {
         package-sets = [
           "gui/apps/base"
