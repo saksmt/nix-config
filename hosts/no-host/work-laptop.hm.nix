@@ -66,6 +66,10 @@
       { pkgs, ... }:
       {
         home.stateVersion = "24.05";
+        # This enables propagation of XDG and other profile variables
+        # through systemd environment, which is imported by default
+        # in xsession
+        targets.genericLinux.enable = true;
         home.packages = [ pkgs.nixgl.nixGLIntel ];
 
         programs.kitty.package = pkgs.nix-gl-wrap pkgs.kitty;
