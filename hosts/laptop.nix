@@ -97,8 +97,12 @@ rec {
       }:
       {
         jetbrains.idea = from master;
+        gemini-cli = from master;
+        opencode = from unstable;
+
         asusctl = from unstable;
         supergfxctl = from unstable;
+
         wrapOBS = from unstable;
         obs-studio-plugins = from unstable;
 

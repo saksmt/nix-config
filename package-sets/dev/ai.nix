@@ -15,5 +15,6 @@ with features;
     with pkgs;
     lib.lists.optionals dev.common.isEnabled ([
       gemini-cli
+      mcp-wrapper
     ]);
 }

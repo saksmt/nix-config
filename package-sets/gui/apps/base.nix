@@ -268,6 +268,13 @@ lib.mkMerge [
           isDefault = false;
           id = 1;
         };
+        agent-grunt = {
+          settings = {
+            "marionette.enabled" = true;
+          };
+          isDefault = false;
+          id = 2;
+        };
       };
     };
 
