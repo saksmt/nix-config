@@ -16,5 +16,6 @@ with features;
     lib.lists.optionals dev.nix.isEnabled [
       nil
       nixfmt-rfc-style
+      mcp-nixos
     ];
 }
