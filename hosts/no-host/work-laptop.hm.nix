@@ -19,6 +19,13 @@
       }:
       {
         jetbrains.idea = from master;
+        gemini-cli = from master;
+        codex = from master;
+        code-cursor = from master;
+        cursor-cli = from master;
+        # goose-cli = from unstable;
+        opencode = from master;
+        opencode-desktop = from master;
 
         unstable = copy-of unstable;
       };
@@ -71,6 +78,9 @@
         # in xsession
         targets.genericLinux.enable = true;
         home.packages = [ pkgs.nixgl.nixGLIntel ];
+
+        # don't care about overrides and conflicts, they happen though
+        xdg.configFile."mimeapps.list".force = true;
 
         programs.kitty.package = pkgs.nix-gl-wrap pkgs.kitty;
         services.xscreensaver.package = pkgs.nix-gl-wrap pkgs.xscreensaver;

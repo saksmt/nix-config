@@ -31,7 +31,7 @@ writeShellApplication {
       # MCP tool names should ideally be alphanumeric with underscores
       SAFE_NAME=$(echo "$NAME" | tr '-' '_')
 
-      echo "''${NAME} mcp server disabled. Starting mock MCP server to gracefully ghost the client." | log.info
+      echo "''${NAME} mcp server disabled via 'ENABLED=''${ENABLED}'. Starting mock MCP server to gracefully ghost the client." | log.info
 
       # Read JSON-RPC requests from stdin line-by-line
       while IFS= read -r line; do

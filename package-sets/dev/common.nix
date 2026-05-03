@@ -45,7 +45,7 @@ with features;
       filterMode = "fuzzy";
       sidePanelWidth = 0.2;
     };
-    git.paging.pager = "delta --side-by-side --line-numbers --paging=never";
+    git.pagers = [ "delta --side-by-side --line-numbers --paging=never" ];
   };
 
   programs.zsh.shellAliases = {

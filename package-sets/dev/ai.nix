@@ -14,7 +14,13 @@ with features;
   install.packages =
     with pkgs;
     lib.lists.optionals dev.common.isEnabled ([
-      gemini-cli
       mcp-wrapper
+
+      gemini-cli
+      code-cursor
+      cursor-cli
+      opencode
+      opencode-desktop
+      codex
     ]);
 }
