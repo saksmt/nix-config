@@ -49,6 +49,7 @@
 
       "cli"
       "dev"
+      "dev/ai"
 
       "gui/apps/base"
       "gui/apps/dev"

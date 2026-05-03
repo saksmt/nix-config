@@ -98,7 +98,8 @@ rec {
       {
         jetbrains.idea = from master;
         gemini-cli = from master;
-        opencode = from unstable;
+        opencode = from master;
+        opencode-desktop = from master;
 
         asusctl = from unstable;
         supergfxctl = from unstable;
@@ -164,6 +165,8 @@ rec {
           "gui/window-managers/awesome"
 
           "user-preferences"
+
+          "dev/ai"
         ];
         features = installation.features;
       };

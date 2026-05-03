@@ -16,7 +16,9 @@ with features;
     (lib.lists.optionals dev.common.isEnabled ([
       graphviz
       httpie
-    ])) ++ [ bintools ];
+    ] ++ (lib.lists.optionals GUI.isEnabled [
+      jq-lsp
+    ]))) ++ [ bintools ];
   services.emacs.enable = lib.mkDefault dev.common.isEnabled;
   services.emacs.defaultEditor = lib.mkDefault dev.common.isEnabled;
   services.emacs.package =
