@@ -25,9 +25,19 @@ writeShellApplication {
       exit 1
     fi
 
-    find "''${INPUT}" -type f -name \*.json \
+    get-content() {
+      while IFS= read -r file; do
+        if [[ -x "$file" ]]; then
+          "$file"
+        else
+          cat "$file"
+        fi
+      done
+    }
+
+    find "''${INPUT}" \( -type f -or -type l \) -name \*.json \
       | sort \
-      | xargs -n1 cat \
+      | get-content \
       | jq -n -f ${jqDeepMerge} \
       > "''${OUTPUT}" \
       || exit 1

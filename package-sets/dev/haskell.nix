@@ -11,5 +11,11 @@ with features;
     "nixos"
   ];
 
-  install.packages = with pkgs; lib.lists.optionals dev.haskell.isEnabled [ stack ];
+  install.packages =
+    with pkgs;
+    lib.lists.optionals dev.haskell.isEnabled [
+      stack
+      haskell-language-server
+      ormolu
+    ];
 }

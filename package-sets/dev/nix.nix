@@ -14,7 +14,7 @@ with features;
   install.packages =
     with pkgs;
     lib.lists.optionals dev.nix.isEnabled [
-      nil
+      nixd
       nixfmt-rfc-style
       mcp-nixos
     ];

@@ -35,7 +35,19 @@ with features;
                 ${json-confd}/bin/json-confd ${opencodeConfd} ${opencodeConfigFile} \\
                   || exit 1
                 # forwarding to the original app
-                exec $app
+
+                # Disabling project-local config loading for security reasons by default
+                # Explicit trust is required
+                # Reason: config may contain ANY commands and ANY javascript plugins!
+
+                disable_project_conf="true"
+                if [[ "\$TRUST_PROJECT" == "true" || "\$OPENCODE_DISABLE_PROJECT_CONFIG" == "false" ]]; then
+                  disable_project_conf="false"
+                fi
+
+                export OPENCODE_DISABLE_PROJECT_CONFIG="\$disable_project_conf"
+
+                exec $app "\''${@}"
             EOF
               chmod +x $bin
 

@@ -16,6 +16,7 @@ with features;
     (lib.lists.optionals dev.common.isEnabled ([
       graphviz
       httpie
+      jqfmt
     ] ++ (lib.lists.optionals GUI.isEnabled [
       jq-lsp
     ]))) ++ [ bintools ];

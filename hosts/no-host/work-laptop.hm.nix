@@ -86,6 +86,15 @@
         programs.kitty.package = pkgs.nix-gl-wrap pkgs.kitty;
         services.xscreensaver.package = pkgs.nix-gl-wrap pkgs.xscreensaver;
         programs.firefox.package = pkgs.nix-gl-wrap pkgs.firefox;
+
+        opencode.confd."100-webseach" = {
+          plugin = [ "opencode-websearch" ];
+          provider.openai.models = {
+            "gpt5.4-mini".options = {
+              websearch = "always";
+            };
+          };
+        };
       }
     )
   ];

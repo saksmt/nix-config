@@ -170,6 +170,111 @@ rec {
         ];
         features = installation.features;
       };
+
+      imports = [
+        (
+          { pkgs, ... }:
+          {
+            opencode.plugins.notifier.settings = {
+              command = {
+                enabled = true;
+                path = pkgs.writeShellScript "ntfy-opencode" ''
+                  project="$1"
+                  event="$2"
+                  session="$3"
+                  agent="$4"
+
+                  ntfyUser=$(< ~/.secrets/ntfy/opencode.user)
+                  ntfyPassword=$(< ~/.secrets/ntfy/opencode.password)
+                  ntfyHost=$(< ~/.secrets/home-server-host)
+
+                  title="OpenCode [$project]"
+                  icon="https://static.$ntfyHost/opencode-logo-dark.png"
+                  message=
+                  priority=
+                  tags=
+
+                  case "$event" in
+                    permission )
+                      tags=unlock
+                      priority=high
+                      if [[ n"$agent" != n ]]; then
+                        message="$agent requests permission in $session"
+                      else
+                        message="Permission request in $session"
+                      fi
+                      ;;
+                    complete|subagent_complete )
+                      tags=heavy_check_mark,hourglass
+                      priority=default
+                      if [[ n"$agent" != n ]]; then
+                        message="$agent completed in $session"
+                      else
+                        message="$session: completed"
+                      fi
+                      ;;
+                    error )
+                      tags=warning
+                      priority=high
+                      if [[ n"$agent" != n ]]; then
+                        message="$agent failed in $session"
+                      else
+                        message="$session: failed"
+                      fi
+                      ;;
+                    question )
+                      tags=question
+                      priority=high
+                      if [[ n"$agent" != n ]]; then
+                        message="$agent has a question for you about $session"
+                      else
+                        message="There is a question in $session"
+                      fi
+                      ;;
+                    plan_exit )
+                      tags=memo,heavy_check_mark
+                      priority=high
+                      if [[ n"$agent" != n ]]; then
+                        message="$agent has completed a plan for $session"
+                      else
+                        message="Plan for $session is complete"
+                      fi
+                      ;;
+                    * )
+                      tags=question
+                      priority=high
+                      message="$event happened in $session (agent=$agent)"
+                  esac
+
+                  curl \
+                    -H "Authorization: Basic $(echo -n "$ntfyUser:$ntfyPassword" | base64)" \
+                    -H "Title: $title" \
+                    -H "Icon: $icon" \
+                    -H "Tags: $tags" \
+                    -H "Priority: $priority" \
+                    -d "$message" \
+                    https://ntfy."$ntfyHost"/user_app_opencode
+
+                '';
+                args = [
+                  "{projectName}"
+                  "{event}"
+                  "{sessionTitle}"
+                  "{agentName}"
+                ];
+                minDuration = 15;
+              };
+
+              events = {
+                user_cancelled = false;
+                session_started = false;
+                user_message = false;
+                client_connected = false;
+              };
+            };
+          }
+        )
+      ];
     };
   };
 }
