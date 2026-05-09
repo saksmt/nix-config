@@ -81,6 +81,21 @@
         "type": "github"
       }
     },
+    "jail-nix": {
+      "locked": {
+        "lastModified": 1772137954,
+        "narHash": "sha256-h4MGNbOo7L3RHi4uNFmsg5g17/DHXEfnv/xiG6BrNFQ=",
+        "owner": "~alexdavid",
+        "repo": "jail.nix",
+        "rev": "42b355c38ca63dab4904acc5c0d95f17954a8c9b",
+        "type": "sourcehut"
+      },
+      "original": {
+        "owner": "~alexdavid",
+        "repo": "jail.nix",
+        "type": "sourcehut"
+      }
+    },
     "nix-features": {
       "inputs": {
         "nixpkgs": [
@@ -233,6 +248,7 @@
         "awesome-iwm": "awesome-iwm",
         "catppuccin": "catppuccin",
         "home-manager": "home-manager",
+        "jail-nix": "jail-nix",
         "nix-features": "nix-features",
         "nix-index-database": "nix-index-database",
         "nix-unstables": "nix-unstables",

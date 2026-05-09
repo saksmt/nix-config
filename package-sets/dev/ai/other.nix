@@ -17,11 +17,9 @@ with features;
         mcp-wrapper
 
         gemini-cli
-        cursor-cli
-        codex
       ]
-      ++ (lib.lists.optionals GUI.isEnabled [
-        code-cursor
+      ++ (lib.lists.optionals work.isEnabled [
+        codex
       ])
     );
 }
