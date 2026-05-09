@@ -39,13 +39,22 @@ with features;
                 | # Disabling project-local config loading for security reasons by default
                 | # Explicit trust is required
                 | # Reason: config may contain ANY commands and ANY javascript plugins!
-                |
+                |${
+                  # todo: opencode-trust plugin
+                  # idea: read well-known location for list of trusted paths
+                  # if project path is trusted - manually load config and apply it
+                  # with ctx.client.config.update(..), need to verify whether that
+                  # will load additional plugins or would require restart
+                  # if that won't work add patch to upstream? or maybe just make more intelligent wrapper
+                  ""
+                }
                 | disable_project_conf="true"
                 | if [[ "\$TRUST_PROJECT" == "true" || "\$OPENCODE_DISABLE_PROJECT_CONFIG" == "false" ]]; then
                 |   disable_project_conf="false"
                 | fi
                 |
                 | export OPENCODE_DISABLE_PROJECT_CONFIG="\$disable_project_conf"
+                | export OPENCODE_EXPERIMENTAL_LSP_TOOL="true"
                 |
                 | exec $app "\''${@}"
             EOF

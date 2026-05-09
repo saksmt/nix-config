@@ -69,6 +69,7 @@
       "test.*"
       "non-git_local-overrides.*"
       "ignoreme/"
+      ".ignoreme/"
 
       ".idea/"
       "*.iml"

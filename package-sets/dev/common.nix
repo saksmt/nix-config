@@ -13,13 +13,17 @@ with features;
 
   install.packages =
     with pkgs;
-    (lib.lists.optionals dev.common.isEnabled ([
-      graphviz
-      httpie
-      jqfmt
-    ] ++ (lib.lists.optionals GUI.isEnabled [
-      jq-lsp
-    ]))) ++ [ bintools ];
+    (lib.lists.optionals dev.common.isEnabled (
+      [
+        graphviz
+        httpie
+        jqfmt
+      ]
+      ++ (lib.lists.optionals GUI.isEnabled [
+        jq-lsp
+      ])
+    ))
+    ++ [ bintools ];
   services.emacs.enable = lib.mkDefault dev.common.isEnabled;
   services.emacs.defaultEditor = lib.mkDefault dev.common.isEnabled;
   services.emacs.package =
@@ -48,7 +52,17 @@ with features;
       filterMode = "fuzzy";
       sidePanelWidth = 0.2;
     };
-    git.pagers = [ "delta --side-by-side --line-numbers --paging=never" ];
+    git.pagers = [
+      {
+        pager = "${lib.getExe pkgs.delta} --side-by-side --line-numbers --paging=never --hyperlinks --hyperlinks-file-link-format=\"lazygit-edit://{path}:{line}\"";
+      }
+      {
+        externalDiffCommand = "${lib.getExe pkgs.difftastic} --color=always --display=inline";
+      }
+      {
+        pager = "${lib.getExe pkgs.delta} --line-numbers --paging=never --hyperlinks --hyperlinks-file-link-format=\"lazygit-edit://{path}:{line}\"";
+      }
+    ];
   };
 
   programs.zsh.shellAliases = {

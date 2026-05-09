@@ -10,7 +10,44 @@ let
 in
 forFeature dev.common {
   opencode.confd."000-shared/base" = {
-    agent.octto.disable = true;
+    agent = {
+      octto.disable = true;
+      plan.permission =
+        let
+          planPaths = {
+            "./**/plans/**" = "allow";
+            "./**/plan/**" = "allow";
+            "./**/brainstorming/**" = "allow";
+            "./**/thoughts/**" = "allow";
+            "./**/notes/**" = "allow";
+            "./**/drafts/**" = "allow";
+            "./**/ideas/**" = "allow";
+            "./**/thought/**" = "allow";
+            "./**/note/**" = "allow";
+            "./**/draft/**" = "allow";
+            "./**/idea/**" = "allow";
+            "./**/specs/**" = "allow";
+            "./**/spec/**" = "allow";
+            "./**/specification/**" = "allow";
+            "./**/specifications/**" = "allow";
+            "./**/handoff/**" = "allow";
+          };
+        in
+        {
+          edit = planPaths;
+          write = planPaths;
+          submit_plan = "allow";
+          create_brainstorm = "allow";
+          await_brainstorm_complete = "allow";
+          end_brainstorm = "allow";
+        };
+        plan.tools = {
+          submit_plan = true;
+          create_brainstorm = true;
+          await_brainstorm_complete = true;
+          end_brainstorm = true;
+        };
+    };
     share = "disabled";
     autoupdate = false;
     disabled_providers = [ ];

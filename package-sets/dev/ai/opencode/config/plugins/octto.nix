@@ -27,10 +27,12 @@ in
   };
   config = forFeature dev.common {
     opencode.confd."000-shared/plugins/octto" = lib.mkIf cfg.enable {
-      plugin = [ "occto@0.3.1" ];
+      plugin = [ "octto@0.3.1" ];
     };
     xdg.configFile."opencode/octto.json".source = lib.mkIf cfg.enable (
       jsonFormat.generate "octto.json" (lib.attrsets.recursiveUpdate defaultConfig cfg.settings)
     );
+
+    programs.git.ignores = lib.mkIf cfg.enable [".octto/"];
   };
 }

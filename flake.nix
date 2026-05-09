@@ -26,6 +26,9 @@ rec {
         };
         url = "github:nix-community/home-manager/release-25.11";
       };
+      jail-nix = {
+        url = "sourcehut:~alexdavid/jail.nix";
+      };
       nix-features = {
         inputs = {
           nixpkgs = {
@@ -88,6 +91,7 @@ rec {
       utils,
       nix-features,
       nix-unstables,
+      jail-nix,
       ...
     }@resolvedInputs:
     let

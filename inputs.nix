@@ -12,6 +12,7 @@ in
   nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   nixpkgs-master.url = "github:nixos/nixpkgs/master";
   nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+  jail-nix.url = "sourcehut:~alexdavid/jail.nix";
 
   nix-index-database = nixpkgs-dependent-input "github:nix-community/nix-index-database";
 

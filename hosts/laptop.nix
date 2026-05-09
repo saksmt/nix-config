@@ -175,6 +175,12 @@ rec {
         (
           { pkgs, ... }:
           {
+            opencode.plugins.octto.settings = {
+              agents = {
+                probe.model = "opencode/big-pickle";
+                bootstrapper.model = "opencode/big-pickle";
+              };
+            };
             opencode.plugins.notifier.settings = {
               command = {
                 enabled = true;
