@@ -44,6 +44,8 @@
                       zip
                       unzip
                       wget
+                      findutils
+                      which
                     ])
                   ];
                 modern-linux-utils = compose [
