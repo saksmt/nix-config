@@ -119,7 +119,6 @@ rec {
 
       gaming
 
-      work
       dev.all
       android
     ];
@@ -173,8 +172,17 @@ rec {
 
       imports = [
         (
-          { pkgs, ... }:
+          { pkgs, jail, host-config, ... }:
           {
+            install.packages = [(jail "restricted-bash" pkgs.bash (with jail.combinators; [
+              (nix host-config.nix)
+              transparent
+              terminfo
+              base-linux-utils
+              modern-linux-utils
+              xdg
+            ]))];
+            opencode.tui.plugin = [ "/home/smt/code/opensource/opencode-plugins/opencode-debug-kit" ];
             opencode.plugins.octto.settings = {
               agents = {
                 probe.model = "opencode/big-pickle";

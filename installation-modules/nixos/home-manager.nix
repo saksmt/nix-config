@@ -18,6 +18,7 @@
           let
             hmModules = includeAllRelative self [
               "/installation-modules/common/features.nix"
+              "/installation-modules/common/jail-nix.nix"
               "/installation-modules/common/overlays.nix"
               "/installation-modules/common/package-sets.nix"
 
@@ -45,13 +46,18 @@
           in
           [
             home-manager.nixosModules.home-manager
-            (_: {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = applied.module-args;
-              home-manager.sharedModules = applied.modules;
-              home-manager.backupFileExtension = ".hm-backup~";
-            })
+            (
+              { config, ... }:
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.extraSpecialArgs = applied.module-args // {
+                  host-config = config;
+                };
+                home-manager.sharedModules = applied.modules;
+                home-manager.backupFileExtension = ".hm-backup~";
+              }
+            )
           ]
         else
           [ ];
