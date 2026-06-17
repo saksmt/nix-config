@@ -25,7 +25,7 @@ let
         modern-linux-utils
         xdg
         git-config
-        (add-pkg-deps pkgs.git)
+        (add-pkg-deps [ pkgs.git ])
       ]
     )
   );
