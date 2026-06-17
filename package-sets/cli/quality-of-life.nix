@@ -131,6 +131,8 @@
         load-env() {
           source-e "''${@}"
         }
+
+        PATH="''${PATH}:/usr/local/bin:''${HOME}/.local/bin"
       '';
     };
   };

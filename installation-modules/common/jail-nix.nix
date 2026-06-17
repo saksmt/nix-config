@@ -114,6 +114,11 @@
                       findutils
                       which
                     ])
+                    (defer (wrap-entry (entry: ''
+                    mkdir -p /usr/bin
+                    ln -s "$(readlink -f "$(which env)")" /usr/bin/env
+                    ${entry}
+                    '')))
                   ];
                 modern-linux-utils = compose [
                   (add-pkg-deps (

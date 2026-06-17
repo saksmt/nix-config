@@ -95,6 +95,9 @@
             };
           };
         };
+        opencode.confd."100-disable-context7" = {
+          mcp.context7.enabled = false;
+        };
       }
     )
   ];

@@ -1,5 +1,6 @@
 _: {
   imports = [
+    # ai intentionally omitted - it mostly requires home manager
     (import ./common.nix)
     (import ./haskell.nix)
     (import ./k8s.nix)
