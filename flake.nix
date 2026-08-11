@@ -172,6 +172,7 @@ rec {
 
         nixosConfigurations = {
           smt-laptop = nixosFromInstallationModules "/hosts/laptop.nix";
+          nas = nixosFromInstallationModules "/hosts/nas.nix";
         };
 
         homeConfigurations = {

@@ -23,7 +23,9 @@ with features;
   services.kmscon = {
     enable = true;
     extraConfig = lib.concatStringsSep "\n" [
-      "font-name=IosevkaForTerm Nerd Font"
+      # Iosevka is too heavy to build on small machines,
+      # fix this when there is a private cache available
+      "font-name=Hasklig"
       "font-size=${if HiDPI.isEnabled then "24" else "16"}"
 
       "xkb-layout=us,ru"

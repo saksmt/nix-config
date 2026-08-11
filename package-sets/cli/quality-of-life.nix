@@ -38,7 +38,7 @@
     libsecret
     moreutils
     gnupg
-    xxHash
+    xxhash
 
     socat
     inetutils

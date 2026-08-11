@@ -4,7 +4,7 @@ with features;
   services.sshd.enable = true;
   services.openssh = {
     enable = true;
-    setting = {
+    settings = {
       PrintMotd = false;
     };
   };

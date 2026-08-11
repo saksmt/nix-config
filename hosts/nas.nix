@@ -8,6 +8,11 @@ rec {
 
         users.users.root.shell = pkgs.zsh;
         users.users.smt.shell = pkgs.zsh;
+
+        # iosevka is too heavy to build on NAS
+        # fix this after setting up proper private cache
+        fonts.fontconfig.enable = true;
+        fonts.packages = [ pkgs.hasklig ];
       }
     )
   ];

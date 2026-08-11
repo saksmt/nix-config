@@ -4,7 +4,10 @@ let
   edition = if dev.jvm.isEnabled then "jdk" else "jre";
   headlessSuffix = if GUI.isEnabled then "" else "_headless";
   jvmVersion = 21;
-  jvmPackageName = "${edition}${builtins.toString jvmVersion}${headlessSuffix}";
+  # for some reason exactly jre21_headless is missing, other combinations exist
+  # todo: fixme!
+  jvmPackageName = "${edition}${headlessSuffix}";
+#  jvmPackageName = "${edition}${builtins.toString jvmVersion}${headlessSuffix}";
   jvmPackage = builtins.getAttr jvmPackageName pkgs;
 in
 {
