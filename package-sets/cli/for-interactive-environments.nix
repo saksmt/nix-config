@@ -18,11 +18,10 @@
         dicts.ru_RU
         dicts.en_US-large
       ]))
-    ])
-    ++ [
+
       # these archive types are not strictly needed and almost always
       # imply something user-downloaded in interactive environment
       p7zip
       rar
-    ];
+    ]);
 }

@@ -11,6 +11,7 @@
     iotop
     iftop
     powertop
+    pv
   ];
 
   catppuccin.btop.enable = true;

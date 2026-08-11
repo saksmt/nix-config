@@ -13,6 +13,8 @@ rec {
         # fix this after setting up proper private cache
         fonts.fontconfig.enable = true;
         fonts.packages = [ pkgs.hasklig ];
+
+        install.packages = [ pkgs.sanoid ];
       }
     )
   ];

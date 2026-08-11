@@ -35,6 +35,7 @@
     zip
     unzip
     zstd
+    mbuffer
     libsecret
     moreutils
     gnupg

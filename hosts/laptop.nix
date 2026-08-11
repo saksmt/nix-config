@@ -125,6 +125,7 @@ rec {
 
     package-sets = [
       "system"
+      "system/fonts"
       "runtime/docker"
       "runtime/jvm"
 
