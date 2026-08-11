@@ -56,7 +56,7 @@
       "gui/apps/im"
       "gui/apps/players"
 
-      "gui/setup/fonts"
+      "system/fonts"
       "gui/themes"
       "gui/window-managers/awesome"
 

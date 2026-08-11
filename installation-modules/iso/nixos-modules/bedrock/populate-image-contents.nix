@@ -25,6 +25,7 @@
           "/dev/root";
       neededForBoot = true;
       noCheck = true;
+      fsType = "hfsplus";
     };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs

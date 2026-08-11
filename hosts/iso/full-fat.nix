@@ -96,7 +96,6 @@ rec {
           "gui/apps/players"
           "gui/apps/streaming"
 
-          "gui/setup/fonts"
           "gui/themes"
           "gui/window-managers/awesome"
 

@@ -8,7 +8,7 @@ with features;
 {
   module-for = [ "nixos" ];
 
-  networking.networkmanager.enable = lib.mkDefault laptop.isEnabled;
+  networking.networkmanager.enable = lib.mkDefault wifi.isEnabled;
   services.upower.enable = lib.mkDefault laptop.isEnabled;
 
   powerManagement.cpuFreqGovernor = lib.mkOverride 900 (

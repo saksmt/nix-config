@@ -245,6 +245,7 @@ in
       copy_bin_and_libs ${lib.getBin pkgs.hfsprogs}/bin/fsck.hfsplus
     '';
     system.fsPackages = [ pkgs.hfsprogs ];
+    boot.initrd.systemd.enable = false;
     boot.initrd.systemd.initrdBin = [ pkgs.hfsprogs ];
 
     environment.systemPackages = [

@@ -58,6 +58,11 @@
     home.stateVersion = config.home.version.release;
   };
 
+  security.pam.services = {
+    login.allowNullPassword = true;
+    sddm.allowNullPassword = true;
+  };
+
   services.getty.autologinUser = lib.mkForce "smt";
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "smt";

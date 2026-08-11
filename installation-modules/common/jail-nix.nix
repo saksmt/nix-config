@@ -6,6 +6,7 @@
         {
           pkgs,
           lib,
+          config,
           ...
         }:
         {
@@ -64,8 +65,12 @@
                       }).generate
                         "overlayed-jail-nix.conf"
                         (
-                          nixCfg.settings // {
-                            experimental-features = (nixCfg.settings.experimental-features or {}) ++ [ "local-overlay-store" "read-only-local-store" ];
+                          nixCfg.settings
+                          // {
+                            experimental-features = (nixCfg.settings.experimental-features or { }) ++ [
+                              "local-overlay-store"
+                              "read-only-local-store"
+                            ];
                             store = "local-overlay://?lower-store=%2Fnix%2Fhost-store%3Fread-only%3Dtrue&upper-layer=%2Fnix%2Fupper-layer&check-mount=false";
                           }
                         )
@@ -80,7 +85,9 @@
                   ];
 
                 host-hostname = compose [
-                  (set-hostname (lib.trim (builtins.readFile "/etc/hostname")))
+                  (set-hostname (
+                    lib.trim ((config.networking or { }).hostName or (builtins.readFile "/etc/hostname"))
+                  ))
                 ];
 
                 transparent = compose [
@@ -114,11 +121,13 @@
                       findutils
                       which
                     ])
-                    (defer (wrap-entry (entry: ''
-                    mkdir -p /usr/bin
-                    ln -s "$(readlink -f "$(which env)")" /usr/bin/env
-                    ${entry}
-                    '')))
+                    (defer (
+                      wrap-entry (entry: ''
+                        mkdir -p /usr/bin
+                        ln -s "$(readlink -f "$(which env)")" /usr/bin/env
+                        ${entry}
+                      '')
+                    ))
                   ];
                 modern-linux-utils = compose [
                   (add-pkg-deps (

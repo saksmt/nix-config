@@ -16,7 +16,7 @@ rec {
             follows = "nixpkgs";
           };
         };
-        url = "github:catppuccin/nix/release-25.11";
+        url = "github:catppuccin/nix/release-26.05";
       };
       home-manager = {
         inputs = {
@@ -24,7 +24,7 @@ rec {
             follows = "nixpkgs";
           };
         };
-        url = "github:nix-community/home-manager/release-25.11";
+        url = "github:nix-community/home-manager/release-26.05";
       };
       jail-nix = {
         url = "sourcehut:~alexdavid/jail.nix";
@@ -65,7 +65,7 @@ rec {
         url = "github:NixOS/nixos-hardware/master";
       };
       nixpkgs = {
-        url = "github:nixos/nixpkgs/nixos-25.11";
+        url = "github:nixos/nixpkgs/nixos-26.05";
       };
       nixpkgs-master = {
         url = "github:nixos/nixpkgs/master";

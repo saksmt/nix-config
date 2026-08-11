@@ -145,6 +145,7 @@ rec {
       programs.zsh.enable = true;
 
       programs.git = {
+        enable = true; # force management of git config through home-manager
         userName = "Kirill Saksin";
         userEmail = "smt@saksmt.dev";
       };
@@ -159,7 +160,6 @@ rec {
           "gui/apps/players"
           "gui/apps/streaming"
 
-          "gui/setup/fonts"
           "gui/themes"
           "gui/window-managers/awesome"
 
@@ -172,17 +172,14 @@ rec {
 
       imports = [
         (
-          { pkgs, jail, host-config, ... }:
           {
-            install.packages = [(jail "restricted-bash" pkgs.bash (with jail.combinators; [
-              (nix host-config.nix)
-              transparent
-              terminfo
-              base-linux-utils
-              modern-linux-utils
-              xdg
-            ]))];
-            opencode.tui.plugin = [ "/home/smt/code/opensource/opencode-plugins/opencode-debug-kit" ];
+            pkgs,
+            jail,
+            lib,
+            host-config,
+            ...
+          }:
+          {
             opencode.plugins.octto.settings = {
               agents = {
                 probe.model = "opencode/big-pickle";

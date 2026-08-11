@@ -8,19 +8,30 @@ _: {
           config,
           ...
         }:
-        let onCI = builtins.getEnv "CI" != ""; in {
+        let
+          onCI = builtins.getEnv "CI" != "";
+        in
+        {
           home.packages = [ pkgs.home-rebuild ];
           nix.enable = true;
           nix.package = pkgs.nix;
 
-          nix.registry = if (!onCI) then {
-            home.to = builtins.parseFlakeRef (
-              lib.strings.fileContents "${config.home.homeDirectory}/.config/hm/flake-ref"
-            );
-            tpl.to = builtins.parseFlakeRef (
-              lib.strings.fileContents "${config.home.homeDirectory}/.config/hm/flake-ref"
-            );
-          } else {};
+          imports = lib.optional (builtins.pathExists "${config.home.homeDirectory}/.config/hm/local-hacks.nix") (
+            builtins.toPath "${config.home.homeDirectory}/.config/hm/local-hacks.nix"
+          );
+
+          nix.registry =
+            if (!onCI) then
+              {
+                home.to = builtins.parseFlakeRef (
+                  lib.strings.fileContents "${config.home.homeDirectory}/.config/hm/flake-ref"
+                );
+                tpl.to = builtins.parseFlakeRef (
+                  lib.strings.fileContents "${config.home.homeDirectory}/.config/hm/flake-ref"
+                );
+              }
+            else
+              { };
 
           # for some reason hm is missing those...
           home.sessionVariables = {

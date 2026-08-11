@@ -14,6 +14,7 @@ lib.mkMerge [
       with pkgs;
       [
         keepassxc
+        solaar
       ]
       ++ (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk);
 
@@ -104,7 +105,6 @@ lib.mkMerge [
 
       profiles = rec {
         default = rec {
-          extensions = [ ];
           settings = {
             "browser.download.always_ask_before_handling_new_types" = true;
             "browser.download.useDownloadDir" = false;

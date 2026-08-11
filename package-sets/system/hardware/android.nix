@@ -9,7 +9,7 @@ lib.mkMerge [
     module-for = [ "nixos" ];
   }
   (features.android.whenEnabled {
-    programs.adb.enable = true;
+    install.packages = [ pkgs.android-tools ];
   })
 
 ]

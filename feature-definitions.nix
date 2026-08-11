@@ -7,8 +7,9 @@
 
   guitar = feature { };
   bluetooth = feature { };
+  wifi = feature { };
 
-  laptop = feature { includes = [ self.bluetooth ]; };
+  laptop = feature { includes = [ self.bluetooth self.wifi ]; };
 
   dev = {
     all = feature {
