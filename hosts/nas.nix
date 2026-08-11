@@ -17,6 +17,9 @@ rec {
     )
   ];
 
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.extraPools = [ "data-pool" ];
+
   users.users.smt = {
     extraGroups = [
       "wheel"
