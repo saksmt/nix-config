@@ -17,8 +17,10 @@ rec {
         install.packages = [ pkgs.sanoid ];
 
         # wifi
-        boot.extraModulePackages = [ config.boot.kernelPackages.rtl88x2bu ];
-        boot.kernelModules = [ "88x2bu" ];
+        # automatically switches from cursed CD-ROM mode
+        hardware.usb-modeswitch.enable = true;
+        # enable firmware for wifi dongle
+        hardware.enableRedistributableFirmware = true;
 
         # reverse tunnel to expose dynamically ip-ed nas
         systemd.services.reverse-ssh-tunnel = {
