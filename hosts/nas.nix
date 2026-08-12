@@ -97,6 +97,23 @@ rec {
     RebootWatchdogSec = "2m";
   };
 
+  # cleanup stale snapshots
+  services.sanoid = {
+    enable = true;
+    templates.backupImportant = {
+      hourly = 6;
+      daily = 3;
+      monthly = 2;
+      yearly = 1;
+      autoprune = true;
+      autosnap = false;
+    };
+    datasets."data-pool" = {
+      useTemplate = [ "backupImportant" ];
+      recursive = true;
+    };
+  };
+
   users.users.smt = {
     extraGroups = [
       "wheel"
