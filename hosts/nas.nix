@@ -21,7 +21,10 @@ rec {
           enable = true;
 
           description = "Reverse SSH Tunnel to Static Server";
-          after = [ "network-online.target" "sshd.service" ];
+          after = [
+            "network-online.target"
+            "sshd.service"
+          ];
           wants = [ "network-online.target" ];
 
           requires = [ "sshd.service" ];
@@ -81,6 +84,18 @@ rec {
 
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.extraPools = [ "data-pool" ];
+
+  # watchdog
+
+  boot.initrd.kernelModules = [ "iTCO_wdt" ];
+  boot.initrd.systemd.settings.Manager = {
+    RuntimeWatchdogSec = "1m";
+    RebootWatchdogSec = "2m";
+  };
+  systemd.settings.Manager = {
+    RuntimeWatchdogSec = "1m";
+    RebootWatchdogSec = "2m";
+  };
 
   users.users.smt = {
     extraGroups = [
