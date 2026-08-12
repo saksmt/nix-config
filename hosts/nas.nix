@@ -15,6 +15,66 @@ rec {
         fonts.packages = [ pkgs.hasklig ];
 
         install.packages = [ pkgs.sanoid ];
+
+        # reverse tunnel to expose dynamically ip-ed nas
+        systemd.services.reverse-ssh-tunnel = {
+          enable = true;
+
+          description = "Reverse SSH Tunnel to Static Server";
+          after = [ "network-online.target" "sshd.service" ];
+          wants = [ "network-online.target" ];
+
+          requires = [ "sshd.service" ];
+
+          # Ensures the service starts automatically on boot
+          wantedBy = [ "multi-user.target" ];
+
+          serviceConfig = {
+            User = "smt";
+            Restart = "always";
+            RestartSec = "10";
+
+            # The SSH command is kept on one line to prevent systemd parsing errors
+            ExecStart =
+              let
+                sshCommandOpts = [
+                  "-N" # no command
+                  "-T" # no tty
+                  "-C" # compression
+                ]
+                ++ (builtins.map (x: "-o ${x}") [
+                  "ServerAliveInterval=15"
+                  "ServerAliveCountMax=3"
+                  "ExitOnForwardFailure=yes"
+                  "StrictHostKeyChecking=no"
+                ]);
+                server = "home.saksmt.dev";
+                serverUser = "backup-pull";
+                nasServerKeyPath = "/root/.ssh/id_ed25519";
+                portToUseOnServer = "10022";
+                # building the command:
+                ssh = "${pkgs.openssh}/bin/ssh";
+                forwardingSpec = "0.0.0.0:${portToUseOnServer}:localhost:22";
+                hostSpec = "${serverUser}@${server}";
+                command = builtins.concatStringsSep " " (
+                  builtins.concatLists [
+                    [ ssh ]
+                    [ sshCommandOpts ]
+                    [
+                      "-i"
+                      nasServerKeyPath
+                    ]
+                    [
+                      "-R"
+                      forwardingSpec
+                    ]
+                    [ hostSpec ]
+                  ]
+                );
+              in
+              command;
+          };
+        };
       }
     )
   ];
