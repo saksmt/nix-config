@@ -87,7 +87,9 @@ rec {
 
   # watchdog
 
-  boot.initrd.kernelModules = [ "iTCO_wdt" ];
+  boot.blacklistedKernelModules = [ "iTCO_wdt" ];
+  boot.initrd.kernelModules = [ "it87_wdt" ];
+  boot.kernelParams = [ "it87_wdt.timeout=180" ];
   boot.initrd.systemd.settings.Manager = {
     RuntimeWatchdogSec = "1m";
     RebootWatchdogSec = "2m";
