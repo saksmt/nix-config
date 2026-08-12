@@ -2,7 +2,7 @@
 rec {
   imports = [
     (
-      { pkgs, ... }:
+      { pkgs, config, ... }:
       {
         system.stateVersion = "26.05";
 
@@ -15,6 +15,10 @@ rec {
         fonts.packages = [ pkgs.hasklig ];
 
         install.packages = [ pkgs.sanoid ];
+
+        # wifi
+        boot.extraModulePackages = [ config.boot.kernelPackages.rtl88x2bu ];
+        boot.kernelModules = [ "88x2bu" ];
 
         # reverse tunnel to expose dynamically ip-ed nas
         systemd.services.reverse-ssh-tunnel = {
