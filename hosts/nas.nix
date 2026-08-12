@@ -59,7 +59,7 @@ rec {
                 command = builtins.concatStringsSep " " (
                   builtins.concatLists [
                     [ ssh ]
-                    [ sshCommandOpts ]
+                    sshCommandOpts
                     [
                       "-i"
                       nasServerKeyPath
