@@ -5,6 +5,8 @@
       catppuccin.nixosModules.catppuccin
       awesome-iwm.nixosModules.awesome-iwm
       nix-index-database.nixosModules.default
+
+      ./nixos-modules
     ];
   };
 }

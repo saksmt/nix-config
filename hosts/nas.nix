@@ -122,6 +122,20 @@ rec {
     };
   };
 
+  services.syncoid = {
+    enable = true;
+
+    # *-*-* 14:00:00 Europe/Moscow
+    interval = [];
+    sshKey = "/var/lib/syncoid/.ssh/id_ed25519";
+
+    commands.backup-pull = {
+      source = "backup-pull@home.saksmt.dev:data-pool/data/important";
+      target = "data-pool/data/important";
+      recursive = true;
+    };
+  };
+
   users.users.smt = {
     extraGroups = [
       "wheel"
