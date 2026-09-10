@@ -37,7 +37,7 @@ let
   };
 in
 {
-  services.syncoid.package = syncoidWrapped;
+  config.services.syncoid.package = syncoidWrapped;
 
   options.services.syncoid.commands = lib.mkOption {
     type = lib.types.attrsOf (
