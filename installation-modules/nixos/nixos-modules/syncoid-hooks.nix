@@ -13,8 +13,8 @@ let
       pkgs.coreutils
     ];
     text = ''
-      export SOURCE="''${@: -2:1}"
-      export TARGET="''${@: -1}"
+      #shellcheck disable=SC1090
+      # ^ - disabling inability to resovle dynamic sourcing
 
       # If the module generated a hooks file, source it into the current shell
       if [ -n "''${HOOKS_PATH:-}" ]; then
@@ -25,7 +25,7 @@ let
       # Temporarily disable exit-on-error to capture Syncoid's exit code
       set +e
       ${pkgs.sanoid}/bin/syncoid "$@"
-      EXIT_STATUS=$?
+      export EXIT_STATUS=$?
       set -e
 
       if [ -n "''${HOOKS_PATH:-}" ]; then
@@ -47,18 +47,44 @@ in
             preHook = lib.mkOption {
               type = lib.types.lines;
               default = "";
-              description = "Bash snippet run before syncoid. Shares environment with post hook. Available environment variables: SYNCOID_COMMAND_NAME, SOURCE, TARGET";
+              description = ''
+              Bash snippet run before syncoid. Shares environment with post hook.
+
+              Environment variables:
+               - SYNCOID_COMMAND_NAME
+               - SOURCE
+               - TARGET
+
+              Arguments:
+               - source data set
+               - target data set
+              '';
             };
             postHook = lib.mkOption {
               type = lib.types.lines;
               default = "";
-              description = "Bash snippet run after syncoid. Shares environment with pre hook. Available environment variables: SYNCOID_COMMAND_NAME, SOURCE, TARGET";
+              description = ''
+              Bash snippet run after syncoid. Shares environment with pre hook.
+
+              Environment variables:
+               - SYNCOID_COMMAND_NAME
+               - SOURCE
+               - TARGET
+               - EXIT_STATUS
+
+              Arguments:
+               - source data set
+               - target data set
+               - exit status of syncoid command
+              '';
             };
           };
 
           config = lib.mkIf (config.preHook != "" || config.postHook != "") {
             service.environment.HOOKS_PATH = pkgs.writeText "syncoid-hooks-${name}.sh" ''
               SYNCOID_COMMAND_NAME="${name}"
+              SOURCE="${config.source}"
+              TARGET="${config.target}"
 
               pre_hook() {
                 ${config.preHook}
