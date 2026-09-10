@@ -16,6 +16,12 @@ rec {
 
         install.packages = [ pkgs.sanoid ];
 
+        programs.ssh.extraConfig = ''
+        Host home.saksmt.dev
+          ServerAliveInterval 15
+          ServerAliveCountMax 4
+        '';
+
         # wifi
         # automatically switches from cursed CD-ROM mode
         hardware.usb-modeswitch.enable = true;
@@ -133,6 +139,8 @@ rec {
       source = "backup-pull@home.saksmt.dev:data-pool/data/important";
       target = "data-pool/data/important";
       recursive = true;
+      sendOptions = "c";
+      extraArgs = [ "--compress=none" "--mbuffer-size=512M" ];
     };
   };
 
