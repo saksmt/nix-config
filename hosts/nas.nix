@@ -16,12 +16,15 @@ rec {
 
         install.packages = [ pkgs.sanoid ];
 
-        services.syncoid.commands.backup-pull.hookPackages = [ pkgs.jq pkgs.curl ];
+        services.syncoid.commands.backup-pull.hookPackages = [
+          pkgs.jq
+          pkgs.curl
+        ];
 
         programs.ssh.extraConfig = ''
-        Host home.saksmt.dev
-          ServerAliveInterval 15
-          ServerAliveCountMax 4
+          Host home.saksmt.dev
+            ServerAliveInterval 15
+            ServerAliveCountMax 4
         '';
 
         # wifi
@@ -141,7 +144,21 @@ rec {
       target = "data-pool/data/important";
       recursive = true;
       sendOptions = "c";
-      extraArgs = [ "--compress=none" "--mbuffer-size=512M" ];
+      extraArgs = [
+        "--compress=none"
+        "--mbuffer-size=512M"
+      ];
+
+      localTargetAllow = [
+        "change-key"
+        "compression"
+        "create"
+        "mount"
+        "mountpoint"
+        "receive"
+        "rollback"
+        "destroy" # <- required to clean up temporary snapshots
+      ];
 
       preHook = ''
         # size before
@@ -152,53 +169,53 @@ rec {
       '';
 
       postHook = ''
-      if [ "$EXIT_STATUS" -eq 0 ] && [ -n "''${BEFORE_BYTES:-}" ]; then
-        AFTER_BYTES=$(zfs get -H -p -o value used "$TARGET" 2>/dev/null || echo "0")
-        BYTES_DIFF=$(($AFTER_BYTES - $BEFORE_BYTES))
+        if [ "$EXIT_STATUS" -eq 0 ] && [ -n "''${BEFORE_BYTES:-}" ]; then
+          AFTER_BYTES=$(zfs get -H -p -o value used "$TARGET" 2>/dev/null || echo "0")
+          BYTES_DIFF=$(($AFTER_BYTES - $BEFORE_BYTES))
 
-        transferred="$(numfmt --to=iec --suffix=B -- "''${BYTES_DIFF}")"
-        priority=default
+          transferred="$(numfmt --to=iec --suffix=B -- "''${BYTES_DIFF}")"
+          priority=default
 
-        if ! [ "$BYTES_DIFF" -gt 0 ]; then
-          priority=low
+          if ! [ "$BYTES_DIFF" -gt 0 ]; then
+            priority=low
+          fi
+
+          snapshot_list_after="$(mktemp)"
+          zfs list -t snapshot --json | jq '.datasets | keys | unique' > "''${snapshot_list_after}"
+
+          {
+          echo "Backup successful, transferred: $transferred"
+
+          echo
+
+          echo "Pulled snapshots:"
+          jq '. - input' ''${snapshot_list_after} ''${SNAPSHOT_LIST_BEFORE_FILE} | \
+            jq '. | map(ltrimstr("data-pool/data/important") | split("@"))' | \
+            jq '. | map(.[0] |= (ltrimstr("/") | if . == "" then "/" else . end))' | \
+            jq '. | group_by(.[0])' | \
+            jq -r '. | map("\(.[0][0])\n\(. | map(" - \(.[1])") | join("\n"))") | .[]'
+
+          } | \
+          curl \
+           -H "$(< /var/lib/syncoid/ntfy-auth-header)" \
+           -H "Title: NAS backup successful" \
+           -H "Tags: heavy_check_mark" \
+           -H "Priority: $priority" \
+           -d @- \
+           "https://$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
+        else
+          echo "NAS backup failed with exit code: $EXIT_STATUS" | \
+          curl \
+           -H "$(< /var/lib/syncoid/ntfy-auth-header)" \
+           -H "Title: NAS backup failed" \
+           -H "Tags: no_entry" \
+           -H "Priority: urgent" \
+           -d @- \
+           "https://$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
         fi
 
-        snapshot_list_after="$(mktemp)"
-        zfs list -t snapshot --json | jq '.datasets | keys | unique' > "''${snapshot_list_after}"
-
-        {
-        echo "Backup successful, transferred: $transferred"
-
-        echo
-
-        echo "Pulled snapshots:"
-        jq '. - input' ''${snapshot_list_after} ''${SNAPSHOT_LIST_BEFORE_FILE} | \
-          jq '. | map(ltrimstr("data-pool/data/important") | split("@"))' | \
-          jq '. | map(.[0] |= (ltrimstr("/") | if . == "" then "/" else . end))' | \
-          jq '. | group_by(.[0])' | \
-          jq -r '. | map("\(.[0][0])\n\(. | map(" - \(.[1])") | join("\n"))") | .[]'
-
-        } | \
-        curl \
-         -H "$(< /var/lib/syncoid/ntfy-auth-header)" \
-         -H "Title: NAS backup successful" \
-         -H "Tags: heavy_check_mark" \
-         -H "Priority: $priority" \
-         -d @- \
-         "https://$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
-      else
-        echo "NAS backup failed with exit code: $EXIT_STATUS" | \
-        curl \
-         -H "$(< /var/lib/syncoid/ntfy-auth-header)" \
-         -H "Title: NAS backup failed" \
-         -H "Tags: no_entry" \
-         -H "Priority: urgent" \
-         -d @- \
-         "https://$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
-      fi
-
-      rm -f "''${SNAPSHOT_LIST_BEFORE_FILE}" &>/dev/null || true
-      rm -f "''${snapshot_list_after}" &>/dev/null || true
+        rm -f "''${SNAPSHOT_LIST_BEFORE_FILE}" &>/dev/null || true
+        rm -f "''${snapshot_list_after}" &>/dev/null || true
       '';
     };
   };
