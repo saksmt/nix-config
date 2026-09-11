@@ -14,9 +14,9 @@ rec {
         fonts.fontconfig.enable = true;
         fonts.packages = [ pkgs.hasklig ];
 
-        install.packages = [ pkgs.sanoid pkgs.curl ];
+        install.packages = [ pkgs.sanoid ];
 
-        services.syncoid.commands.backup-pull.hookPackages = [ pkgs.jq ];
+        services.syncoid.commands.backup-pull.hookPackages = [ pkgs.jq pkgs.curl ];
 
         programs.ssh.extraConfig = ''
         Host home.saksmt.dev
