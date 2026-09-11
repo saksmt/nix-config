@@ -156,7 +156,7 @@ rec {
         AFTER_BYTES=$(zfs get -H -p -o value used "$TARGET" 2>/dev/null || echo "0")
         BYTES_DIFF=$(($AFTER_BYTES - $BEFORE_BYTES))
 
-        transferred="$(numfmt --to=iec $BYTES_DIFF)"
+        transferred="$(numfmt --to=iec --suffix=B -- "''${BYTES_DIFF}")"
         priority=default
 
         if ! [ "$BYTES_DIFF" -gt 0 ]; then
