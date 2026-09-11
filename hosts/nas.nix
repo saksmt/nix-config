@@ -131,8 +131,7 @@ rec {
   services.syncoid = {
     enable = true;
 
-    # *-*-* 14:00:00 Europe/Moscow
-    interval = [];
+    interval = "*-*-* 14:00:00 Europe/Moscow";
     sshKey = "/var/lib/syncoid/.ssh/id_ed25519";
 
     commands.backup-pull = {
@@ -141,6 +140,64 @@ rec {
       recursive = true;
       sendOptions = "c";
       extraArgs = [ "--compress=none" "--mbuffer-size=512M" ];
+
+      preHook = ''
+        # size before
+        BEFORE_BYTES="$(zfs get -H -p -o value used "$TARGET" 2>/dev/null || echo "0")"
+
+        SNAPSHOT_LIST_BEFORE_FILE="$(mktemp)"
+        zfs list -t snapshot --json | jq '.datasets | keys | unique' > "''${SNAPSHOT_LIST_BEFORE_FILE}"
+      '';
+
+      postHook = ''
+      if [ "$EXIT_STATUS" -eq 0 ] && [ -n "''${BEFORE_BYTES:-}" ]; then
+        AFTER_BYTES=$(zfs get -H -p -o value used "$TARGET" 2>/dev/null || echo "0")
+        BYTES_DIFF=$(($AFTER_BYTES - $BEFORE_BYTES))
+
+        transferred="$(numfmt --to=iec $BYTES_DIFF)"
+        priority=default
+
+        if ! [ "$BYTES_DIFF" -gt 0 ]; then
+          priority=low
+        fi
+
+        snapshot_list_after="$(mktemp)"
+        zfs list -t snapshot --json | jq '.datasets | keys | unique' > "''${snapshot_list_after}"
+
+        {
+        echo "Backup successful, transferred: $transferred"
+
+        echo
+
+        echo "Pulled snapshots:"
+        jq '. - input' ''${snapshot_list_after} ''${SNAPSHOT_LIST_BEFORE_FILE} | \
+          jq '. | map(ltrimstr("data-pool/data/important") | split("@"))' | \
+          jq '. | map(.[0] |= (ltrimstr("/") | if . == "" then "/" else . end))' | \
+          jq '. | group_by(.[0])' | \
+          jq -r '. | map("\(.[0][0])\n\(. | map(" - \(.[1])") | join("\n"))") | .[]'
+
+        } | \
+        curl \
+         -H "$(< /var/lib/syncoid/ntfy-auth-header)" \
+         -H "Title: NAS backup successful" \
+         -H "Tags: heavy_check_mark" \
+         -H "Priority: $priority" \
+         -d @- \
+         "https://ntfy.$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
+      else
+        echo "NAS backup failed with exit code: $EXIT_STATUS" | \
+        curl \
+         -H "$(< /var/lib/syncoid/ntfy-auth-header)" \
+         -H "Title: NAS backup failed" \
+         -H "Tags: no_entry" \
+         -H "Priority: urgent" \
+         -d @- \
+         "https://ntfy.$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
+      fi
+
+      rm -f "''${SNAPSHOT_LIST_BEFORE_FILE}" &>/dev/null || true
+      rm -f "''${snapshot_list_after}" &>/dev/null || true
+      '';
     };
   };
 
