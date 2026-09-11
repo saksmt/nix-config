@@ -44,6 +44,12 @@ in
       lib.types.submodule (
         { config, name, ... }: {
           options = {
+            hookPackages = lib.mkOption {
+              type = lib.types.listOf lib.types.package;
+              default = [];
+              description = "Packages that will be available in the pre and post hook environment";
+            };
+
             preHook = lib.mkOption {
               type = lib.types.lines;
               default = "";
@@ -87,10 +93,16 @@ in
               TARGET="${config.target}"
 
               pre_hook() {
+                _originalPath="''${PATH}"
+                PATH="''${_originalPath}:${lib.makeBinPath config.hookPackages}"
                 ${config.preHook}
+                PATH="''${_originalPath}"
               }
               post_hook() {
+                _originalPath="''${PATH}"
+                PATH="''${_originalPath}:${lib.makeBinPath config.hookPackages}"
                 ${config.postHook}
+                PATH="''${_originalPath}"
               }
             '';
           };

@@ -16,6 +16,8 @@ rec {
 
         install.packages = [ pkgs.sanoid ];
 
+        services.syncoid.commands.backup-pull.hookPackages = [ pkgs.jq ];
+
         programs.ssh.extraConfig = ''
         Host home.saksmt.dev
           ServerAliveInterval 15
