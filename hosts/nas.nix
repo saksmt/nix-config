@@ -184,16 +184,22 @@ rec {
           zfs list -t snapshot --json | jq '.datasets | keys | unique' > "''${snapshot_list_after}"
 
           {
-          echo "Backup successful, transferred: $transferred"
+          if [ "$BYTES_DIFF" -gt 0 ]; then
+            echo "Backup successful, transferred: $transferred"
+          else
+            echo "Backup successful, no changes"
+          fi
 
           echo
 
           echo "Pulled snapshots:"
           jq '. - input' ''${snapshot_list_after} ''${SNAPSHOT_LIST_BEFORE_FILE} | \
-            jq '. | map(ltrimstr("data-pool/data/important") | split("@"))' | \
+            jq '. | map(ltrimstr("'"''${TARGET}"'") | split("@"))' | \
+            jq '. | map(select(.[1] | startswith("syncoid") | not))' | \
             jq '. | map(.[0] |= (ltrimstr("/") | if . == "" then "/" else . end))' | \
             jq '. | group_by(.[0])' | \
-            jq -r '. | map("\(.[0][0])\n\(. | map(" - \(.[1])") | join("\n"))") | .[]'
+            jq '. | map("\(.[0][0])\n\(. | map(" - \(.[1])") | join("\n"))")' | \
+            jq -r '. | if length > 0 then .[] else "None, already up to date" end'
 
           } | \
           curl \
