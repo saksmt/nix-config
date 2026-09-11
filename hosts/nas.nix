@@ -201,7 +201,7 @@ rec {
            -H "Title: NAS backup successful" \
            -H "Tags: heavy_check_mark" \
            -H "Priority: $priority" \
-           -d @- \
+           --data-binary @- \
            "https://$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
         else
           echo "NAS backup failed with exit code: $EXIT_STATUS" | \
