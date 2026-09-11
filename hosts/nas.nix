@@ -14,7 +14,7 @@ rec {
         fonts.fontconfig.enable = true;
         fonts.packages = [ pkgs.hasklig ];
 
-        install.packages = [ pkgs.sanoid ];
+        install.packages = [ pkgs.sanoid pkgs.curl ];
 
         services.syncoid.commands.backup-pull.hookPackages = [ pkgs.jq ];
 
@@ -185,7 +185,7 @@ rec {
          -H "Tags: heavy_check_mark" \
          -H "Priority: $priority" \
          -d @- \
-         "https://ntfy.$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
+         "https://$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
       else
         echo "NAS backup failed with exit code: $EXIT_STATUS" | \
         curl \
@@ -194,7 +194,7 @@ rec {
          -H "Tags: no_entry" \
          -H "Priority: urgent" \
          -d @- \
-         "https://ntfy.$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
+         "https://$(</var/lib/syncoid/ntfy-host)/system_server_backup" || true
       fi
 
       rm -f "''${SNAPSHOT_LIST_BEFORE_FILE}" &>/dev/null || true
