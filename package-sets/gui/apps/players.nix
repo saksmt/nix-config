@@ -15,7 +15,6 @@ lib.mkMerge [
       with pkgs;
       [
         mpv
-        playerctl # commandline controls for MPRIS
       ]
       ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         smplayer
