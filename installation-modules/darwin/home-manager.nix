@@ -44,7 +44,7 @@
             );
           in
           [
-            home-manager.nixosModules.home-manager
+            home-manager.darwinModules.home-manager
             (
               { config, ... }:
               {
