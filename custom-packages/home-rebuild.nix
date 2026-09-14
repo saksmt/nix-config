@@ -49,11 +49,11 @@ writeShellApplication {
     flake/regenerate
 
     case "''${1:-}" in
-      build ) shift; nh home build "''${rebuildArgs[@]}" "''${@}" -- "''${nixOpts[@]}" --impure ; ;;
-      switch ) shift; nh home switch "''${rebuildArgs[@]}" "''${@}" -- "''${nixOpts[@]}" --impure ; ;;
+      build ) shift; nh home build "''${rebuildArgs[@]}" "''${@}" -- "''${nixOpts[@]}" --impure --reference-lock-file ./flake.linux.lock --output-lock-file ./flake.linux.lock; ;;
+      switch ) shift; nh home switch "''${rebuildArgs[@]}" "''${@}" -- "''${nixOpts[@]}" --impure --reference-lock-file ./flake.linux.lock --output-lock-file ./flake.linux.lock; ;;
       update )
         git pull
-        nix flake update
+        flake/lock update
         ;;
       repl )
         shift;

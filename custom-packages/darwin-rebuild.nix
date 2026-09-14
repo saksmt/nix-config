@@ -32,6 +32,8 @@ let
     "--"
     (quotedVar "nixOpts[@]")
     "--impure"
+    "--reference-lock-file" "./flake.darwin.lock"
+    "--output-lock-file" "./flake.darwin.lock"
   ];
   script = ''
     ASK_FLAG="''${NO_ASK:---ask}"

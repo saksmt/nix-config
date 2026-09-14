@@ -15,27 +15,25 @@ let
     darwinModule = validatorF "darwin";
   };
 
-  def = tpe: {
-    default =
-      _:
-      let
-        includeModule = moduleName: import (./src/${moduleName}.module.nix);
-        modules = builtins.map includeModule polyfils;
+  def =
+    tpe:
+    let
+      includeModule = moduleName: import (./src/${moduleName}.module.nix);
+      modules = builtins.map includeModule polyfils;
 
-      in
-      {
-        default = {
-          imports = builtins.map (module: module.${tpe} or (_: { })) (modules ++ [ validator ]);
-        };
-        module-type-validator = validator.${tpe};
-      }
-      // (builtins.listToAttrs (
-        builtins.map (moduleName: {
-          name = moduleName;
-          value = (includeModule modules).${tpe} or (_: { });
-        }) polyfils
-      ));
-  };
+    in
+    {
+      default = _: {
+        imports = builtins.map (module: module.${tpe} or (_: { })) (modules ++ [ validator ]);
+      };
+      module-type-validator = validator.${tpe};
+    }
+    // (builtins.listToAttrs (
+      builtins.map (moduleName: {
+        name = moduleName;
+        value = (includeModule modules).${tpe} or (_: { });
+      }) polyfils
+    ));
 in
 {
   nixosModules = def "nixosModule";

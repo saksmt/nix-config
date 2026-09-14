@@ -80,7 +80,10 @@ if type nixos-rebuild &>/dev/null; then
   echo "path:${thisDir}" | sudo tee /etc/nixos/flake-ref >/dev/null
   echo "${attributeRef}" | sudo tee /etc/nixos/host-ref >/dev/null
 
-  nix run --impure "$(< /etc/nixos/flake-ref)#os-rebuild" -- boot
+  nix run \
+    --reference-lock-file ./flake.linux.lock --output-lock-file ./flake.linux.lock \
+    --impure "$(< /etc/nixos/flake-ref)#os-rebuild" \
+    -- boot
 elif type nix &> /dev/null; then
   if [[ "$(uname)" == "Darwin" ]]; then
     if [[ n"${attributeRef}" == n ]]; then
@@ -99,7 +102,9 @@ elif type nix &> /dev/null; then
     echo "path:${thisDir}" | sudo tee /etc/nixos/flake-ref >/dev/null
     echo "${attributeRef}" | sudo tee /etc/nixos/host-ref >/dev/null
 
-    nix run --impure "$(< /etc/nixos/flake-ref)#darwin-rebuild" -- switch
+    nix run \
+     --reference-lock-file ./flake.darwin.lock --output-lock-file ./flake.darwin.lock \
+     --impure "$(< /etc/nixos/flake-ref)#darwin-rebuild" -- switch
   else
 
     if [[ n"${attributeRef}" == n ]]; then
@@ -116,7 +121,12 @@ elif type nix &> /dev/null; then
     echo "path:${thisDir}" > ~/.config/hm/flake-ref
     echo "${attributeRef}" > ~/.config/hm/user-config-ref
 
-    nix --extra-experimental-features 'nix-command flakes' run --impure "$(< ~/.config/hm/flake-ref)#home-rebuild" -- switch -b .hm-backup~ || exit 1
+    nix \
+      --extra-experimental-features 'nix-command flakes' \
+      run \
+      --reference-lock-file ./flake.linux.lock --output-lock-file ./flake.linux.lock \
+      --impure "$(< ~/.config/hm/flake-ref)#home-rebuild" \
+      -- switch -b .hm-backup~ || exit 1
     prompt "Add system-wide xsession pointing to home?" || exit 0
     cat <<EOF | sudo tee /usr/bin/start-user-xsession > /dev/null
   #!/usr/bin/env bash
