@@ -19,4 +19,15 @@
         };
       config.home.packages = config.fonts.packages;
     };
+
+  darwinModule =
+    { lib, ... }:
+    {
+      options.fonts.fontconfig = with lib;
+        mkOption {
+          default = {};
+          type = types.attrs;
+          description = "Fontconfig stub for darwin - noop";
+        };
+    };
 }

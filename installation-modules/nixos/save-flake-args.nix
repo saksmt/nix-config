@@ -29,7 +29,7 @@ args: {
                   ) (builtins.attrValues inputs);
                 refs = pkgs.writeText "flake-inputs" (
                   builtins.concatStringsSep "\n" (
-                    lib.unique (all-inputs (builtins.removeAttrs flake-inputs [ "nix-hm-adapter" ]))
+                    lib.unique (all-inputs (builtins.removeAttrs flake-inputs [ "nix-polyfils" ]))
                   )
                 );
               in

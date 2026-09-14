@@ -98,7 +98,7 @@ rec {
       sourceInputs = inputs;
       installation-module-lib = import (self.outPath + "/installation-modules/lib.nix");
       installationModulesArgs = resolvedInputs // {
-        nix-hm-adapter = import ./lib/nix-hm-adapter;
+        nix-polyfils = import ./lib/nix-polyfils;
       };
       recipe-loader = installation-module-lib.loader {
         self = self;
@@ -110,6 +110,12 @@ rec {
           modules = [ "/installation-modules/nixos" ];
           recipe-path = path;
         }).as-nixos;
+      darwinFromInstallationModules =
+        path:
+        (recipe-loader.load-and-process {
+          modules = [ "/installation-modules/darwin" ];
+          recipe-path = path;
+        }).as-darwin;
       isoFromInstallationModulesFor =
         system: path:
         (recipe-loader.load-and-process {
@@ -178,6 +184,10 @@ rec {
         homeConfigurations = {
           work-laptop = hmFromInstallationModules "/hosts/no-host/work-laptop.hm.nix";
           deck = hmFromInstallationModules "/hosts/no-host/deck.hm.nix";
+        };
+
+        darwinConfigurations = {
+          work-mac = darwinFromInstallationModules "/hosts/work-mac.nix";
         };
 
         isoConfigurations =

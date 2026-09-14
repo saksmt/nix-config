@@ -27,6 +27,7 @@ in
         "hm"
         "home-manager"
         "nixos"
+        "darwin"
       ]);
     };
   config.assertions = [
