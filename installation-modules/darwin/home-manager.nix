@@ -18,6 +18,7 @@
           let
             hmModules = includeAllRelative self [
               "/installation-modules/common/features.nix"
+              "/installation-modules/darwin/jail-stub.nix"
               "/installation-modules/common/overlays.nix"
               "/installation-modules/common/package-sets.nix"
 
