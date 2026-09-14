@@ -29,6 +29,14 @@ rec {
       jail-nix = {
         url = "sourcehut:~alexdavid/jail.nix";
       };
+      nix-darwin = {
+        inputs = {
+          nixpkgs = {
+            follows = "nixpkgs-darwin";
+          };
+        };
+        url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
+      };
       nix-features = {
         inputs = {
           nixpkgs = {
@@ -66,6 +74,9 @@ rec {
       };
       nixpkgs = {
         url = "github:nixos/nixpkgs/nixos-26.05";
+      };
+      nixpkgs-darwin = {
+        url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
       };
       nixpkgs-master = {
         url = "github:nixos/nixpkgs/master";

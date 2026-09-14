@@ -82,23 +82,43 @@ if type nixos-rebuild &>/dev/null; then
 
   nix run --impure "$(< /etc/nixos/flake-ref)#os-rebuild" -- boot
 elif type nix &> /dev/null; then
-  if [[ n"${attributeRef}" == n ]]; then
-    attributeRef="$(whoami)"
-  fi
+  if [[ "$(uname)" == "Darwin" ]]; then
+    if [[ n"${attributeRef}" == n ]]; then
+      attributeRef="$(hostname)"
+    fi
 
-  echo "${info}Installing user configuration (home-manager)"
-  echo "${info}Flake path: ${dim}path:${thisDir}${clr}"
-  echo "${info}Flake attribute: ${dim}${attributeRef}${clr}"
+    echo "${info}Installing system-wide configuration (darwin)"
+    echo "${info}Flake path: ${dim}path:${thisDir}${clr}"
+    echo "${info}Flake attribute: ${dim}${attributeRef}${clr}"
 
-  prompt "Proceed?" inverse || exit 0
+    prompt "Proceed?" inverse || {
+      echo "${info}Aborting";
+      exit 1;
+    }
 
-  mkdir -p ~/.config/hm &>/dev/null
-  echo "path:${thisDir}" > ~/.config/hm/flake-ref
-  echo "${attributeRef}" > ~/.config/hm/user-config-ref
+    echo "path:${thisDir}" | sudo tee /etc/nixos/flake-ref >/dev/null
+    echo "${attributeRef}" | sudo tee /etc/nixos/host-ref >/dev/null
 
-  nix --extra-experimental-features 'nix-command flakes' run --impure "$(< ~/.config/hm/flake-ref)#home-rebuild" -- switch -b .hm-backup~ || exit 1
-  prompt "Add system-wide xsession pointing to home?" || exit 0
-  cat <<EOF | sudo tee /usr/bin/start-user-xsession > /dev/null
+    nix run --impure "$(< /etc/nixos/flake-ref)#darwin-rebuild" -- switch
+  else
+
+    if [[ n"${attributeRef}" == n ]]; then
+      attributeRef="$(whoami)"
+    fi
+
+    echo "${info}Installing user configuration (home-manager)"
+    echo "${info}Flake path: ${dim}path:${thisDir}${clr}"
+    echo "${info}Flake attribute: ${dim}${attributeRef}${clr}"
+
+    prompt "Proceed?" inverse || exit 0
+
+    mkdir -p ~/.config/hm &>/dev/null
+    echo "path:${thisDir}" > ~/.config/hm/flake-ref
+    echo "${attributeRef}" > ~/.config/hm/user-config-ref
+
+    nix --extra-experimental-features 'nix-command flakes' run --impure "$(< ~/.config/hm/flake-ref)#home-rebuild" -- switch -b .hm-backup~ || exit 1
+    prompt "Add system-wide xsession pointing to home?" || exit 0
+    cat <<EOF | sudo tee /usr/bin/start-user-xsession > /dev/null
   #!/usr/bin/env bash
   exec \${HOME}/.xsession
 EOF
@@ -113,6 +133,7 @@ EOF
   Type=XSession
   DesktopNames=home-managed_x
 EOF
+  fi
 else
   echo "${error}ERROR: No nix or nixos-rebuild found!" >&2;
   exit 1
