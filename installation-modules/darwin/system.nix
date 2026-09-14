@@ -14,7 +14,7 @@
 
       [
         (
-          { pkgs, ... }:
+          { pkgs, lib, ... }:
           {
             environment.systemPackages = [ pkgs.os-rebuild ];
             nix.registry = {
@@ -22,7 +22,8 @@
               tpl.to = builtins.parseFlakeRef (nixpkgs.lib.strings.fileContents "/etc/nixos/flake-ref");
             };
             # this is to make determinate-nix work, will need to look for a workaround
-            nix.enable = false;
+            nix.enable = lib.mkForce false;
+            nix.gc.automatic = lib.mkForce false;
           }
         )
       ]
