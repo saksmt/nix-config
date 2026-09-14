@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, systemHostPlatform, ... }:
 {
   module-for = [ "hm" ];
 
@@ -91,7 +91,7 @@
   };
 
   xdg.enable = true;
-  xdg.mimeApps.enable = lib.strings.hasSuffix "linux" config.nixpkgs.hostPlatform;
+  xdg.mimeApps.enable = lib.strings.hasSuffix "linux" systemHostPlatform;
   xdg.mimeApps.defaultApplications = {
     "x-scheme-handler/http" = [ "firefox.desktop" ];
     "x-scheme-handler/https" = [ "firefox.desktop" ];

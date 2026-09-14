@@ -82,7 +82,9 @@ rec {
               module-args.home-manager.lib.homeManagerConfiguration {
                 pkgs = _nixpkgs.legacyPackages.${system};
                 modules = applied.modules;
-                extraSpecialArgs = applied.module-args;
+                extraSpecialArgs = applied.module-args // {
+                  systemHostPlatform = system;
+                };
               };
             as-iso =
               system:
