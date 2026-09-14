@@ -82,9 +82,9 @@ rec {
       # force management of zshrc and stuff through home-manager
       programs.zsh.enable = true;
 
-      programs.git = {
-        userName = "Kirill Saksin";
-        userEmail = "smt@saksmt.dev";
+      programs.git.settings.user = {
+        name = "Kirill Saksin";
+        email = "smt@saksmt.dev";
       };
 
       installation = {

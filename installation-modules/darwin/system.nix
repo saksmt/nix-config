@@ -21,6 +21,8 @@
               os.to = builtins.parseFlakeRef (nixpkgs.lib.strings.fileContents "/etc/nixos/flake-ref");
               tpl.to = builtins.parseFlakeRef (nixpkgs.lib.strings.fileContents "/etc/nixos/flake-ref");
             };
+            # this is to make determinate-nix work, will need to look for a workaround
+            nix.enable = false;
           }
         )
       ]
