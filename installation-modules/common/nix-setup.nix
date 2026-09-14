@@ -65,7 +65,8 @@
 
           nix.gc = {
             automatic = lib.mkDefault true;
-            dates = lib.mkDefault "weekly";
+            # commented line below does not exist on darwin
+            # dates = lib.mkDefault "weekly";
             options = lib.mkDefault "--delete-older-than 60d";
           };
         }
