@@ -53,9 +53,6 @@ rec {
 
     package-sets = [
       "system/fonts"
-
-      "cli"
-      "dev"
     ];
 
     home-manager = {
@@ -74,6 +71,8 @@ rec {
         package-sets = [
           "runtime/jvm"
 
+          "cli"
+
           "gui/apps/base"
           "gui/apps/dev"
 
@@ -81,6 +80,7 @@ rec {
 
           "user-preferences"
 
+          "dev"
           "dev/ai"
         ];
         features = installation.features;

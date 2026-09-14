@@ -60,6 +60,24 @@ in
       config.programs.zsh.ohMyZsh.theme = lib.mkDefault config.shells.zsh.oh-my-zsh.theme;
       config.programs.zsh.ohMyZsh.plugins = config.shells.zsh.oh-my-zsh.plugins;
     };
+  darwinModule =
+    { config, lib, pkgs, ... }:
+    {
+      options = defineOpts lib;
+
+      config.environment.shells = [
+        (lib.mkIf config.shells.bash.enable pkgs.bashInteractive)
+        (lib.mkIf config.shells.zsh.enable pkgs.zsh)
+      ];
+
+      config.programs.zsh.enable = lib.mkDefault config.shells.zsh.enable;
+      # loosely matches "top" of rc file
+      config.programs.zsh.interactiveShellInit = config.shells.zsh.rc-extra.top;
+      # loosely matches "bottom" of rc file
+      config.programs.zsh.promptInit = config.shells.zsh.rc-extra.bottom;
+
+      # oh-my-zsh is not supported as a darwin module yet
+    };
   homeManagerModule =
     { config, lib, ... }:
     {
