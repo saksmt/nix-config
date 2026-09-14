@@ -5,54 +5,58 @@
     "nixos"
   ];
 
-  install.packages = with pkgs; [
-    # because there can be no quality of life without kitties.
-    kittysay
+  install.packages =
+    with pkgs;
+    [
+      # because there can be no quality of life without kitties.
+      kittysay
 
-    (writeShellScriptBin "zsh-interactive" ''
-      exec zsh -ic "''${@}"
-    '')
+      (writeShellScriptBin "zsh-interactive" ''
+        exec zsh -ic "''${@}"
+      '')
 
-    bat
-    bat-extras.batdiff
-    bat-extras.batman
-    bat-extras.batpipe
-    bat-extras.batwatch
-    fzf
-    ripgrep
-    wget
-    fd
-    jq
-    jo
-    yq
-    difftastic
+      bat
+      bat-extras.batdiff
+      bat-extras.batman
+      bat-extras.batpipe
+      bat-extras.batwatch
+      fzf
+      ripgrep
+      wget
+      fd
+      jq
+      jo
+      yq
+      difftastic
 
-    lsof
-    # fuser
-    psmisc
+      lsof
+      # fuser
 
-    openssh
-    zip
-    unzip
-    zstd
-    mbuffer
-    libsecret
-    moreutils
-    gnupg
-    xxhash
+      openssh
+      zip
+      unzip
+      zstd
+      mbuffer
+      libsecret
+      moreutils
+      gnupg
+      xxhash
 
-    socat
-    inetutils
-    iproute2
+      socat
+      inetutils
 
-    sshfs
+      sshfs
 
-    # alias to configured default editor
-    (writeShellApplication {
-      name = "ee";
-      text = "exec \${EDITOR} \"\${@}\"";
-    })
-  ];
+      # alias to configured default editor
+      (writeShellApplication {
+        name = "ee";
+        text = "exec \${EDITOR} \"\${@}\"";
+      })
+    ]
+    ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+      psmisc
+      iproute2
+    ]);
 
   shells.zsh.enable = true;
   shells.zsh = {
