@@ -13,7 +13,9 @@ lib.mkMerge [
   ((features.GUI.and features.dev.common).whenEnabled {
     install.packages = [
       pkgs.jetbrains.idea
-      pkgs.freemind
-    ];
+    ]
+    ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+      pkgs.freemind # <- exists, but not on nix
+    ]);
   })
 ]
