@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# repo root
+cd "$(dirname "$(dirname "$(readlink -f "${0}")")")" || exit
+
+OS="${OS:-$(uname)}"
+
+export OS
+
+{
+  echo "rec { inputs = "
+  nix --extra-experimental-features 'flakes nix-command' eval --impure --expr \
+    'import ./flake/inputs.nix'
+  echo '; outputs = resolvedInputs: (import flake/outputs) (resolvedInputs // { inherit inputs; }); }'
+
+} | nix run nixpkgs#nixfmt-rfc-style -- - > ./flake.nix
+
+# hack to track in nix without actually tracking
+git add --intent-to-add -f ./flake.nix
+git update-index --assume-unchanged ./flake.nix
+
+if ! [ -f ./flake.lock ]; then
+  if [[ "${OS}" == Darwin ]]; then
+    cp ./flake{.darwin,}.lock
+  else
+    cp ./flake{.linux,}.lock
+  fi
+fi
+
+git add --intent-to-add -f ./flake.lock
+git update-index --assume-unchanged ./flake.lock

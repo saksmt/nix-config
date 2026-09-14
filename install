@@ -57,9 +57,9 @@ function prompt {
     return $returnCode
 }
 
-
-
 thisDir="$(readlink -f "$(dirname "${0}")")"
+
+"${thisDir}"/flake/regenerate || exit 1
 
 attributeRef="${1}"
 

@@ -3,3 +3,6 @@ env.nix
 /result
 .nixpkgs.revision
 .unstable-nixpkgs.nix
+
+/flake.nix
+/flake.lock

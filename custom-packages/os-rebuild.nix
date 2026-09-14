@@ -36,20 +36,22 @@ let
   script = ''
     ASK_FLAG="''${NO_ASK:---ask}"
     read -r -a nixOpts <<< "''${NH_NIX_OPTS:-}"
+
+    cd ${lib.strings.escapeShellArg thisFlakePath} || { echo ${lib.strings.escapeShellArg thisFlakePath}' does not exist!'; exit 1; }
+
+    flake/regenerate
+
     case "''${1:-}" in
       build ) shift; nh os build ${buildOpts}; ;;
       switch ) shift; nh os switch ${buildOpts}; ;;
       boot ) shift; nh os boot ${buildOpts}; ;;
       pull )
-        cd ${lib.strings.escapeShellArg thisFlakePath} || { echo ${lib.strings.escapeShellArg thisFlakePath}' does not exist!'; exit 1; }
         git pull
         ;;
       update )
-        cd ${lib.strings.escapeShellArg thisFlakePath} || { echo ${lib.strings.escapeShellArg thisFlakePath}' does not exist!'; exit 1; }
         nix flake update
         ;;
       pull-and-update )
-        cd ${lib.strings.escapeShellArg thisFlakePath} || { echo ${lib.strings.escapeShellArg thisFlakePath}' does not exist!'; exit 1; }
         git pull
         nix flake update
         ;;
