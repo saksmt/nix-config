@@ -52,7 +52,7 @@
                 home-manager.useUserPackages = true;
                 home-manager.extraSpecialArgs = applied.module-args // {
                   host-config = config;
-                  systemHostPlatform = config.nixpkgs.hostPlatform;
+                  systemHostPlatform = config.nixpkgs.hostPlatform.system;
                 };
                 home-manager.sharedModules = applied.modules;
                 home-manager.backupFileExtension = ".hm-backup~";
