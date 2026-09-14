@@ -27,7 +27,7 @@ let
     darwinConfigurations = (import ./darwin.nix) recipe-loader;
     isoConfigurations = (import ./iso.nix) resolvedInputs recipe-loader;
 
-    packages = (import ./packages.nix) isoConfigurations;
+    packages = (import ./packages.nix) resolvedInputs isoConfigurations;
   };
 in
 outputs
