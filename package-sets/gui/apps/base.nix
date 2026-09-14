@@ -14,9 +14,11 @@ lib.mkMerge [
       with pkgs;
       [
         keepassxc
-        solaar
       ]
-      ++ (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk);
+      ++ (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk)
+      ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+        solaar
+      ]);
 
     catppuccin.kitty.enable = true;
     programs.kitty =
@@ -33,8 +35,8 @@ lib.mkMerge [
           text = ''
             import os
 
-            key_mapping = ${lib.generators.toJSON {} configKeyMapping}
-            key_prefix = ${lib.generators.toJSON {} kittyConfigKeyPrefix}
+            key_mapping = ${lib.generators.toJSON { } configKeyMapping}
+            key_prefix = ${lib.generators.toJSON { } kittyConfigKeyPrefix}
 
             for key, value in os.environ.items():
                 if key in key_mapping:
