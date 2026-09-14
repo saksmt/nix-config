@@ -37,15 +37,18 @@ rec {
 
     features = with feature-definitions; [
       GUI
-      EFI
-      HiDPI
 
       laptop
 
-      gaming
+      work
+      work-ban
 
-      dev.all
-      android
+      dev.scala
+      dev.jvm-other
+      dev.nix
+      dev.k8s
+
+      HiDPI
     ];
 
     package-sets = [
