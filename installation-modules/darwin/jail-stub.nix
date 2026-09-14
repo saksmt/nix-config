@@ -61,7 +61,7 @@ includeAllRelative self
               name: pkg: combinators:
               pkg;
           in
-          jailFunction // { combinators = jailNixLibStubs // extendedStubs; }
+          { combinators = jailNixLibStubs // extendedStubs; __functor = jailFunction; }
         );
       };
     }
