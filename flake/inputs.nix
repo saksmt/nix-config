@@ -1,10 +1,7 @@
 let
   nixpkgs-version = "26.05";
-  nixpkgs-branch =
-    if builtins.getEnv "OS" == "Darwin" then
-      "nixpkgs-${nixpkgs-version}-darwin"
-    else
-      "nixos-${nixpkgs-version}";
+  onMac = builtins.getEnv "OS" == "Darwin";
+  nixpkgs-branch = if onMac then "nixpkgs-${nixpkgs-version}-darwin" else "nixos-${nixpkgs-version}";
   nixpkgs-dependent-input = url: {
     inherit url;
     inputs.nixpkgs.follows = "nixpkgs";
@@ -24,7 +21,10 @@ in
   home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-${nixpkgs-version}";
   nix-darwin = nixpkgs-dependent-input "github:nix-darwin/nix-darwin/nix-darwin-${nixpkgs-version}";
 
-  catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/release-${nixpkgs-version}";
+  # 26.06 does not have darwin module
+  catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/${
+    if onMac then "main" else "release-${nixpkgs-version}"
+  }";
 
   utils.url = "github:numtide/flake-utils";
 

@@ -13,7 +13,7 @@ export OS
     'import ./flake/inputs.nix'
   echo '; outputs = resolvedInputs: (import flake/outputs) (resolvedInputs // { inherit inputs; }); }'
 
-} | nix run nixpkgs#nixfmt-rfc-style -- - > ./flake.nix
+} | nix run nixpkgs#nixfmt -- - > ./flake.nix
 
 # hack to track in nix without actually tracking
 git add --intent-to-add -f ./flake.nix
