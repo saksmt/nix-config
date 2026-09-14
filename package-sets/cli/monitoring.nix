@@ -5,14 +5,18 @@
     "nixos"
   ];
 
-  install.packages = with pkgs; [
-    btop
-    unixtools.netstat
-    iotop
-    iftop
-    powertop
-    pv
-  ];
+  install.packages =
+    with pkgs;
+    [
+      btop
+      unixtools.netstat
+      iftop
+      powertop
+      pv
+    ]
+    ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+      iotop
+    ]);
 
   catppuccin.btop.enable = true;
 }
