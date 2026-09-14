@@ -11,11 +11,11 @@
       btop
       unixtools.netstat
       iftop
-      powertop
       pv
     ]
     ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
       iotop
+      powertop
     ]);
 
   catppuccin.btop.enable = true;
