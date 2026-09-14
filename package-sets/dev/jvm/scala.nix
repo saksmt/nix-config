@@ -24,7 +24,7 @@ with features;
       ++ (
         let
           unjailed-sbt = sbt.override { jre = config.programs.java.package; };
-          jailed-sbt = jail "jailed-sbt-client" "sbt" (
+          jailed-sbt = jail "jailed-sbt-client" sbt (
             with jail.combinators;
             [
               transparent
