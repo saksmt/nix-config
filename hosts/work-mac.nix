@@ -4,7 +4,7 @@ rec {
     (
       { pkgs, ... }:
       {
-        system.stateVersion = "26.05";
+        system.stateVersion = 7;
       }
     )
   ];
