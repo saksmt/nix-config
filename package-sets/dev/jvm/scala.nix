@@ -53,7 +53,7 @@ with features;
         in
         [
           unjailed-sbt
-          jailed-sbt
+          # jailed-sbt
         ]
       )
     );

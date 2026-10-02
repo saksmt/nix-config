@@ -66,19 +66,19 @@ let
         nix repl --extra-experimental-features 'flakes repl-flake' $flake"#repl" "''${@}"
         ;;
       *)
-        echo "Unknown argument to darwin-rebuild: ''${1}" >&2;
+        echo "Unknown argument to macos-rebuild: ''${1}" >&2;
         exit 1;
         ;;
     esac
   '';
 in
 writeShellApplication {
-  name = "darwin-rebuild";
+  name = "macos-rebuild";
 
   derivationArgs = {
-    pname = "darwin-rebuild-script";
+    pname = "macos-rebuild-script";
     meta = {
-      name = "darwin-rebuild-script";
+      name = "macos-rebuild-script";
     };
   };
 
@@ -91,7 +91,7 @@ writeShellApplication {
   text =
     if onCI then
       ''
-        echo "THIS IS WAS A CI BUILD. darwin-rebuild COMMAND IS NOT AVAILABLE" >&2;
+        echo "THIS IS WAS A CI BUILD. macos-rebuild COMMAND IS NOT AVAILABLE" >&2;
         exit 1;
       ''
     else

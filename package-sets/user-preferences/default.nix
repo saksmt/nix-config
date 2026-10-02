@@ -3,7 +3,11 @@
   module-for = [ "hm" ];
 
   # one of "latte", "frappe", "macchiato", "mocha" (light -> dark)
-  catppuccin.flavor = "macchiato";
+  catppuccin = {
+    enable = true;
+    autoEnable = false;
+    flavor = "macchiato";
+  };
   programs.btop = {
     settings = {
       theme_background = false;

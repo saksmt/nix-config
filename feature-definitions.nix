@@ -19,6 +19,7 @@
         self.dev.haskell
         self.dev.nix
         self.dev.k8s
+        self.dev.rust
       ];
     };
 
@@ -27,6 +28,7 @@
     haskell = feature { includes = [ self.dev.common ]; };
     nix = feature { includes = [ self.dev.common ]; };
     k8s = feature { includes = [ self.dev.common ]; };
+    rust = feature { includes = [ self.dev.common ]; };
 
     jvm = feature { includes = [ self.dev.common ]; };
 

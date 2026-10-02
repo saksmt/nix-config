@@ -11,7 +11,7 @@ in
 forFeature dev.common {
   opencode.confd."000-shared/base" = {
     agent = {
-      octto.disable = true;
+      octto.disable = lib.mkIf config.opencode.plugins.octto.enable true;
       plan.permission =
         let
           planPaths = {
@@ -43,9 +43,9 @@ forFeature dev.common {
         };
         plan.tools = {
           submit_plan = true;
-          create_brainstorm = true;
-          await_brainstorm_complete = true;
-          end_brainstorm = true;
+          create_brainstorm = lib.mkIf config.opencode.plugins.octto.enable true;
+          await_brainstorm_complete = lib.mkIf config.opencode.plugins.octto.enable true;
+          end_brainstorm = lib.mkIf config.opencode.plugins.octto.enable true;
         };
     };
     share = "disabled";

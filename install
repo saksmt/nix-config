@@ -104,7 +104,7 @@ elif type nix &> /dev/null; then
 
     nix run \
      --reference-lock-file ./flake.darwin.lock --output-lock-file ./flake.darwin.lock \
-     --impure "$(< /etc/nixos/flake-ref)#darwin-rebuild" -- switch
+     --impure "$(< /etc/nixos/flake-ref)#macos-rebuild" -- switch
   else
 
     if [[ n"${attributeRef}" == n ]]; then

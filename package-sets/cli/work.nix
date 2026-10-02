@@ -16,6 +16,7 @@ lib.mkMerge [
     install.packages = with pkgs; [
       openconnect
       davmail
+      google-cloud-sdk
     ];
   })
 ]

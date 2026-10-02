@@ -68,9 +68,10 @@ with features;
           [
             opencode
           ]
-          ++ (lib.lists.optionals GUI.isEnabled [
+          # mac is case insensitive on fs...
+          /*++ (lib.lists.optionals GUI.isEnabled [
             opencode-desktop
-          ])
+          ])*/
         ))
       ]
 

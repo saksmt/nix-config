@@ -10,12 +10,10 @@ lib.mkMerge [
     module-for = [ "hm" ];
   }
   (GUI.whenEnabled {
+    programs.keepassxc.enable = true;
     install.packages =
       with pkgs;
-      [
-        keepassxc
-      ]
-      ++ (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk)
+      (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk)
       ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         solaar
       ]);
@@ -52,7 +50,18 @@ lib.mkMerge [
           name = "IosevkaForTerm Nerd Font";
           size = if HiDPI.isEnabled then 24 else 16;
         };
-        settings.notify_on_cmd_finish = "unfocused 60 notify";
+        settings = {
+          notify_on_cmd_finish = "unfocused 60 notify";
+        }
+        // (
+          if (pkgs.stdenv.hostPlatform.isMacOS) then
+            {
+              macos_option_as_alt = "yes";
+              hide_window_decorations = "titlebar-only";
+            }
+          else
+            { }
+        );
         extraConfig = ''
           geninclude ${envloader}/loadenv.py
         '';
@@ -260,6 +269,113 @@ lib.mkMerge [
             }
             */
           '';
+
+          search.engines = {
+            bing.metaData.hidden = true;
+            perplexity.metaData.hidden = true;
+            wikipedia.metaData.hidden = true;
+            duckduckgo.metaData.alias = "`d";
+
+            nixPackages = {
+              name = "Nix Packages";
+              urls = [
+                {
+                  template = "https://search.nixos.org/packages";
+                  params = [
+                    {
+                      name = "type";
+                      value = "packages";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                  icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+                }
+              ];
+              definedAliases = [ "`np" ];
+            };
+
+            nixOptions = {
+              name = "Nix Options";
+              urls = [
+                {
+                  template = "https://search.nixos.org/options";
+                  params = [
+                    {
+                      name = "type";
+                      value = "options";
+                    }
+                    {
+                      name = "query";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                  icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+                }
+              ];
+              definedAliases = [ "`no" ];
+            };
+
+            noogle = lib.mkIf (features.dev.nix.isEnabled) {
+              name = "Noogle";
+              urls = [{
+                template = "https://noogle.dev/q";
+                params = [
+                  {
+                    name = "term";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }];
+              definedAliases = [ "`nf" ];
+            };
+
+            hoogle = lib.mkIf (features.dev.haskell.isEnabled) {
+              name = "Hoogle";
+              urls = [{
+                template = "https://hoogle.haskell.org";
+                params = [
+                  {
+                    name = "hoogle";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }];
+              definedAliases = [ "`hs" ];
+            };
+
+            cratesIo = lib.mkIf (features.dev.rust.isEnabled) {
+              name = "crates.io";
+              urls = [{
+                template = "https://crates.io/search";
+                params = [{
+                  name = "q";
+                  value = "{searchTerms}";
+                }];
+              }];
+              definedAliases = [ "`rs" "`rc" ];
+            };
+
+            docsRs = lib.mkIf (features.dev.rust.isEnabled) {
+              name = "docs.rs";
+              urls = [{
+                template = "https://docs.rs/releases/search";
+                params = [{
+                  name = "query";
+                  value = "{searchTerms}";
+                }];
+              }];
+              definedAliases = [ "`rd" ];
+            };
+
+            jira = lib.mkIf (features.work.isEnabled) {
+              name = "Jira";
+              urls = [ { template = "https://jira.ringcentral.com/browse/{searchTerms}"; } ];
+              definedAliases = [ "`j" ];
+            };
+          };
         };
 
         debug = default // {
