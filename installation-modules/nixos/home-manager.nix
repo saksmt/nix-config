@@ -22,7 +22,7 @@
               "/installation-modules/common/overlays.nix"
               "/installation-modules/common/package-sets.nix"
 
-              "/installation-modules/hm/hm-adapter.nix"
+              "/installation-modules/hm/polyfils.nix"
               "/installation-modules/hm/hm-setup.nix"
               "/installation-modules/common/passthrou-nixos.nix"
               "/installation-modules/hm/external-modules.nix"

@@ -15,6 +15,12 @@ in
       options = defineOpts lib;
       config.environment.systemPackages = config.install.packages;
     };
+  darwinModule =
+      { config, lib, ... }:
+      {
+        options = defineOpts lib;
+        config.environment.systemPackages = config.install.packages;
+      };
   homeManagerModule =
     { config, lib, ... }:
     {

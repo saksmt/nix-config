@@ -1,11 +1,21 @@
-{ writeShellApplication, jq, systemd, mcp-proxy }:
+{
+  writeShellApplication,
+  jq,
+  systemd,
+  mcp-proxy,
+}:
 
 writeShellApplication {
   name = "mcp-wrapper";
 
   # We need jq to parse the JSON-RPC handshake, and systemd for journald logging
   # mcp-proxy included as a bonus to neatly wrap SSE/HTTPStream endpoints
-  runtimeInputs = [ jq systemd mcp-proxy ];
+  runtimeInputs = [
+    jq
+    # todo: replace usage of systemd with something else
+    # systemd
+    mcp-proxy
+  ];
 
   text = ''
     if [ "$#" -lt 2 ]; then

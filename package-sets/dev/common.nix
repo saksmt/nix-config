@@ -39,7 +39,7 @@ with features;
   programs.direnv.enableZshIntegration = true;
 
   programs.git.enable = true;
-  programs.git.delta.enable = true;
+  programs.delta.enable = true;
   programs.delta.enableGitIntegration = true;
   catppuccin.delta.enable = true;
 

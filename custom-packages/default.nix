@@ -1,6 +1,7 @@
 args@{ pkgs, ... }:
 {
   os-rebuild = pkgs.callPackage ./os-rebuild.nix { };
+  macos-rebuild = pkgs.callPackage ./macos-rebuild.nix { };
   home-rebuild = pkgs.callPackage ./home-rebuild.nix { };
   mcp-wrapper = pkgs.callPackage ./mcp-wrapper.nix { };
   json-confd = pkgs.callPackage ./json-confd.nix { };

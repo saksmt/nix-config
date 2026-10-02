@@ -12,7 +12,7 @@ forFeature dev.common {
     plugin = [
       "@gotgenes/opencode-agent-identity@3.1.1"
       [
-        "@plannotator/opencode@0.19.11"
+        "@plannotator/opencode@0.27.21"
         { workflow = "user-managed"; }
       ]
     ];

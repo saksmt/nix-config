@@ -69,6 +69,10 @@ rec {
             override-base-nixpkgs = override: result // {
               _nixpkgs = override;
             };
+            as-darwin = module-args.nix-darwin.lib.darwinSystem {
+              modules = applied.modules;
+              specialArgs = applied.module-args;
+            };
             as-nixos = _nixpkgs.lib.nixosSystem {
               modules = applied.modules;
               specialArgs = applied.module-args;

@@ -1,9 +1,13 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 {
   module-for = [ "hm" ];
 
   # one of "latte", "frappe", "macchiato", "mocha" (light -> dark)
-  catppuccin.flavor = "macchiato";
+  catppuccin = {
+    enable = true;
+    autoEnable = false;
+    flavor = "macchiato";
+  };
   programs.btop = {
     settings = {
       theme_background = false;
@@ -91,7 +95,7 @@
   };
 
   xdg.enable = true;
-  xdg.mimeApps.enable = true;
+  xdg.mimeApps.enable = !pkgs.stdenv.hostPlatform.isMacOS;
   xdg.mimeApps.defaultApplications = {
     "x-scheme-handler/http" = [ "firefox.desktop" ];
     "x-scheme-handler/https" = [ "firefox.desktop" ];

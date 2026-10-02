@@ -36,13 +36,13 @@ in
 
   config = forFeature dev.common {
     opencode.confd."000-shared/plugins/notifier" = lib.mkIf cfg.enable {
-      plugin = [ "@mohak34/opencode-notifier@0.2.4" ];
+      plugin = [ "@mohak34/opencode-notifier@0.4.0" ];
     };
 
-    xdg.configFile."opencode/opencode-notifier.json".source = lib.mkIf cfg.enable (
-      jsonFormat.generate "opencode-notifier.json" (
+    xdg.configFile."opencode/opencode-notifier.json" = lib.mkIf cfg.enable {
+      source = jsonFormat.generate "opencode-notifier.json" (
         lib.attrsets.recursiveUpdate defaultConfiguration cfg.settings
-      )
-    );
+      );
+    };
   };
 }

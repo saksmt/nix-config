@@ -34,6 +34,8 @@
             trusted-users = [
               "root"
               "smt"
+              "Kirill.Saksin"
+              "@admin" # <- macos
               "@wheel"
             ];
 
@@ -56,8 +58,6 @@
             # security is the priority =_=
             require-sigs = lib.mkForce true;
             sandbox = lib.mkForce true;
-            # need to test this properly, false for now; requires "cgroups" feature
-            use-cgroups = lib.mkForce false;
             # useless and makes any call to any nix command retrieve json from github
             # also related - https://github.com/NixOS/nix/issues/8953#issuecomment-1728592073
             flake-registry = "";
@@ -65,7 +65,8 @@
 
           nix.gc = {
             automatic = lib.mkDefault true;
-            dates = lib.mkDefault "weekly";
+            # commented line below does not exist on darwin
+            # dates = lib.mkDefault "weekly";
             options = lib.mkDefault "--delete-older-than 60d";
           };
         }

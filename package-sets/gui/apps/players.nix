@@ -11,11 +11,14 @@ lib.mkMerge [
   }
 
   (features.GUI.whenEnabled {
-    install.packages = with pkgs; [
-      smplayer
-      mpv
-      plexamp
-      playerctl # commandline controls for MPRIS
-    ];
+    install.packages =
+      with pkgs;
+      [
+        mpv
+      ]
+      ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+        smplayer
+        plexamp # <- it exists, but not in nix
+      ]);
   })
 ]

@@ -49,11 +49,13 @@ in
   };
   config = forFeature dev.common {
     opencode.confd."000-shared/plugins/dcp" = lib.mkIf cfg.enable {
-      plugin = [ "@tarquinen/opencode-dcp@3.1.9" ];
+      plugin = [ "@tarquinen/opencode-dcp@3.1.15" ];
     };
 
-    xdg.configFile."opencode/dcp.jsonc".source = lib.mkIf cfg.enable (
-      jsonFormat.generate "dcp.json" (lib.attrsets.recursiveUpdate defaultConfiguration cfg.settings)
-    );
+    xdg.configFile."opencode/dcp.jsonc" = lib.mkIf cfg.enable {
+      source = jsonFormat.generate "dcp.json" (
+        lib.attrsets.recursiveUpdate defaultConfiguration cfg.settings
+      );
+    };
   };
 }

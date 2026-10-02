@@ -9,6 +9,7 @@ let
 in
 {
   nixpkgs.url = "github:nixos/nixpkgs/nixos-${nixpkgs-version}";
+  nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-${nixpkgs-version}-darwin";
   nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   nixpkgs-master.url = "github:nixos/nixpkgs/master";
   nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -20,6 +21,10 @@ in
   awesome-iwm = nixpkgs-dependent-input "github:saksmt/awesomewm-iwm";
 
   home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-${nixpkgs-version}";
+  nix-darwin = {
+    url = "github:nix-darwin/nix-darwin/nix-darwin-${nixpkgs-version}";
+    inputs.nixpkgs.follows = "nixpkgs-darwin";
+  };
 
   catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/release-${nixpkgs-version}";
 

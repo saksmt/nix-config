@@ -15,7 +15,7 @@ with features;
     with pkgs;
     lib.lists.optionals dev.nix.isEnabled [
       nixd
-      nixfmt-rfc-style
+      nixfmt
       mcp-nixos
     ];
 }

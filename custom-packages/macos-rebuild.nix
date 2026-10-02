@@ -1,0 +1,99 @@
+{
+  writeShellApplication,
+  nh,
+  nix-output-monitor,
+  git,
+  lib,
+}:
+let
+  onCI = builtins.getEnv "CI" != "";
+  thisFlake =
+    if (builtins.pathExists "/etc/nixos/flake-ref") then
+      lib.strings.fileContents "/etc/nixos/flake-ref"
+    else if (onCI) then
+      "NOT_AVAILABLE"
+    else
+      builtins.throw "No reference to this flake specified in /etc/nixos/flake-ref";
+  thisHost =
+    if (builtins.pathExists "/etc/nixos/host-ref") then
+      lib.strings.fileContents "/etc/nixos/host-ref"
+    else
+      "$(hostname)";
+
+  thisFlakePath = lib.strings.removePrefix "path:" (lib.strings.removePrefix "git+file:" thisFlake);
+  var = name: "\${${name}}";
+  quotedVar = name: ''"${var name}"'';
+  buildOpts = builtins.concatStringsSep " " [
+    (quotedVar "ASK_FLAG")
+    (lib.strings.escapeShellArg thisFlake)
+    "-H"
+    (lib.strings.escapeShellArg thisHost)
+    (quotedVar "@")
+    "--"
+    (quotedVar "nixOpts[@]")
+    "--impure"
+    "--reference-lock-file" "./flake.darwin.lock"
+    "--output-lock-file" "./flake.darwin.lock"
+  ];
+  script = ''
+    ASK_FLAG="''${NO_ASK:---ask}"
+    read -r -a nixOpts <<< "''${NH_NIX_OPTS:-}"
+
+    cd ${lib.strings.escapeShellArg thisFlakePath} || { echo ${lib.strings.escapeShellArg thisFlakePath}' does not exist!'; exit 1; }
+
+    flake/regenerate
+
+    case "''${1:-}" in
+      build ) shift; nh darwin build ${buildOpts}; ;;
+      switch ) shift; nh darwin switch ${buildOpts}; ;;
+      pull )
+        git pull
+        ;;
+      update )
+        nix flake update
+        ;;
+      pull-and-update )
+        git pull
+        nix flake update
+        ;;
+      repl )
+        shift;
+        flake=${lib.strings.escapeShellArg thisFlake}
+        if [[ "''${1:-}" == "--built" ]]; then
+          flake=built-os
+          shift
+        fi
+        nix repl --extra-experimental-features 'flakes repl-flake' $flake"#repl" "''${@}"
+        ;;
+      *)
+        echo "Unknown argument to macos-rebuild: ''${1}" >&2;
+        exit 1;
+        ;;
+    esac
+  '';
+in
+writeShellApplication {
+  name = "macos-rebuild";
+
+  derivationArgs = {
+    pname = "macos-rebuild-script";
+    meta = {
+      name = "macos-rebuild-script";
+    };
+  };
+
+  runtimeInputs = [
+    nh
+    nix-output-monitor
+    git
+  ];
+
+  text =
+    if onCI then
+      ''
+        echo "THIS IS WAS A CI BUILD. macos-rebuild COMMAND IS NOT AVAILABLE" >&2;
+        exit 1;
+      ''
+    else
+      script;
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# repo root
+cd "$(dirname "$(dirname "$(readlink -f "${0}")")")" || exit
+
+OS="${OS:-$(uname)}"
+
+export OS
+
+lockfile="./flake.linux.lock"
+if [[ "${OS}" == "Darwin" ]]; then
+  lockfile="./flake.darwin.lock"
+fi
+
+nix flake "${@}" --reference-lock-file "${lockfile}" --output-lock-file "${lockfile}"
+cp "${lockfile}" ./flake.lock
+
+git add --intent-to-add -f ./flake.lock
+git update-index --assume-unchanged ./flake.lock

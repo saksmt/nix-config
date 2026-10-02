@@ -3,9 +3,9 @@
   home.username = "kirillsaksin";
   home.homeDirectory = "/home/kirillsaksin";
 
-  programs.git = {
-    userName = "Kirill Saksin";
-    userEmail = "kirill.saksin@ringcentral.com";
+  programs.git.settings.user = {
+    name = "Kirill Saksin";
+    email = "kirill.saksin@ringcentral.com";
   };
 
   installation = {

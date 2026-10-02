@@ -6,6 +6,7 @@
   module-for = [
     "hm"
     "nixos"
+    "darwin"
   ];
   fonts.packages =
     with pkgs;

@@ -26,7 +26,7 @@ forFeature dev.common {
     (forFeature dev.nix {
       nixfmt = {
         command = [
-          "${pkgs.nixfmt-rfc-style}/bin/nixfmt"
+          "${pkgs.nixfmt}/bin/nixfmt"
           "$FILE"
         ];
         extensions = [
