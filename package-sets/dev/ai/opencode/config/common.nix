@@ -57,6 +57,7 @@ forFeature dev.common {
       # forcing binding only to localhost
       hostname = "127.0.0.1";
     };
+    instructions = ["AGENTS.local.md" "AGENTS.md"];
   };
 
   opencode.tui = {

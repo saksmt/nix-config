@@ -65,8 +65,8 @@ in
     opencode.confd."000-shared/plugins/interpreters" = lib.mkIf cfg.enable {
       plugin = [
         [
-          "opencode-interpreters-plugin@0.1.0"
-          (lib.attrsets.recursiveUpdate defaultConfiguration cfg.settings)
+          "/home/smt/code/opensource/opencode-plugins/opencode-interpreters-plugin"
+          { interpreters = (lib.attrsets.recursiveUpdate defaultConfiguration cfg.settings); }
         ]
       ];
     };

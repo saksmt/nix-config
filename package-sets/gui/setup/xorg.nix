@@ -15,6 +15,16 @@ lib.mkMerge [
 
     services.libinput.enable = lib.mkDefault GUI.isEnabled;
     services.libinput.touchpad.disableWhileTyping = lib.mkDefault (laptop.isEnabled && GUI.isEnabled);
+
+    services.xserver.displayManager.session = [
+      {
+        manage = "desktop";
+        name = "home-managed_x";
+        start = ''exec $HOME/.xsession'';
+      }
+    ];
+
+    services.displayManager.defaultSession = "home-managed_x";
   }
 
   (HiDPI.whenEnabled {

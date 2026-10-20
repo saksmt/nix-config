@@ -75,7 +75,7 @@ with features;
     defaultLocale = "ru_RU.UTF-8";
   };
 
-  time.timeZone = lib.mkDefault "Asia/Tbilisi";
+  time.timeZone = lib.mkDefault "Europe/Sofia";
 
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = false;

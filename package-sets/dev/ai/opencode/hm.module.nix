@@ -14,7 +14,7 @@ let
       { text = cfg; }
     else
       {
-        source = if (lib.isPath cfg) || (lib.isDerivation cfg) then cfg else (jsonFormat.generate name cfg);
+        source = if ((lib.isPath cfg) || (lib.isDerivation cfg) && !builtins.isBool cfg) then cfg else (jsonFormat.generate name cfg);
       };
 in
 if dev.common.isEnabled then

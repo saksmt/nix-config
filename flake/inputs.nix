@@ -21,10 +21,12 @@ in
   home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-${nixpkgs-version}";
   nix-darwin = nixpkgs-dependent-input "github:nix-darwin/nix-darwin/nix-darwin-${nixpkgs-version}";
 
-  # 26.06 does not have darwin module
-  catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/${
-    if onMac then "main" else "release-${nixpkgs-version}"
-  }";
+  magicless-agents = {
+    url = "github:saksmt/magicless-agents";
+    flake = false;
+  };
+
+  catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/main";
 
   utils.url = "github:numtide/flake-utils";
 

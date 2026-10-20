@@ -5,7 +5,7 @@ args: {
       ...
     }:
     let
-      keep-flake = installation.keep-flake or true;
+      keep-flake = installation.keep-flake or false; # broken, need to fix
     in
     {
       module-args = {

@@ -3,6 +3,7 @@
   GUI = feature { default-enabled = true; };
   EFI = feature { default-enabled = true; };
 
+  wayland = feature { };
   HiDPI = feature { };
 
   guitar = feature { };

@@ -120,7 +120,7 @@ lib.mkMerge [
             "browser.download.always_ask_before_handling_new_types" = true;
             "browser.download.useDownloadDir" = false;
             "browser.search.countryCode" = "RU";
-            "browser.search.region" = "GE";
+            "browser.search.region" = "BG";
             "browser.startup.page" =
               let
                 blank = 0;
@@ -270,6 +270,7 @@ lib.mkMerge [
             */
           '';
 
+          search.force = true;
           search.engines = {
             bing.metaData.hidden = true;
             perplexity.metaData.hidden = true;

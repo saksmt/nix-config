@@ -74,6 +74,8 @@
       "non-git_local-overrides.*"
       "ignoreme/"
       ".ignoreme/"
+      "AGENTS.local.md"
+      ".agents.local/"
 
       ".idea/"
       "*.iml"

@@ -3,6 +3,10 @@ def deep_merge($a; $b):
     reduce ([[ $a, $b ][] | keys[]] | unique[]) as $k ({}; .[$k] = deep_merge($a[$k]; $b[$k]))
   elif ($a | type) == "array" and ($b | type) == "array" then
     $a + $b
+  elif ($a | type) == "boolean" and $b == null then
+    $a
+  elif ($b | type) == "boolean" and $a == null then
+    $b
   else
     $b // $a
   end;

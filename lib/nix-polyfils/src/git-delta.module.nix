@@ -10,6 +10,11 @@
         };
       };
       options.programs.delta = with lib; {
+        enable = mkOption {
+          type = types.bool;
+          apply = v: warnIf v "programs.delta is not supported as a nixos module yet!" v;
+          default = false;
+        };
         enableGitIntegration = mkOption {
           type = types.bool;
           apply = v: warnIf v "programs.delta is not supported as a nixos module yet!" v;

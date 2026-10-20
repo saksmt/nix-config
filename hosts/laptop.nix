@@ -181,6 +181,34 @@ rec {
             ...
           }:
           {
+            opencode.agents = {
+              brainstorm = {
+                model = "opencode-go/deepseek-v4-pro";
+                reasoningEffort = "high";
+              };
+              spec = {
+                model = "opencode-go/deepseek-v4-pro";
+                reasoningEffort = "high";
+              };
+              orchestrate = {
+                model = "opencode-go/glm-5.3-flash";
+                reasoningEffort = "low";
+              };
+              implementer = {
+                model = "opencode-go/mimo-v2.6-pro";
+              };
+              implementer-flash = {
+                model = "opencode-go/mimo-v2.6-flash";
+              };
+              reviewer = {
+                model = "opencode-go/glm-5.3";
+                reasoningEffort = "high";
+              };
+              explore = {
+                model = "opencode-go/glm-5.3-flash";
+                reasoningEffort = "low";
+              };
+            };
             opencode.plugins.octto.settings = {
               agents = {
                 probe.model = "opencode/big-pickle";

@@ -120,6 +120,7 @@
                       wget
                       findutils
                       which
+                      diffutils
                     ])
                     (defer (
                       wrap-entry (entry: ''
