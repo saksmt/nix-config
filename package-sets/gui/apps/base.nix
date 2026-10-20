@@ -2,6 +2,7 @@
   features,
   pkgs,
   lib,
+  config,
   ...
 }:
 with features;
@@ -10,6 +11,13 @@ lib.mkMerge [
     module-for = [ "hm" ];
   }
   (GUI.whenEnabled {
+    home.sessionVariables = {
+      # gl shader cache
+      __GL_SHADER_DISK_CACHE_PATH="${config.xdg.cacheHome}/nv";
+      # compose key cache
+      XCOMPOSECACHE="${config.xdg.cacheHome}/compose-cache";
+    };
+
     programs.keepassxc.enable = true;
     install.packages =
       with pkgs;

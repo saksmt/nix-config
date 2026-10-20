@@ -5,6 +5,7 @@ _: {
     (import ./haskell.nix)
     (import ./k8s.nix)
     (import ./nix.nix)
+    (import ./xdg-obedience.nix)
     (import ./jvm/other.nix)
     (import ./jvm/scala.nix)
   ];
