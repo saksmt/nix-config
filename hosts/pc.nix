@@ -3,7 +3,6 @@ rec {
   imports = [
     {
       hardware.nvidia = {
-        enabled = true;
         open = true;
         modesetting.enable = true;
       };
@@ -75,6 +74,7 @@ rec {
 
     features = with feature-definitions; [
       GUI
+      wayland
       EFI
       HiDPI
 

@@ -9,5 +9,6 @@ let
 in
 {
   smt-laptop = nixosFromInstallationModules "/hosts/laptop.nix";
+  smt-pc = nixosFromInstallationModules "/hosts/pc.nix";
   nas = nixosFromInstallationModules "/hosts/nas.nix";
 }

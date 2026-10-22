@@ -17,7 +17,7 @@ white="${esc}[37m"
 info=" ${cyan}*${clr} "
 error=" ${red}*${clr} "
 
-function prompt {
+prompt() {
     local inversed
 
     if [[ "$2" == "inverse" ]]; then
@@ -57,6 +57,26 @@ function prompt {
     return $returnCode
 }
 
+existsAndWritable() {
+  [ -f "${1}" ] && [ -w "${1}" ]
+}
+
+doesntExistAndParentWritable() {
+  ! [ -f "${1}"] && [ -w "$(dirname "${1}")" ]
+}
+
+canWrite() {
+  existsAndWritable "${1}" || doesntExistAndParentWritable "${1}"
+}
+
+teeOrSudoTee() {
+  if canWrite "${1}"; then
+    tee "${1}"
+  else
+    sudo tee "${1}"
+  fi
+}
+
 thisDir="$(readlink -f "$(dirname "${0}")")"
 
 "${thisDir}"/flake/regenerate || exit 1
@@ -77,10 +97,17 @@ if type nixos-rebuild &>/dev/null; then
     exit 1;
   }
 
-  echo "path:${thisDir}" | sudo tee /etc/nixos/flake-ref >/dev/null
-  echo "${attributeRef}" | sudo tee /etc/nixos/host-ref >/dev/null
+  echo "path:${thisDir}" | teeOrSudoTee /etc/nixos/flake-ref >/dev/null
+  echo "${attributeRef}" | teeOrSudoTee /etc/nixos/host-ref >/dev/null
+
+  bypass=false
+  if [[ "${UID}" == "0" ]] && prompt "Running as root - nh forbids that. Bypass?"; then
+    bypass=true
+  fi
+  export NH_BYPASS_ROOT_CHECK="${bypass}"
 
   nix run \
+    --extra-experimental-features 'nix-command flakes' \
     --reference-lock-file ./flake.linux.lock --output-lock-file ./flake.linux.lock \
     --impure "$(< /etc/nixos/flake-ref)#os-rebuild" \
     -- boot
@@ -103,6 +130,7 @@ elif type nix &> /dev/null; then
     echo "${attributeRef}" | sudo tee /etc/nixos/host-ref >/dev/null
 
     nix run \
+    --extra-experimental-features 'nix-command flakes' \
      --reference-lock-file ./flake.darwin.lock --output-lock-file ./flake.darwin.lock \
      --impure "$(< /etc/nixos/flake-ref)#macos-rebuild" -- switch
   else
