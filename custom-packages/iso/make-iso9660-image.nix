@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
   # the image will be self-contained so we can drop references
   # to the closure that was used to build it
-  unsafeDiscardReferences.out = true;
+  unsafeDiscardReferences.out = false;
 
   buildCommandPath = ./make-iso9660-image.sh;
   nativeBuildInputs = [

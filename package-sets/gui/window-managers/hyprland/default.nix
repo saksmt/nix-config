@@ -34,6 +34,13 @@
         extraConfig = ''
         local mod = "SUPER"
 
+        hl.env("XCURSOR_THEME", "DMZ-Black")
+        hl.env("XCURSOR_SIZE", "30")
+
+        hl.on("hyprland.start", function()
+          hl.exec_cmd("dconf write /org/gnome/desktop/interface/cursor-theme \"'DMZ-Black'\"")
+        end)
+
         -- ---------------------------------------------------------------------------
         -- Core config
         -- ---------------------------------------------------------------------------
@@ -41,6 +48,10 @@
         hl.config({
           general = {
             layout = "dwindle",
+          },
+          misc = {
+            mouse_move_enables_dpms = true,
+            key_press_enables_dpms = true
           },
           input = {
             -- us first => binds are resolved against the us keymap and keep working
@@ -51,6 +62,23 @@
             mouse_refocus = true,
             focus_on_close = 1,
           },
+          render = {
+            cm_enabled = true,
+          },
+        })
+
+        hl.monitor({
+          output = "DP-5",
+          mode = "preferred",
+          vrr = 2,
+          supports_hdr = 1,
+          bitdepth = 10,
+          cm = "wide",
+          scale = "auto",
+          sdr_min_luminance = 0.002,
+          sdr_max_luminance = 100,
+          min_luminance = 0,
+          max_luminance = 603
         })
 
         -- ---------------------------------------------------------------------------

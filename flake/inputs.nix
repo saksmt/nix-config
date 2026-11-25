@@ -26,10 +26,17 @@ in
     flake = false;
   };
 
+  madr-skillz = {
+    url = "github:saksmt/madr-skillz";
+    flake = false;
+  };
+
   catppuccin = nixpkgs-dependent-input "github:catppuccin/nix/main";
 
   utils.url = "github:numtide/flake-utils";
 
   nix-features = nixpkgs-dependent-input "github:saksmt/nix-features";
   nix-unstables = nixpkgs-dependent-input "github:saksmt/nix-unstables";
+
+  opencode = nixpkgs-dependent-input "github:anomalyco/opencode/v1.19.5";
 }

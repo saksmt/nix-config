@@ -52,15 +52,16 @@ with features;
       filterMode = "fuzzy";
       sidePanelWidth = 0.2;
     };
-    git.pagers = [
+    git.diffRenderers = [
       {
-        pager = "${lib.getExe pkgs.delta} --side-by-side --line-numbers --paging=never --hyperlinks --hyperlinks-file-link-format=\"lazygit-edit://{path}:{line}\"";
+        command = "${lib.getExe pkgs.delta} --side-by-side --line-numbers --paging=never --hyperlinks --hyperlinks-file-link-format=\"lazygit-edit://{path}:{line}\"";
       }
       {
-        externalDiffCommand = "${lib.getExe pkgs.difftastic} --color=always --display=inline";
+        command = "${lib.getExe pkgs.difftastic} --color=always --display=inline";
+        type = "extDiff";
       }
       {
-        pager = "${lib.getExe pkgs.delta} --line-numbers --paging=never --hyperlinks --hyperlinks-file-link-format=\"lazygit-edit://{path}:{line}\"";
+        command = "${lib.getExe pkgs.delta} --line-numbers --paging=never --hyperlinks --hyperlinks-file-link-format=\"lazygit-edit://{path}:{line}\"";
       }
     ];
   };

@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+
+
+# region lib code
+
+esc=$(echo -en "\033")
+
+clr="${esc}[0m"
+bright="${esc}[1m"
+dim="${esc}[2m"
+
+red="${esc}[31m"
+green="${esc}[32m"
+cyan="${esc}[36m"
+white="${esc}[37m"
+brown="${esc}[33m"
+yellow="${bright}${brown}"
+
+info=" ${cyan}*${clr} "
+warn=" ${yellow}*${clr} "
+error=" ${red}*${clr} "
+
+function prompt {
+    local inversed
+
+    if [[ "$2" == "inverse" ]]; then
+        inversed=true
+    else
+        inversed=false
+    fi
+
+    local questionAnswerVariants
+    questionAnswerVariants=$($inversed && echo "[${red}y${clr}|${green}N${clr}]" || echo "[${green}Y${clr}|${red}n${clr}]")
+    local ans=""
+    while true; do
+        echo -n "${white}${bright}>>> ${clr}${1}${clr} ${questionAnswerVariants} "
+        read -n1 ans
+        if [[ ! ( $ans =~ [yYnN] || $ans == "" ) ]]; then
+            echo ""
+            echo "Sorry didn't understand, try again."
+        else
+            if [[ $ans != "" ]]; then
+                echo ""
+            fi
+            if [[ $ans =~ [yY] || ( $ans == "" && ! "$inversed" == "true" ) ]]; then
+                answer=true
+            else
+                answer=false
+            fi
+            break
+        fi
+    done
+
+    local returnCode
+    if [[ "$answer" == "true" ]]; then
+        returnCode=0
+    else
+        returnCode=1
+    fi
+    return $returnCode
+}
+
+# endregion
+
+image="${1}"
+
+cd "$(dirname "$(readlink -f "$0")")" || exit 1
+
+function listImageConfigurations() {
+  nix eval ".#images" \
+    --apply 'x: builtins.concatStringsSep "\n" (builtins.attrNames x)' \
+    --raw \
+    2>/dev/null
+}
+
+if [[ n"${image}" == n ]]; then
+  echo -n "usage: ${bright}${white}build-image${clr} ${dim}<${clr}"
+  configs=( $(listImageConfigurations | \
+    xargs printf "${bright}${white}%s${clr} ") )
+  IFS='|'
+  echo -n "${configs[*]}" | sed "s/[|]/${dim}|${clr}/g"
+  echo "${dim}>${clr}"
+  exit 1
+fi
+
+listImageConfigurations | grep -q "${1}" || {
+  echo "${error}unknown image configuration ${cyan}${1}${clr}"
+  echo "${info}available configurations:"
+  listImageConfigurations | \
+    xargs printf "   ${bright}${white}-${clr} %s\n"
+  exit 1
+}
+
+export THIS_FLAKE_REPO="$(dirname "$(readlink -f "${0}")")"
+
+echo "${info}Building ${bright}${white}${1}${clr} image"
+
+INCLUDED_SSH_KEYS=""
+prompt "Include public ssh keys of this user as authorized keys in ISO?" && {
+  keyFiles="$(find ~/.ssh -type f -name \*.pub | tr '\n' ':')"
+
+  echo "${info}Including public ssh keys:"
+  echo "${keyFiles}" | tr ':' '\n' | xargs realpath -s --relative-to="${HOME}" | xargs printf "   ${bright}${white}-${clr} ~/%s\n"
+
+  INCLUDED_SSH_KEYS="$(echo "${keyFiles}" | tr ':' '\n' | xargs readlink -f | tr '\n' ':')"
+}
+
+export INCLUDED_SSH_KEYS
+
+nix build --impure ".#images.${1}"

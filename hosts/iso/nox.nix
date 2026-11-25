@@ -56,8 +56,11 @@ rec {
       "system/hardware/android"
       "system/hardware/yubikey"
       "system/base"
+      "system/fonts"
 
       "system/iso"
+
+      "server/sshd"
 
       "tools/hardware-tools"
       "tools/rescue-tools"

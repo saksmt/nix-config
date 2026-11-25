@@ -243,7 +243,7 @@
     };
 
     images.iso.boot.grub.timeout = lib.mkOption {
-      default = -1;
+      default = 5;
       type = lib.types.int;
       description = ''
         Timeout for GRUB menu in seconds. 0 means no timeout. -1 means infinite timeout.

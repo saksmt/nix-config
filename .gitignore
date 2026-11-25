@@ -6,3 +6,4 @@ env.nix
 
 /flake.nix
 /flake.lock
+/local-hacks.nix

@@ -2,13 +2,10 @@
 {
   module-for = [ "hm" ];
 
-  # one of "latte", "frappe", "macchiato", "mocha" (light -> dark)
-  catppuccin = {
-    enable = true;
-    autoEnable = false;
-    flavor = "macchiato";
-  };
+  imports = [ (import ./system.nix) ];
+
   programs.btop = {
+    enable = true;
     settings = {
       theme_background = false;
       truecolor = true;

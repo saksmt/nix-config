@@ -21,7 +21,8 @@ lib.mkMerge [
     programs.keepassxc.enable = true;
     install.packages =
       with pkgs;
-      (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk)
+      [ viu ]
+      ++ (lib.lists.optional (!work-ban.isEnabled) transmission-remote-gtk)
       ++ (lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         solaar
       ]);

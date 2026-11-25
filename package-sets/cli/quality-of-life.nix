@@ -147,6 +147,7 @@
     kdiff = "kitten diff";
 
     watch = "watch -c -x zsh-interactive";
+    nl = "nl -ba";
   };
 
   programs.nix-index.enable = true;

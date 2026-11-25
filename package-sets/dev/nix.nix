@@ -16,6 +16,6 @@ with features;
     lib.lists.optionals dev.nix.isEnabled [
       nixd
       nixfmt
-      mcp-nixos
+#      mcp-nixos
     ];
 }

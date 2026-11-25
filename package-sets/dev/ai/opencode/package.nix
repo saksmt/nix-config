@@ -66,7 +66,12 @@ with features;
       [
         (withOpencodeConfd (
           [
-            opencode
+            # issue: https://github.com/anomalyco/opencode/issues/49063
+            (opencode.overrideAttrs (old: {
+              node_modules = old.node_modules.overrideAttrs {
+                outputHash = "sha256-enlDRzv+YvNSiXma2b5Zeozh5LYNvhl4kQHj1S/7NWU=";
+              };
+            }))
           ]
           # mac is case insensitive on fs...
           /*++ (lib.lists.optionals GUI.isEnabled [

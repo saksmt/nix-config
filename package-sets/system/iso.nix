@@ -1,20 +1,29 @@
 # Not included in aggregate
 {
+  config,
   flake-inputs,
   pkgs,
   lib,
   ...
 }:
-{
+let
+  impure = builtins ? currentSystem;
+  repoPath = if impure then builtins.getEnv "THIS_FLAKE_REPO" else "";
+  repo = if repoPath == "" then flake-inputs.self else lib.fileset.toSource {
+    root = /. + repoPath;
+    fileset = lib.fileset.union (lib.fileset.gitTracked (/. + repoPath)) (/. + repoPath + "/.git");
+  };
+  sshKeysEnvVar = if impure then builtins.getEnv "INCLUDED_SSH_KEYS" else "";
+  sshKeys = builtins.map (it: /. + it) (lib.uniqueStrings (builtins.filter (it: it != "") (builtins.map lib.trim (lib.splitString ":" sshKeysEnvVar))));
+in {
   module-for = [ "nixos" ];
 
   images.iso = {
     publisher = "SAKSMT";
 
-    # todo: use actuall sources, not flake copied ones
     contents = [
       {
-        source = flake-inputs.self;
+        source = repo;
         target = "/saksmt-nix-config";
       }
     ];
@@ -53,9 +62,11 @@
       "video"
     ];
     initialHashedPassword = "";
+    openssh.authorizedKeys.keyFiles = sshKeys;
   };
   home-manager.users.smt = { config, ... }: {
     home.stateVersion = config.home.version.release;
+    home.activationGenerateGcRoot = false;
   };
 
   security.pam.services = {
@@ -88,4 +99,12 @@
 
   networking.networkmanager.enable = true;
   services.upower.enable = true;
+
+  services.openssh.settings = {
+    # force logging in with keys and only for smt
+    AllowUsers = [ "smt" ];
+    PasswordAuthentication = false;
+  };
+
+  images.iso.nix-store-contents = [ config.home-manager.users.smt.home.activationPackage ];
 }

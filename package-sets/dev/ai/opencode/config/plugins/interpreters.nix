@@ -16,17 +16,61 @@ let
   restricted-bash = (
     jail "restricted-bash" pkgs.bash (
       with jail.combinators;
-      [
-        (nix host-config.nix)
-        transparent
-        network
-        terminfo
-        base-linux-utils
-        modern-linux-utils
-        xdg
-        git-config
-        (add-pkg-deps [ pkgs.git ])
-      ]
+      (
+        [
+          (nix host-config.nix)
+          transparent
+          network
+          terminfo
+          base-linux-utils
+          modern-linux-utils
+          xdg
+          git-config
+          (add-pkg-deps [ pkgs.git ])
+        ]
+        ++ (lib.optionals features.dev.k8s.isEnabled [
+          (try-readonly (noescape "~/.test-k8s/kubeconfig"))
+          (jail-to-host-channel "_testK8sChan" ''
+            if [[ "$(echo "''${1}" | jq -r '. | length')" == "2" ]]; then
+              test-k8s "$(echo "''${1}" | jq -r '.[0]')" "$(echo "''${1}" | jq -r '.[1]')"
+            else
+              test-k8s "$(echo "''${1}" | jq -r '.[0]')"
+            fi
+          '')
+          (add-pkg-deps [
+            (pkgs.writeShellApplication {
+              name = "test-k8s";
+              text = ''
+                json-args() {
+                  {
+                    echo "''${1}"
+                    if [[ n"''${2:-""}" != n ]]; then
+                      echo "''${2}"
+                    fi
+                  } | jq -R | jq -sc
+                }
+                case "''${1:-""}" in
+                  create ) _testK8sChan "$(json-args create "''${2:-""}")" ;;
+                  delete ) _testK8sChan "$(json-args delete "''${2:-""}")" ;;
+                  * )
+                    echo "usage: test-k8s <create|delete> [name]"
+                    echo "(readonly) kube config at: ~/.test-k8s/kubeconfig"
+                  ;;
+                esac
+              '';
+            })
+          ])
+        ])
+        ++ (lib.optionals features.dev.rust.isEnabled [
+          (try-readwrite (noescape "~/.cache/cargo-registry"))
+          (wrap-entry (entry: ''
+            mkdir -p ~/.cargo &>/dev/null || true
+            ln -s ~/.cache/cargo-registry ~/.cargo/registry &>/dev/null || true
+
+            ${entry}
+          ''))
+        ])
+      )
     )
   );
   defaultConfiguration = {
@@ -70,5 +114,8 @@ in
         ]
       ];
     };
+
+    install.packages = lib.mkIf cfg.enable [ restricted-bash ];
+    programs.sandbox-store.enable = cfg.enable;
   };
 }

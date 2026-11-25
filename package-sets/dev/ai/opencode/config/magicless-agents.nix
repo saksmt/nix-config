@@ -14,11 +14,7 @@ in
 forFeature dev.common {
   module-for = [ "hm" ];
 
-  home.file = builtins.foldl' (a: b: a // b) { } (
-    builtins.map (skill: {
-      ".config/opencode/skills/${skill}/SKILL.md".source = "${skills}/${skill}/SKILL.md";
-    }) (builtins.attrNames (builtins.readDir skills))
-  );
+  opencode.skills.rootDirectories = [ skills ];
   opencode.confd."000-shared/agents" =
     let
       planPaths = {

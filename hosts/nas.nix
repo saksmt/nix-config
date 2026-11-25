@@ -253,6 +253,7 @@ rec {
 
     package-sets = [
       "system"
+      "system/boot/grub" # <- this needs to change...
 
       "server/sshd"
 

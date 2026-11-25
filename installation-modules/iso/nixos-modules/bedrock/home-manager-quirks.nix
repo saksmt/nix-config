@@ -1,4 +1,9 @@
 { config, lib, home-manager-enabled, ... }:
+# todo: this needs rework & more importantly debug...
+# todo: also related is a hack in package-sets/system/iso
+# todo: core issue: nix-store --realise fails on home-manager generation store path due to it being unable to build it
+# todo: core question on issue: why it even tries to build it if it is already built?
+# todo: current solution is to avoid nix-store --realise - this avoids trying to build it and thus succeeds.
 let
   getDrvPath = pkg: pkg.drvPath;
   optNull = x: if x == null then [ ] else [ x ];

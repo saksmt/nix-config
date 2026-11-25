@@ -7,8 +7,8 @@
 with features;
 if GUI.isEnabled then {
   module-for = [ "nixos" ];
-  boot.plymouth.enable = lib.mkDefault true;
-  boot.kernelParams = lib.mkDefault [
+  boot.plymouth.enable = true;
+  boot.kernelParams = [
     "quiet"
     "splash"
     "boot.shell_on_fail"
@@ -19,7 +19,7 @@ if GUI.isEnabled then {
     "rd.udev.log_level=3"
     "udev.log_priority=3"
   ];
-  boot.consoleLogLevel = lib.mkDefault 0;
-  boot.initrd.verbose = lib.mkDefault false;
+  boot.consoleLogLevel = 0;
+  boot.initrd.verbose = false;
   catppuccin.plymouth.enable = true;
 } else {}

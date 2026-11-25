@@ -59,10 +59,13 @@ rec {
       "system/hardware/keyboard"
       "system/hardware/yubikey"
       "system/base"
+      "system/fonts"
       "system/virtual-camera"
 
       "system/iso"
       "system/vm-guest"
+
+      "server/sshd"
 
       "tools/hardware-tools"
 

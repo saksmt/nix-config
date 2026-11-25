@@ -127,6 +127,8 @@ rec {
       "system"
       "system/fonts"
       "system/plymouth"
+      "system/boot/grub"
+
       "runtime/docker"
       "runtime/jvm"
 

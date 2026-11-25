@@ -59,7 +59,7 @@
     };
 
     images.iso.include-system-build-dependencies = lib.mkOption {
-      default = false;
+      default = true;
       type = lib.types.bool;
       description = ''
         Set this option to include all the needed sources etc in the

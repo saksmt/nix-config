@@ -18,6 +18,8 @@ lib.mkMerge [
       pcmanfm
       xarchiver
       wl-clipboard
+      qimgv
+      nwg-look
     ];
     services.gpg-agent.pinentry.package = pkgs.pinentry-rofi;
 

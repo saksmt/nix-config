@@ -48,6 +48,7 @@ rec {
     };
 
   networking.hostName = "smt-pc";
+  networking.hostId = "255e8a93";
   networking.hosts = {
     "127.0.0.1" = [ "smt-pc" ];
   };
@@ -87,6 +88,9 @@ rec {
     package-sets = [
       "system"
       "system/fonts"
+      "system/plymouth"
+      "system/boot/grub"
+
       "runtime/docker"
       "runtime/jvm"
 
@@ -98,6 +102,8 @@ rec {
       "gui/setup/hyprland"
 
       "gui/apps/gaming"
+
+      "user-preferences/system"
     ];
 
     home-manager = {
@@ -131,44 +137,48 @@ rec {
         ];
         features = installation.features;
       };
+
+      imports = [
+        ({
+          opencode.plugins.dcp.enable = false;
+          opencode.plugins.notifier.enable = false;
+          opencode.plugins.octto.enable = false;
+          opencode.agents = {
+            brainstorm = {
+              model = "opencode-go/deepseek-v4-pro";
+              reasoningEffort = "high";
+            };
+            decompose = {
+              model = "opencode-go/deepseek-v4-pro";
+              reasoningEffort = "high";
+            };
+            orchestrate = {
+              model = "opencode-go/glm-5.3-flash";
+              reasoningEffort = "low";
+            };
+            implementer = {
+              model = "opencode-go/mimo-v2.6-pro";
+            };
+            implementer-flash = {
+              model = "opencode-go/mimo-v2.6-flash";
+            };
+            reviewer = {
+              model = "opencode-go/glm-5.3";
+              reasoningEffort = "high";
+            };
+            explore = {
+              model = "opencode-go/glm-5.3-flash";
+              reasoningEffort = "low";
+            };
+          };
+          opencode.plugins.octto.settings = {
+            agents = {
+              probe.model = "opencode/big-pickle";
+              bootstrapper.model = "opencode/big-pickle";
+            };
+          };
+        })
+      ];
     };
-    imports = [
-      ({ }: {
-        opencode.agents = {
-          brainstorm = {
-            model = "opencode-go/deepseek-v4-pro";
-            reasoningEffort = "high";
-          };
-          spec = {
-            model = "opencode-go/deepseek-v4-pro";
-            reasoningEffort = "high";
-          };
-          orchestrate = {
-            model = "opencode-go/glm-5.3-flash";
-            reasoningEffort = "low";
-          };
-          implementer = {
-            model = "opencode-go/mimo-v2.6-pro";
-          };
-          implementer-flash = {
-            model = "opencode-go/mimo-v2.6-flash";
-          };
-          reviewer = {
-            model = "opencode-go/glm-5.3";
-            reasoningEffort = "high";
-          };
-          explore = {
-            model = "opencode-go/glm-5.3-flash";
-            reasoningEffort = "low";
-          };
-        };
-        opencode.plugins.octto.settings = {
-          agents = {
-            probe.model = "opencode/big-pickle";
-            bootstrapper.model = "opencode/big-pickle";
-          };
-        };
-      })
-    ];
   };
 }
