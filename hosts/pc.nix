@@ -38,6 +38,9 @@ rec {
       "docker"
       "kvm"
       "adbusers"
+      "input"
+      "audio"
+      "render"
     ];
   };
 
@@ -125,7 +128,7 @@ rec {
           "gui/apps/im"
           # "gui/apps/gaming" it should've been here, but alas...
           "gui/apps/media-editing"
-          "gui/apps/players"
+          "gui/apps/players-wayland"
           "gui/apps/streaming"
 
           "gui/themes"

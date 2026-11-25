@@ -13,6 +13,7 @@ lib.mkMerge [
 
   ((GUI.and gaming).whenEnabled {
     programs.steam.enable = true;
+    programs.steam.protontricks.enable = true;
     install.packages = [
       pkgs.wineWowPackages.stable
       pkgs.prismlauncher

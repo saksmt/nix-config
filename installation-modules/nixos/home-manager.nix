@@ -28,12 +28,33 @@
               "/installation-modules/common/passthrou-nixos.nix"
               "/installation-modules/hm/external-modules.nix"
             ];
+            perUserHmModules = includeAllRelative self [
+              # everything else is system-wide and is really hard to change per-user
+              "/installation-modules/common/package-sets.nix"
+              "/installation-modules/common/passthrou-nixos.nix"
+            ];
             hmInstallation = hm-conf.installation or (_: { });
             baseHmConf = builtins.removeAttrs hm-conf [
               "installation"
               "enable"
               "enabled"
+              "per-user"
             ];
+            appliedPerUser = builtins.mapAttrs (
+              user: conf:
+              let
+                installationConf = conf.installation or { };
+              in
+              apply inputs perUserHmModules (
+                args:
+                {
+                  installation =
+                    (if builtins.isAttrs installationConf then (_: installationConf) else installationConf)
+                      args;
+                }
+                // (builtins.removeAttrs conf [ "installation" ])
+              )
+            ) (hm-conf.per-user or { });
             applied = apply inputs hmModules (
               let
                 installationF = if builtins.isAttrs hmInstallation then (_: hmInstallation) else hmInstallation;
@@ -57,6 +78,9 @@
                 };
                 home-manager.sharedModules = applied.modules;
                 home-manager.backupFileExtension = ".hm-backup~";
+                home-manager.users = builtins.mapAttrs (user: applied: {
+                  imports = applied.modules;
+                }) appliedPerUser;
               }
             )
           ]

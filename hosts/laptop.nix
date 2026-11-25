@@ -12,6 +12,8 @@ rec {
         users.users.smt.shell = pkgs.zsh;
         users.users.root.shell = pkgs.zsh;
 
+        networking.hostId = "aff1aff1";
+
         programs.steam.package = pkgs.steam.override {
           # nvidia-offload hacks. would've been better to somehow get those
           # from config, but it is impossible as of now.
@@ -73,6 +75,9 @@ rec {
       "docker"
       "kvm"
       "adbusers"
+      "input"
+      "audio"
+      "render"
     ];
   };
   home-manager.users.smt =
@@ -80,6 +85,9 @@ rec {
     {
       home.stateVersion = "24.05";
     };
+  home-manager.users.potato = { pkgs, ... }: {
+    home.stateVersion = "26.05";
+  };
 
   networking.hostName = "smt-laptop";
   networking.hosts = {
@@ -129,6 +137,8 @@ rec {
       "system/plymouth"
       "system/boot/grub"
 
+      "system/couch-potato"
+
       "runtime/docker"
       "runtime/jvm"
 
@@ -142,182 +152,215 @@ rec {
       "gui/apps/gaming"
     ];
 
-    home-manager = {
-      enabled = true;
-
-      # force management of zshrc and stuff through home-manager
-      programs.zsh.enable = true;
-
-      programs.git.enable = true; # force management of git config through home-manager
-      programs.git.settings.user = {
-        name = "Kirill Saksin";
-        email = "smt@saksmt.dev";
-      };
-
-      installation = {
-        package-sets = [
-          "gui/apps/base"
-          "gui/apps/dev"
-          "gui/apps/im"
-          # "gui/apps/gaming" it should've been here, but alas...
-          "gui/apps/media-editing"
-          "gui/apps/players"
-          "gui/apps/streaming"
-
-          "gui/themes"
-          "gui/window-managers/awesome"
-
-          "user-preferences"
-
-          "dev/ai"
-        ];
-        features = installation.features;
-      };
-
-      imports = [
-        (
+    home-manager =
+      let
+        extraMpvPaths = [
           {
-            pkgs,
-            jail,
-            lib,
-            host-config,
-            ...
-          }:
-          {
-            opencode.agents = {
-              brainstorm = {
-                model = "opencode-go/deepseek-v4-pro";
-                reasoningEffort = "high";
-              };
-              spec = {
-                model = "opencode-go/deepseek-v4-pro";
-                reasoningEffort = "high";
-              };
-              orchestrate = {
-                model = "opencode-go/glm-5.3-flash";
-                reasoningEffort = "low";
-              };
-              implementer = {
-                model = "opencode-go/mimo-v2.6-pro";
-              };
-              implementer-flash = {
-                model = "opencode-go/mimo-v2.6-flash";
-              };
-              reviewer = {
-                model = "opencode-go/glm-5.3";
-                reasoningEffort = "high";
-              };
-              explore = {
-                model = "opencode-go/glm-5.3-flash";
-                reasoningEffort = "low";
-              };
-            };
-            opencode.plugins.octto.settings = {
-              agents = {
-                probe.model = "opencode/big-pickle";
-                bootstrapper.model = "opencode/big-pickle";
-              };
-            };
-            opencode.plugins.notifier.settings = {
-              command = {
-                enabled = true;
-                path = pkgs.writeShellScript "ntfy-opencode" ''
-                  project="$1"
-                  event="$2"
-                  session="$3"
-                  agent="$4"
-
-                  ntfyUser=$(< ~/.secrets/ntfy/opencode.user)
-                  ntfyPassword=$(< ~/.secrets/ntfy/opencode.password)
-                  ntfyHost=$(< ~/.secrets/home-server-host)
-
-                  title="OpenCode [$project]"
-                  icon="https://static.$ntfyHost/opencode-logo-dark.png"
-                  message=
-                  priority=
-                  tags=
-
-                  case "$event" in
-                    permission )
-                      tags=unlock
-                      priority=high
-                      if [[ n"$agent" != n ]]; then
-                        message="$agent requests permission in $session"
-                      else
-                        message="Permission request in $session"
-                      fi
-                      ;;
-                    complete|subagent_complete )
-                      tags=heavy_check_mark,hourglass
-                      priority=default
-                      if [[ n"$agent" != n ]]; then
-                        message="$agent completed in $session"
-                      else
-                        message="$session: completed"
-                      fi
-                      ;;
-                    error )
-                      tags=warning
-                      priority=high
-                      if [[ n"$agent" != n ]]; then
-                        message="$agent failed in $session"
-                      else
-                        message="$session: failed"
-                      fi
-                      ;;
-                    question )
-                      tags=question
-                      priority=high
-                      if [[ n"$agent" != n ]]; then
-                        message="$agent has a question for you about $session"
-                      else
-                        message="There is a question in $session"
-                      fi
-                      ;;
-                    plan_exit )
-                      tags=memo,heavy_check_mark
-                      priority=high
-                      if [[ n"$agent" != n ]]; then
-                        message="$agent has completed a plan for $session"
-                      else
-                        message="Plan for $session is complete"
-                      fi
-                      ;;
-                    * )
-                      tags=question
-                      priority=high
-                      message="$event happened in $session (agent=$agent)"
-                  esac
-
-                  curl \
-                    -H "Authorization: Basic $(echo -n "$ntfyUser:$ntfyPassword" | base64)" \
-                    -H "Title: $title" \
-                    -H "Icon: $icon" \
-                    -H "Tags: $tags" \
-                    -H "Priority: $priority" \
-                    -d "$message" \
-                    https://ntfy."$ntfyHost"/user_app_opencode
-
-                '';
-                args = [
-                  "{projectName}"
-                  "{event}"
-                  "{sessionTitle}"
-                  "{agentName}"
-                ];
-                minDuration = 15;
-              };
-
-              events = {
-                user_cancelled = false;
-                session_started = false;
-                user_message = false;
-                client_connected = false;
-              };
+            item = {
+              title = "Win-D";
+              value = [
+                "script-message-to"
+                "uosc"
+                "open-file-menu"
+                "/mnt/win-d"
+              ];
             };
           }
-        )
-      ];
-    };
+        ];
+      in
+      {
+        enabled = true;
+
+        # force management of zshrc and stuff through home-manager
+        programs.zsh.enable = true;
+
+        programs.git.enable = true; # force management of git config through home-manager
+        programs.git.settings.user = {
+          name = "Kirill Saksin";
+          email = "smt@saksmt.dev";
+        };
+
+        per-user = {
+          potato = {
+            installation.package-sets = [
+              "gui/apps/players-wayland"
+              "gui/window-managers/barebones/wayland"
+            ];
+
+            programs.mpv.uosc.menu.fs.items = extraMpvPaths;
+          };
+          smt = {
+            installation.package-sets = [
+              "gui/apps/dev"
+              "gui/apps/players"
+              "gui/apps/media-editing"
+              "gui/apps/streaming"
+              "gui/window-managers/awesome"
+              "dev/ai"
+            ];
+
+            imports = [
+              (
+                {
+                  pkgs,
+                  jail,
+                  lib,
+                  host-config,
+                  ...
+                }:
+                {
+                  programs.mpv.uosc.menu.fs.items = extraMpvPaths;
+                  opencode.agents = {
+                    brainstorm = {
+                      model = "opencode-go/deepseek-v4-pro";
+                      reasoningEffort = "high";
+                    };
+                    spec = {
+                      model = "opencode-go/deepseek-v4-pro";
+                      reasoningEffort = "high";
+                    };
+                    orchestrate = {
+                      model = "opencode-go/glm-5.3-flash";
+                      reasoningEffort = "low";
+                    };
+                    implementer = {
+                      model = "opencode-go/mimo-v2.6-pro";
+                    };
+                    implementer-flash = {
+                      model = "opencode-go/mimo-v2.6-flash";
+                    };
+                    reviewer = {
+                      model = "opencode-go/glm-5.3";
+                      reasoningEffort = "high";
+                    };
+                    explore = {
+                      model = "opencode-go/glm-5.3-flash";
+                      reasoningEffort = "low";
+                    };
+                  };
+                  opencode.plugins.octto.settings = {
+                    agents = {
+                      probe.model = "opencode/big-pickle";
+                      bootstrapper.model = "opencode/big-pickle";
+                    };
+                  };
+                  opencode.plugins.notifier.settings = {
+                    command = {
+                      enabled = true;
+                      path = pkgs.writeShellScript "ntfy-opencode" ''
+                        project="$1"
+                        event="$2"
+                        session="$3"
+                        agent="$4"
+
+                        ntfyUser=$(< ~/.secrets/ntfy/opencode.user)
+                        ntfyPassword=$(< ~/.secrets/ntfy/opencode.password)
+                        ntfyHost=$(< ~/.secrets/home-server-host)
+
+                        title="OpenCode [$project]"
+                        icon="https://static.$ntfyHost/opencode-logo-dark.png"
+                        message=
+                        priority=
+                        tags=
+
+                        case "$event" in
+                          permission )
+                            tags=unlock
+                            priority=high
+                            if [[ n"$agent" != n ]]; then
+                              message="$agent requests permission in $session"
+                            else
+                              message="Permission request in $session"
+                            fi
+                            ;;
+                          complete|subagent_complete )
+                            tags=heavy_check_mark,hourglass
+                            priority=default
+                            if [[ n"$agent" != n ]]; then
+                              message="$agent completed in $session"
+                            else
+                              message="$session: completed"
+                            fi
+                            ;;
+                          error )
+                            tags=warning
+                            priority=high
+                            if [[ n"$agent" != n ]]; then
+                              message="$agent failed in $session"
+                            else
+                              message="$session: failed"
+                            fi
+                            ;;
+                          question )
+                            tags=question
+                            priority=high
+                            if [[ n"$agent" != n ]]; then
+                              message="$agent has a question for you about $session"
+                            else
+                              message="There is a question in $session"
+                            fi
+                            ;;
+                          plan_exit )
+                            tags=memo,heavy_check_mark
+                            priority=high
+                            if [[ n"$agent" != n ]]; then
+                              message="$agent has completed a plan for $session"
+                            else
+                              message="Plan for $session is complete"
+                            fi
+                            ;;
+                          * )
+                            tags=question
+                            priority=high
+                            message="$event happened in $session (agent=$agent)"
+                        esac
+
+                        curl \
+                          -H "Authorization: Basic $(echo -n "$ntfyUser:$ntfyPassword" | base64)" \
+                          -H "Title: $title" \
+                          -H "Icon: $icon" \
+                          -H "Tags: $tags" \
+                          -H "Priority: $priority" \
+                          -d "$message" \
+                          https://ntfy."$ntfyHost"/user_app_opencode
+
+                      '';
+                      args = [
+                        "{projectName}"
+                        "{event}"
+                        "{sessionTitle}"
+                        "{agentName}"
+                      ];
+                      minDuration = 15;
+                    };
+
+                    events = {
+                      user_cancelled = false;
+                      session_started = false;
+                      user_message = false;
+                      client_connected = false;
+                    };
+                  };
+                }
+              )
+            ];
+          };
+        };
+        installation = {
+          package-sets = [
+            "gui/apps/base"
+
+            "gui/apps/im"
+            # "gui/apps/gaming" it should've been here, but alas...
+
+            "gui/apps/game-streaming"
+
+            "gui/themes"
+
+            "user-preferences"
+          ];
+          features = installation.features;
+        };
+      };
   };
 }

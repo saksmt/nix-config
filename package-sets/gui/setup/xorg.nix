@@ -20,11 +20,11 @@ lib.mkMerge [
       {
         manage = "desktop";
         name = "home-managed_x";
-        start = ''exec $HOME/.xsession'';
+        start = "exec $HOME/.xsession";
       }
     ];
 
-    services.displayManager.defaultSession = "home-managed_x";
+    services.displayManager.defaultSession = lib.mkDefault "home-managed_x";
   }
 
   (HiDPI.whenEnabled {
