@@ -184,6 +184,7 @@ rec {
           potato = {
             installation.package-sets = [
               "gui/apps/players-wayland"
+              "gui/apps/steam-couch-potato-apps"
               "gui/window-managers/barebones/wayland"
             ];
 

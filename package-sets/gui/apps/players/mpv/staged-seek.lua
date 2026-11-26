@@ -7,7 +7,7 @@ mp.observe_property("idle-active", "bool", function(_, is_idle)
   if is_idle then
     mp.add_timeout(0.1, function()
       if mp.get_property_bool("idle-active") then
-        mp.commandv("script-message-to", "extra_uosc_menu", "open-menu", "main")
+        mp.commandv("script-message-to", "extra_uosc_menu", "open-menu", "fs")
       end
     end)
   end

@@ -18,6 +18,8 @@ in
   nixgl = nixpkgs-dependent-input "github:nix-community/nixGL";
   awesome-iwm = nixpkgs-dependent-input "github:saksmt/awesomewm-iwm";
 
+  steam-config = nixpkgs-dependent-input "github:different-name/steam-config-nix";
+
   home-manager = nixpkgs-dependent-input "github:nix-community/home-manager/release-${nixpkgs-version}";
   nix-darwin = nixpkgs-dependent-input "github:nix-darwin/nix-darwin/nix-darwin-${nixpkgs-version}";
 

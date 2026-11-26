@@ -21,7 +21,7 @@ with features;
         opencodeConfigFile = "~/.config/opencode/opencode.generated.json";
         withOpencodeConfd =
           packages-to-wrap:
-          runCommandNoCC "opencode-configured" { } ''
+          runCommand "opencode-configured" { } ''
             mkdir -p $out/bin
 
             { ${
