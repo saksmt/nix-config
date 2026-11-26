@@ -181,11 +181,6 @@ in
               } }
             }, afterMain, { { title = "Quit", value = { 'quit' } } })
 
-            print(utils.format_json({
-                                   type = "main_menu",
-                                   title = "Menu",
-                                   items = menuItems
-                                 }))
             return utils.format_json({
               type = "main_menu",
               title = "Menu",
