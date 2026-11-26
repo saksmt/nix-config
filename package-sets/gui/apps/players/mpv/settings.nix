@@ -65,24 +65,41 @@
       "SPACE" = "cycle pause";
       "LEFT" = "script-binding staged_seek/step-back";
       "RIGHT" = "script-binding staged_seek/step-fwd";
-      "ENTER" = "script-binding staged_seek/confirm-only";
+      "ENTER" = "script-binding staged_seek/confirm-or-pause";
       "KP_ENTER" = "script-binding staged_seek/confirm-only";
       "ESC" = "script-binding staged_seek/cancel-or-unfullscreen";
       "UP" = "script-message-to uosc flash-elements timeline,controls,top_bar";
       "DOWN" = "script-message-to uosc flash-elements timeline,controls,top_bar";
 
-      # gamepad
-      "a" = "script-binding staged_seek/confirm-or-pause";
-      "b" = "script-binding staged_seek/cancel-seek";
-      "y" = "script-message-to extra_uosc_menu open-menu fs";
-      "x" = "script-message-to extra_uosc_menu open-menu main";
+      "Ctrl+y" = "script-message-to extra_uosc_menu open-menu fs";
 
-      "l" = "cycle sub";
-      "r" = "cycle sub down";
-      "L" = "cycle audio";
-      "R" = "cycle audio down";
+      "Ctrl+l" = "cycle sub";
+      "Ctrl+r" = "cycle sub down";
+      "Ctrl+L" = "cycle audio";
+      "Ctrl+R" = "cycle audio down";
 
-      "q" = "quit";
+      "Ctrl+q" = "quit";
+
+      # Suggested couch potato bindings:
+      /*
+        A -> Enter
+        B -> Esc
+        X -> Right Mouse Button
+        Y -> Ctrl+y
+
+        D-Pad -> Arrows
+        Left Stick -> Arrows
+
+        Right Stick -> Mouse (for extra rare cases when it is needed)
+        Right Stick Press -> Left Mouse Button (for extra rare cases when it is needed)
+
+        LB -> Ctrl + l
+        RB -> Ctrl + r
+        LT -> Ctrl + Shift + l
+        RT -> Ctrl + Shift + r
+
+        Back -> Ctrl+q
+      */
     };
   };
 }

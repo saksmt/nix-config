@@ -12,7 +12,8 @@
         config = {
           vo = "gpu-next";
           gpu-api = "vulkan";
-          gpu-context = "waylandvk";
+          gpu-context = "auto";
+          force-window = "yes";
           target-colorspace-hint = "yes";
         };
       };

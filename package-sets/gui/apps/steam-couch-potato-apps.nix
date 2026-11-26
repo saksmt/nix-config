@@ -11,9 +11,10 @@
     enable = true;
     nonSteamApps = {
       "MPV" = lib.mkIf config.programs.mpv.enable {
+        name = "mpv";
         # why not directly use pkg? - that will drop all the scripts and configs
         # why not "mpv"? - that will potentially fail to resolve from inside modified env of steam
-        target = pkgs.writeShellScriptBin "run-mpv" "mpv --idle --player-operation-mode=pseudo-gui";
+        target = pkgs.writeShellScriptBin "run-mpv" "exec mpv --idle --player-operation-mode=pseudo-gui --script-opts-append=staged_seek-lock_fullscreen=yes --fs";
         # generic seed so that swap to something other that mpv won't break anything
         seed = "media player";
         artwork = {
@@ -52,9 +53,10 @@
       };
 
       "Moonlight" = lib.mkIf config.programs.moonlight.enable {
+        name = "moonlight";
         # why not directly use pkg? - that defeats the purpose of programs.moonlight.package and potential other modifications
         # why not "moonlight"? - that will potentially fail to resolve from inside modified env of steam
-        target = pkgs.writeShellScriptBin "run-moonlight" "moonlight";
+        target = pkgs.writeShellScriptBin "run-moonlight" "exec moonlight";
         seed = "game streaming client";
         artwork = {
           # 460x215 in library

@@ -206,6 +206,9 @@ in
           end)
 
           mp.register_script_message('open-file-menu', function (path)
+            if path == "~" then
+              path = "~/"
+            end
             local resolved_path = mp.command_native({ "expand-path", path })
             mp.commandv('script-message-to', 'uosc', 'open-file-menu', resolved_path)
           end)

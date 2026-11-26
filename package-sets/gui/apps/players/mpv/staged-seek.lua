@@ -2,6 +2,21 @@
 local pending_pos = nil
 local thumb_info = nil
 
+local options = require("mp.options")
+local opts = {
+  lock_fullscreen = false,
+}
+options.read_options(opts, "staged_seek")
+
+-- this prevents exiting from fullscreen in couch potato mode
+if opts.lock_fullscreen then
+  mp.observe_property("fullscreen", "bool", function(_, is_fs)
+    if is_fs == false then
+      mp.set_property_bool("fullscreen", true)
+    end
+  end)
+end
+
 -- auto open menu on idle
 mp.observe_property("idle-active", "bool", function(_, is_idle)
   if is_idle then
