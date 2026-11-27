@@ -69,6 +69,7 @@ in
       ])
       ++ [
         "--expose-wayland"
+        "--force-composition"
         "--rt"
       ];
     steamArgs = [
