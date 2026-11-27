@@ -8,32 +8,14 @@ let
 in
 {
   options.environment.couch-potato = {
-    hdr = lib.mkOption {
-      description = "enable hdr support";
-      type = lib.types.bool;
-      default = true;
-    };
-
-    vrr = lib.mkOption {
-      description = "enable vrr support";
-      type = lib.types.bool;
-      default = true;
-    };
-
     prefer-vk-device = lib.mkOption {
       description = "{id}:{vendor} of preferred GPU, optional; useful only for multi-gpu setups (i.e. realistically - laptops)";
       type = lib.types.nullOr lib.types.str;
       example = "10de:25a0";
       default = null;
     };
-    wlr-drm-devices = lib.mkOption {
-      description = "colon separated list of GPU paths, optional; useful only for multi-gpu setups (i.e. realistically - laptops)";
-      type = lib.types.nullOr lib.types.str;
-      example = "/dev/dri/card1:/dev/dri/card0";
-      default = null;
-    };
     outputs = lib.mkOption {
-      description = "list of hot-pluggable outputs in order of preference";
+      description = "list of outputs in order of preference";
       type = lib.types.listOf (
         lib.types.submodule {
           options = {
@@ -48,9 +30,19 @@ in
               example = "1280x1024";
             };
             refresh-rate = lib.mkOption {
-              description = "refresh rate, leave null for default";
+              description = "refresh rate, leave null for highest available for chosen resolution";
               type = lib.types.nullOr lib.types.ints.positive;
               example = 60;
+            };
+            hdr = lib.mkOption {
+              description = "enable hdr support";
+              type = lib.types.bool;
+              default = true;
+            };
+            vrr = lib.mkOption {
+              description = "enable vrr support";
+              type = lib.types.bool;
+              default = true;
             };
           };
         }
@@ -58,6 +50,7 @@ in
     };
   };
 
+  config.programs.gamescope.capSysNice = true;
   config.programs.steam.gamescopeSession = {
     enable = true;
     args =
@@ -73,11 +66,6 @@ in
         "--prefer-vk-device"
         cfg.prefer-vk-device
       ])
-      ++ (lib.optional cfg.vrr "--adaptive-sync")
-      ++ (lib.optionals cfg.hdr [
-        "--hdr-enabled"
-        "--hdr-debug-force-output"
-      ])
       ++ [
         "--expose-wayland"
         "--rt"
@@ -89,7 +77,8 @@ in
     ];
     env = {
       ENABLE_GAMESCOPE_WSI = "1";
-      WLR_DRM_DEVICES = lib.mkIf (cfg.wlr-drm-devices != null) cfg.wlr-drm-devices;
+      # used in wrapper, why not package directly? - that will break capSysNice which generates a wrapper
+      GAMESCOPE_BIN = "/run/wrappers/bin/gamescope";
     };
   };
 }

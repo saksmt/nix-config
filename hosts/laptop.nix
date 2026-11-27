@@ -96,9 +96,15 @@ rec {
 
   environment.couch-potato = {
     prefer-vk-device = "10de:24a0";
-    wlr-drm-devices = "/dev/dri/card0:/dev/dri/card1";
     outputs = [
-      { name = "HDMI-A-1";  }
+      {
+        # shitty hdmi port, capped by bandwidth, prioritizing image quality
+        name = "HDMI-A-1";
+        hdr = true;
+        resolution = "3840x2160";
+        refresh-rate = 30;
+        vrr = false;
+      }
       { name = "eDP-1"; }
     ];
   };

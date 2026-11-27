@@ -10,7 +10,7 @@
   imports = [
     (import ./gamescope.nix)
     (import ./user.nix)
-    (import ./output-auto-switch.nix)
+    (import ./output.nix)
     (import ./guitar.nix)
     (import ./sddm.nix)
   ];
