@@ -1,0 +1,116 @@
+{
+  config,
+  pkgs,
+  ...
+}:
+let
+  outputs = config.environment.couch-potato.outputs;
+  userName = config.environment.couch-potato.user.name;
+  nvl = a: fallback: if a == null then fallback else builtins.toString a;
+  outputsTsv = builtins.concatStringsSep "\n" (
+    builtins.map (
+      output:
+      builtins.concatStringsSep "\t" [
+        output.name
+        (nvl output.resolution "AUTO")
+        (nvl output.refresh-rate "AUTO")
+      ]
+    ) outputs
+  );
+  syncModesScript = pkgs.writeShellApplication {
+    name = "gamescope-output-sync";
+
+    derivationArgs = {
+      pname = "gamescope-output-sync";
+      meta = {
+        name = "gamescope-output-sync";
+      };
+    };
+
+    runtimeInputs = [
+      pkgs.util-linux
+      pkgs.drm_info
+      pkgs.jq
+    ];
+
+    text = ''
+      targetOutput=
+      targetResolution=
+      targetRefreshRate=
+
+      IFS=$'\t'
+      while read -r name resolution refreshRate; do
+        if [[ "$(cat /sys/class/drm/*-"$name"/status 2>/dev/null)" == "connected" ]]; then
+          targetOutput="''${name}"
+          targetResolution="''${resolution}"
+          targetRefreshRate="''${refreshRate}"
+        fi
+      done <<< '${outputsTsv}'
+
+      if [[ n"''${targetOutput}" == n ]]; then
+        exit 0
+      fi
+
+      if [[ "''${targetResolution}" == "AUTO" ]] || [[ "''${targetRefreshRate}" == "AUTO" ]]; then
+        connectorId="$(head -n1 /sys/class/drm/*-"$targetOutput"/connector_id)"
+        IFS=$'\t'
+        read -r resolution refresh <<< "$(drm_info -j | \
+          jq -r \
+            --arg connectorId "''${connectorId}" \
+            --arg requestedResolution "''${targetResolution}" \
+            --arg requestedRefreshRate "''${targetRefreshRate}" \
+            '
+            [ .[].connectors[] | select(.id == ($connectorId | tonumber)) | .modes[] ] as $modes
+            | ([ $modes[] | select("\(.hdisplay)x\(.vdisplay)" == $requestedResolution or $requestedResolution == "AUTO") ]) as $fittingByResolution
+            | ([ $modes[] | select("\(.vrefresh)" == $requestedRefreshRate or $requestedRefreshRate == "AUTO") ]) as $fittingByRefreshRate
+            | ($fittingByResolution - ($fittingByResolution - $fittingByRefreshRate)) as $fittingModes
+            | $fittingModes[0]
+            | if . == null then "" else "\(.hdisplay)x\(.vdisplay)\t\(.vrefresh)" end
+            ')"
+
+        if [[ n"''${resolution}" == n ]] || [[ n"''${refresh}" == n ]]; then
+          exit 1
+        fi
+
+        targetResolution="''${resolution}"
+        targetRefreshRate="''${refresh}"
+      fi
+
+      POTATO_UID=$(id -u "${userName}")
+      RUNTIME_DIR="/run/user/$POTATO_UID"
+      CFG_DIR="~${userName}/.config/gamescope"
+      if [[ "$targetResolution" =~ ^([0-9]+)x([0-9]+) ]]; then
+        mkdir -p "$CFG_DIR"
+        # Format expected by gamescope modes.cfg: <connector> <width> <height> <refresh>
+        echo "$targetOutput ''${BASH_REMATCH[1]} ''${BASH_REMATCH[2]} $targetRefreshRate" > "$CFG_DIR/modes.cfg"
+        chown -R ${userName}:users "$CFG_DIR"
+
+        # Notify live gamescope instance if potato's session is currently running
+        if [ -d "$RUNTIME_DIR" ]; then
+          runuser -u ${userName} XDG_RUNTIME_DIR="$RUNTIME_DIR" \
+            ${pkgs.gamescope}/bin/gamescopectl backend_set_dirty 2>/dev/null || true
+        fi
+      fi
+    '';
+  };
+  # Run the exact same mode detection before gamescope starts so initial boot matches too
+  preStartSync = pkgs.writeShellScriptBin "gamescope" ''
+    ${syncModesScript}/bin/gamescope-output-sync
+    MODE_LINE=$(cat /home/potato/.config/gamescope/modes.cfg 2>/dev/null)
+    EXTRA_ARGS=()
+    if [[ "$MODE_LINE" =~ ^[A-Za-z0-9-]+\ ([0-9]+)\ ([0-9]+)\ ([0-9]+) ]]; then
+      EXTRA_ARGS+=("-W" "''${BASH_REMATCH[1]}" "-H" "''${BASH_REMATCH[2]}" "-r" "''${BASH_REMATCH[3]}")
+    fi
+    exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@"
+  '';
+in
+{
+  # 1. Trigger mode sync automatically on any DRM display hotplug event
+  services.udev.extraRules = ''
+    SUBSYSTEM=="drm", ACTION=="change", RUN+="${syncModesScript}/bin/gamescope-output-sync"
+    SUBSYSTEM=="pci", ATTR{class}=="0x040300", ATTR{power/control}="on"
+  '';
+
+  # Why this instead of package override? This is local to gamescope session, override to package will override each usage of that package
+  programs.steam.gamescopeSession.env.PATH = "${preStartSync}/bin:\${PATH}";
+}

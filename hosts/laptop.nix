@@ -94,6 +94,15 @@ rec {
     "127.0.0.1" = [ "smt-laptop" ];
   };
 
+  environment.couch-potato = {
+    prefer-vk-device = "10de:24a0";
+    wlr-drm-devices = "/dev/dri/card0:/dev/dri/card1";
+    outputs = [
+      { name = "HDMI-A-1";  }
+      { name = "eDP-1"; }
+    ];
+  };
+
   installation = {
     unstables =
       {
