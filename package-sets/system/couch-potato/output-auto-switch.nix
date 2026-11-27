@@ -125,9 +125,9 @@ let
         # Notify live gamescope instance if potato session is currently running and there are changes in mode file
         if [ -d "$RUNTIME_DIR" ] && [[ "$hasChanges" == "y" ]]; then
           log "pinging gamescope daemon"
-          {
-          runuser -u ${userName} ${pkgs.gamescope}/bin/gamescopectl backend_set_dirty 2>&1 || true
-          } >> "$log"
+          #{
+          #runuser -u ${userName} bash -c "XDG_RUNTIME_DIR=$RUNTIME_DIR ${pkgs.gamescope}/bin/gamescopectl backend_set_dirty" 2>&1 || true
+          #} >> "$log"
         fi
       else
         log "could not parse resolution"
@@ -151,7 +151,7 @@ let
       EXTRA_ARGS+=("-W" "''${w}" "-w" "''${w}" "-H" "''${h}" "-h" "''${h}" "-r" "''${r}")
     fi
     echo "starting gamescope:" exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@" >> "$log"
-    exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@"
+    ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@" 2> >(tee -a "$(ls -d ~${userName})/.gamescope-session-stderr" >&2) >(tee -a "$(ls -d ~${userName})/.gamescope-session-stdout")
   '';
 in
 {
