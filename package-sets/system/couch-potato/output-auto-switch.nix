@@ -108,7 +108,7 @@ let
         mkdir -p "$CFG_DIR"
         # Format expected by gamescope modes.cfg: <connector> <width> <height> <refresh>
         futureConfig=$(mktemp)
-        echo "$targetOutput ''${BASH_REMATCH[1]} ''${BASH_REMATCH[2]} $targetRefreshRate" > "$futureConfig"
+        echo "''${targetOutput}:''${targetResolution}@$targetRefreshRate" > "$futureConfig"
         hasChanges=n
 
         if ! cmp -s "$futureConfig" "$CFG_DIR/modes.cfg"; then
@@ -122,7 +122,7 @@ let
 
         rm -f "$futureConfig"
 
-        # Notify live gamescope instance if potato's session is currently running
+        # Notify live gamescope instance if potato session is currently running and there are changes in mode file
         if [ -d "$RUNTIME_DIR" ] && [[ "$hasChanges" == "y" ]]; then
           log "pinging gamescope daemon"
           {
@@ -144,7 +144,7 @@ let
     MODE_LINE=$(cat "$(ls -d ~${userName})/.config/gamescope/modes.cfg" 2>/dev/null)
     echo "got modeline: $MODE_LINE" >> "$log"
     EXTRA_ARGS=()
-    if [[ "$MODE_LINE" =~ ^[A-Za-z0-9-]+\ ([0-9]+)\ ([0-9]+)\ ([0-9]+) ]]; then
+    if [[ "$MODE_LINE" =~ ^[A-Za-z0-9-]+:([0-9]+)x([0-9]+)@([0-9]+) ]]; then
       w="''${BASH_REMATCH[1]}"
       h="''${BASH_REMATCH[2]}"
       r="''${BASH_REMATCH[3]}"
