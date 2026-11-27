@@ -126,8 +126,7 @@ let
         if [ -d "$RUNTIME_DIR" ] && [[ "$hasChanges" == "y" ]]; then
           log "pinging gamescope daemon"
           {
-          runuser -u ${userName} XDG_RUNTIME_DIR="$RUNTIME_DIR" \
-            ${pkgs.gamescope}/bin/gamescopectl backend_set_dirty 2>&1 || true
+          runuser -u ${userName} ${pkgs.gamescope}/bin/gamescopectl backend_set_dirty 2>&1 || true
           } >> "$log"
         fi
       else
@@ -146,7 +145,10 @@ let
     echo "got modeline: $MODE_LINE" >> "$log"
     EXTRA_ARGS=()
     if [[ "$MODE_LINE" =~ ^[A-Za-z0-9-]+\ ([0-9]+)\ ([0-9]+)\ ([0-9]+) ]]; then
-      EXTRA_ARGS+=("-W" "''${BASH_REMATCH[1]}" "-H" "''${BASH_REMATCH[2]}" "-r" "''${BASH_REMATCH[3]}")
+      w="''${BASH_REMATCH[1]}"
+      h="''${BASH_REMATCH[2]}"
+      r="''${BASH_REMATCH[3]}"
+      EXTRA_ARGS+=("-W" "''${w}" "-w" "''${w}" "-H" "''${h}" "-h" "''${h}" "-r" "''${r}")
     fi
     echo "starting gamescope:" exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@" >> "$log"
     exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@"
