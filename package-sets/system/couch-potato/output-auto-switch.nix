@@ -107,14 +107,28 @@ let
       if [[ "$targetResolution" =~ ^([0-9]+)x([0-9]+) ]]; then
         mkdir -p "$CFG_DIR"
         # Format expected by gamescope modes.cfg: <connector> <width> <height> <refresh>
-        echo "$targetOutput ''${BASH_REMATCH[1]} ''${BASH_REMATCH[2]} $targetRefreshRate" > "$CFG_DIR/modes.cfg"
-        chown -R ${userName}:users "$CFG_DIR"
+        futureConfig=$(mktemp)
+        echo "$targetOutput ''${BASH_REMATCH[1]} ''${BASH_REMATCH[2]} $targetRefreshRate" > "$futureConfig"
+        hasChanges=n
+
+        if ! cmp -s "$futureConfig" "$CFG_DIR/modes.cfg"; then
+          log "modes on disk are different: overwriting"
+          hasChanges=y
+          mv "$futureConfig" "$CFG_DIR/modes.cfg"
+          chown -R ${userName}:users "$CFG_DIR"
+        else
+          log "modes on disk are the same"
+        fi
+
+        rm -f "$futureConfig"
 
         # Notify live gamescope instance if potato's session is currently running
-        if [ -d "$RUNTIME_DIR" ]; then
+        if [ -d "$RUNTIME_DIR" ] && [[ "$hasChanges" == "y" ]]; then
           log "pinging gamescope daemon"
+          {
           runuser -u ${userName} XDG_RUNTIME_DIR="$RUNTIME_DIR" \
-            ${pkgs.gamescope}/bin/gamescopectl backend_set_dirty 2>/dev/null || true
+            ${pkgs.gamescope}/bin/gamescopectl backend_set_dirty 2>&1 || true
+          } >> "$log"
         fi
       else
         log "could not parse resolution"
@@ -125,12 +139,16 @@ let
   };
   # Run the exact same mode detection before gamescope starts so initial boot matches too
   preStartSync = pkgs.writeShellScriptBin "gamescope" ''
+    log="$(ls -d ~${userName})/.gamescope-pre-start-log"
+    echo "identifying outputs" >> "$log"
     ${syncModesScript}/bin/gamescope-output-sync
-    MODE_LINE=$(cat /home/potato/.config/gamescope/modes.cfg 2>/dev/null)
+    MODE_LINE=$(cat "$(ls -d ~${userName})/.config/gamescope/modes.cfg" 2>/dev/null)
+    echo "got modeline: $MODE_LINE" >> "$log"
     EXTRA_ARGS=()
     if [[ "$MODE_LINE" =~ ^[A-Za-z0-9-]+\ ([0-9]+)\ ([0-9]+)\ ([0-9]+) ]]; then
       EXTRA_ARGS+=("-W" "''${BASH_REMATCH[1]}" "-H" "''${BASH_REMATCH[2]}" "-r" "''${BASH_REMATCH[3]}")
     fi
+    echo "starting gamescope:" exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@" >> "$log"
     exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@"
   '';
 in
