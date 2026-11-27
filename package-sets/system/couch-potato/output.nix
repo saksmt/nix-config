@@ -5,7 +5,6 @@
 }:
 let
   outputs = config.environment.couch-potato.outputs;
-  userName = config.environment.couch-potato.user.name;
   nvl = a: fallback: if a == null then fallback else builtins.toString a;
   outputsTsv = builtins.concatStringsSep "\n" (
     builtins.map (
@@ -146,7 +145,7 @@ let
     fi
     rm -f "$outputFile"
 
-    echo "starting gamescope:" exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@"
+    echo "starting gamescope:" exec $GAMESCOPE_BIN "''${EXTRA_ARGS[@]}" "$@"
     exec ${pkgs.systemd}/bin/systemd-cat -t gamescope-session $GAMESCOPE_BIN "''${EXTRA_ARGS[@]}" "$@"
   '';
 in

@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 let
@@ -50,7 +51,7 @@ in
     };
   };
 
-  config.programs.gamescope.capSysNice = true;
+  # config.programs.gamescope.capSysNice = true;
   config.programs.steam.gamescopeSession = {
     enable = true;
     args =
@@ -78,7 +79,7 @@ in
     env = {
       ENABLE_GAMESCOPE_WSI = "1";
       # used in wrapper, why not package directly? - that will break capSysNice which generates a wrapper
-      GAMESCOPE_BIN = "/run/wrappers/bin/gamescope";
+      GAMESCOPE_BIN = "${pkgs.gamescope}/bin/gamescope";
     };
   };
 }
