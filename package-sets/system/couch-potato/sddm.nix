@@ -8,7 +8,6 @@
   # autologin and autolaunch of steam
   services.displayManager = {
     sddm.autoLogin.relogin = false;
-    defaultSession = "steam";
 
     autoLogin = {
       enable = true;

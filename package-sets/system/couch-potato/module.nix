@@ -10,7 +10,7 @@ in
 {
   options.environment.couch-potato = {
     prefer-vk-device = lib.mkOption {
-      description = "{id}:{vendor} of preferred GPU, optional; useful only for multi-gpu setups (i.e. realistically - laptops)";
+      description = "{id}:{vendor} of preferred GPU, optional; noop when using hyprland implementation; useful only for multi-gpu setups (i.e. realistically - laptops)";
       type = lib.types.nullOr lib.types.str;
       example = "10de:25a0";
       default = null;
@@ -48,39 +48,6 @@ in
           };
         }
       );
-    };
-  };
-
-  # config.programs.gamescope.capSysNice = true;
-  config.programs.steam.gamescopeSession = {
-    enable = true;
-    args =
-      (lib.optionals ((builtins.length cfg.outputs) > 0) (
-        let
-          outputNames = builtins.map (output: output.name) cfg.outputs;
-        in
-        /*nixfmt:disable*/
-        [ "-O" (builtins.concatStringsSep "," outputNames) ]
-        /*nixfmt:enable*/
-      ))
-      ++ (lib.optionals (cfg.prefer-vk-device != null) [
-        "--prefer-vk-device"
-        cfg.prefer-vk-device
-      ])
-      ++ [
-        "--expose-wayland"
-        "--force-composition"
-        "--rt"
-      ];
-    steamArgs = [
-      "-tenfoot"
-      "-pipewire-dmabuf"
-      "-steamos3"
-    ];
-    env = {
-      ENABLE_GAMESCOPE_WSI = "1";
-      # used in wrapper, why not package directly? - that will break capSysNice which generates a wrapper
-      GAMESCOPE_BIN = "${pkgs.gamescope}/bin/gamescope";
     };
   };
 }

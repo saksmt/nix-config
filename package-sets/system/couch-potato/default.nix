@@ -1,6 +1,6 @@
 # adds couch potato mode:
 #  - potato passwordless user with autologin
-#  - gamescope with steam big picture session
+#  - gamescope/hyprland with steam big picture session
 # ~~for extra flavor~~ don't forget to add complementary:
 # - gui/apps/game-streaming - moonlight
 # - gui/apps/players - mpv
@@ -8,9 +8,10 @@
 {
   module-for = [ "nixos" ];
   imports = [
-    (import ./gamescope.nix)
+    # (import ./gamescope-impl)
+    (import ./hyprland-impl)
     (import ./user.nix)
-    (import ./output.nix)
+    (import ./module.nix)
     (import ./guitar.nix)
     (import ./sddm.nix)
   ];

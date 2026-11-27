@@ -1,10 +1,12 @@
 {
+  lib,
   config,
   pkgs,
   ...
 }:
 let
-  outputs = config.environment.couch-potato.outputs;
+  cfg = config.environment.couch-potato;
+  outputs = cfg.outputs;
   nvl = a: fallback: if a == null then fallback else builtins.toString a;
   outputsTsv = builtins.concatStringsSep "\n" (
     builtins.map (
@@ -150,6 +152,40 @@ let
   '';
 in
 {
-  # Why this instead of package override? This is local to gamescope session, override to package will override each usage of that package
-  programs.steam.gamescopeSession.env.PATH = "${preStartSync}/bin:\${PATH}";
+  config.services.displayManager.defaultSession = "steam";
+
+  # config.programs.gamescope.capSysNice = true;
+  config.programs.steam.gamescopeSession = {
+    enable = true;
+    args =
+      (lib.optionals ((builtins.length cfg.outputs) > 0) (
+        let
+          outputNames = builtins.map (output: output.name) cfg.outputs;
+        in
+        /*nixfmt:disable*/
+        [ "-O" (builtins.concatStringsSep "," outputNames) ]
+        /*nixfmt:enable*/
+      ))
+      ++ (lib.optionals (cfg.prefer-vk-device != null) [
+        "--prefer-vk-device"
+        cfg.prefer-vk-device
+      ])
+      ++ [
+        "--expose-wayland"
+        "--force-composition"
+        "--rt"
+      ];
+    steamArgs = [
+      "-tenfoot"
+      "-pipewire-dmabuf"
+      "-steamos3"
+    ];
+    env = {
+      ENABLE_GAMESCOPE_WSI = "1";
+      # used in wrapper, why not package directly? - that will break capSysNice which generates a wrapper
+      GAMESCOPE_BIN = "${pkgs.gamescope}/bin/gamescope";
+      # Why this instead of package override? This is local to gamescope session, override to package will override each usage of that package
+      PATH = "${preStartSync}/bin:\${PATH}";
+    };
+  };
 }
