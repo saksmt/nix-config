@@ -10,6 +10,9 @@
     ELECTRON_OZONE_PLATFORM_HINT = lib.mkDefault "auto";
   };
 
+  hardware.uinput.enable = true;
+  users.users.potato.extraGroups = [ "uinput" ];
+
   services.displayManager.defaultSession = "hyprland";
   home-manager.users.${os-config.environment.couch-potato.user.name} = { pkgs, config, ... }: {
     xdg.configFile."uwsm/env".source =
@@ -27,6 +30,7 @@
       extraConfig =
         let
           launchSteam = pkgs.writeShellScript "couch-steam" ''
+            LD_PRELOAD="${pkgs.extest}/lib/libextest.so''${LD_PRELOAD:+:$LD_PRELOAD}" \
             steam -tenfoot -steamos3 -pipewire-dmabuf
             # line below is only called when steam exits entirely
             hyprctl dispatch exit
@@ -39,7 +43,7 @@
           local active_output = nil
 
           local function format_mode(out)
-            if out.resolution and out.refresh_rate then
+            if out.resolution and out['refresh-rate'] then
               return out.resolution .. "@" .. tostring(out.refresh_rate)
             elseif out.resolution then
               return out.resolution
@@ -99,6 +103,14 @@
             end
           end
 
+          local any_with_vrr = false
+          for _, output in ipairs(outputs) do
+            if output.vrr then
+              any_with_vrr = true
+              break
+            end
+          end
+
           hl.config({
             render = {
               cm_enabled = true,
@@ -126,7 +138,16 @@
             misc = {
               disable_hyprland_logo = true,
               disable_splash_rendering = true,
+              vrr = any_with_vrr and 1 or 0,
+              new_window_takes_over_fullscreen = 2, -- 2 = unfullscreen when a new window/menu opens
+              focus_on_activate = true,
             },
+          })
+          hl.window_rule({
+            name = "steam-bpm-maximize",
+            match = { class = "^steam$", title = "^Steam Big Picture Mode$" },
+            suppress_event = "fullscreen",
+            maximize = true,
           })
 
           hl.on("monitor.added", sync_outputs)

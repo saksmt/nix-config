@@ -105,7 +105,8 @@ rec {
         refresh-rate = 30;
         vrr = false;
       }
-      { name = "eDP-1"; }
+      # false to vrr, so that it is disabled system-wide in hyprland impl
+      { name = "eDP-1"; hdr = true; vrr = false; }
     ];
   };
 
