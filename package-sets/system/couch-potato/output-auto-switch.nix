@@ -34,22 +34,43 @@ let
     ];
 
     text = ''
+      now="[$(date)]"
+      log="$(ls -d ~${userName})/.output-switch-log"
+
+      log() {
+        echo "''${@}" >> "$log"
+      }
+      log-n() {
+        echo -n "''${@}" >> "$log"
+      }
+
+      log "$now ================"
+
       targetOutput=
       targetResolution=
       targetRefreshRate=
 
       IFS=$'\t'
       while read -r name resolution refreshRate; do
+        log-n "considering $name"
         if [[ "$(cat /sys/class/drm/*-"$name"/status 2>/dev/null)" == "connected" ]]; then
+          log " - connected"
           targetOutput="''${name}"
           targetResolution="''${resolution}"
           targetRefreshRate="''${refreshRate}"
+          break
         fi
+        log " - not connected"
       done <<< '${outputsTsv}'
 
       if [[ n"''${targetOutput}" == n ]]; then
+        log "no output chosen"
         exit 0
       fi
+
+      log "chosen output: $targetOutput"
+      log "requested resolution: $targetResolution"
+      log "requested refresh rate: $targetRefreshRate"
 
       if [[ "''${targetResolution}" == "AUTO" ]] || [[ "''${targetRefreshRate}" == "AUTO" ]]; then
         connectorId="$(head -n1 /sys/class/drm/*-"$targetOutput"/connector_id)"
@@ -69,16 +90,20 @@ let
             ')"
 
         if [[ n"''${resolution}" == n ]] || [[ n"''${refresh}" == n ]]; then
+          log "could not resolve resolution and refresh rate to mode"
           exit 1
         fi
 
         targetResolution="''${resolution}"
         targetRefreshRate="''${refresh}"
+
+        log "resolved resolution: $resolution"
+        log "resolved refresh rate: $refresh"
       fi
 
       POTATO_UID=$(id -u "${userName}")
       RUNTIME_DIR="/run/user/$POTATO_UID"
-      CFG_DIR="~${userName}/.config/gamescope"
+      CFG_DIR="$(ls -d ~${userName})/.config/gamescope"
       if [[ "$targetResolution" =~ ^([0-9]+)x([0-9]+) ]]; then
         mkdir -p "$CFG_DIR"
         # Format expected by gamescope modes.cfg: <connector> <width> <height> <refresh>
@@ -87,10 +112,15 @@ let
 
         # Notify live gamescope instance if potato's session is currently running
         if [ -d "$RUNTIME_DIR" ]; then
+          log "pinging gamescope daemon"
           runuser -u ${userName} XDG_RUNTIME_DIR="$RUNTIME_DIR" \
             ${pkgs.gamescope}/bin/gamescopectl backend_set_dirty 2>/dev/null || true
         fi
+      else
+        log "could not parse resolution"
       fi
+      log "done"
+      log "============== $now"
     '';
   };
   # Run the exact same mode detection before gamescope starts so initial boot matches too
