@@ -140,7 +140,7 @@ let
       fi
 
       if [[ "$hdr" == "true" ]]; then
-        EXTRA_ARGS+=("--hdr-enabled" "--hdr-debug-force-output")
+        EXTRA_ARGS+=("--hdr-enabled")
       fi
     fi
     rm -f "$outputFile"
