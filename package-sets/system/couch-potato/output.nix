@@ -128,7 +128,7 @@ let
 
     echo "identifying outputs"
     outputFile="$(mktemp)"
-    systemd-cat ${getPreferredModeScript}/bin/get-preferred-output-mode "$outputFile"
+    ${pkgs.systemd}/bin/systemd-cat ${getPreferredModeScript}/bin/get-preferred-output-mode "$outputFile"
     EXTRA_ARGS=()
     if [[ -s "$outputFile" ]]; then
       IFS=$'\t'
@@ -147,7 +147,7 @@ let
     rm -f "$outputFile"
 
     echo "starting gamescope:" exec ${pkgs.gamescope}/bin/gamescope "''${EXTRA_ARGS[@]}" "$@"
-    exec systemd-cat -t gamescope-session $GAMESCOPE_BIN "''${EXTRA_ARGS[@]}" "$@"
+    exec ${pkgs.systemd}/bin/systemd-cat -t gamescope-session $GAMESCOPE_BIN "''${EXTRA_ARGS[@]}" "$@"
   '';
 in
 {
