@@ -40,6 +40,8 @@
       osc = "no";
       border = "no";
       input-default-bindings = "no";
+      target-colorspace-hint = "yes";
+      target-colorspace-hint-mode = "source";
     };
     scriptOpts = {
       uosc = {

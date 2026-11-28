@@ -12,6 +12,8 @@
 
   hardware.uinput.enable = true;
   users.users.potato.extraGroups = [ "uinput" ];
+  programs.steam.enable = lib.mkDefault true;
+  programs.steam.extest.enable = true;
 
   services.displayManager.defaultSession = "hyprland";
   home-manager.users.${os-config.environment.couch-potato.user.name} = { pkgs, config, ... }: {
@@ -30,10 +32,9 @@
       extraConfig =
         let
           launchSteam = pkgs.writeShellScript "couch-steam" ''
-            LD_PRELOAD="${pkgs.extest}/lib/libextest.so''${LD_PRELOAD:+:$LD_PRELOAD}" \
-            steam -tenfoot -steamos3 -pipewire-dmabuf
+            steam -tenfoot -gamepadui -pipewire-dmabuf
             # line below is only called when steam exits entirely
-            hyprctl dispatch exit
+            uwsm stop
           '';
           toLua = lib.generators.toLua {};
         in
@@ -93,6 +94,7 @@
             end
 
             active_output = chosen.name
+            hl.dispatch(hl.dsp.focus({ workspace = "1" }))
           end
 
           local any_with_hdr = false
@@ -139,8 +141,12 @@
               disable_hyprland_logo = true,
               disable_splash_rendering = true,
               vrr = any_with_vrr and 1 or 0,
-              new_window_takes_over_fullscreen = 2, -- 2 = unfullscreen when a new window/menu opens
               focus_on_activate = true,
+              on_focus_under_fullscreen = 1,
+            },
+            ecosystem = {
+              no_update_news = true,
+              no_donation_nag = true,
             },
           })
           hl.window_rule({
@@ -149,6 +155,21 @@
             suppress_event = "fullscreen",
             maximize = true,
           })
+
+          hl.window_rule({
+            match = { class = ".*" },
+            workspace = "1",
+          })
+          hl.on("workspace.active", function (ws)
+            if ws and ws.id ~= 1 then
+              hl.dispatch(hl.dsp.focus({ workspace = "1" }))
+            end
+          end)
+          hl.on("window.move_to_workspace", function(w, ws)
+            if ws and ws.id ~= 1 then
+              hl.dispatch(hl.dsp.window.move({ window = w, workspace = "1", follow = true }))
+            end
+          end)
 
           hl.on("monitor.added", sync_outputs)
           hl.on("monitor.removed", sync_outputs)
